@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,7 +19,7 @@ import java.util.LinkedList;
 
 public class RecibeUdp extends Thread {
 
-    protected Acc agente;  // Para tener acceso a los datos de este agente
+    protected Ajr agente;  // Para tener acceso a los datos de este agente
     DatagramSocket servidor_UDP;
 
     /**
@@ -31,7 +33,7 @@ public class RecibeUdp extends Thread {
      *      - Inicializa datos
      *      - Arranca el hilo encargado de recibir mediante UDP
      */
-    RecibeUdp(Acc este_agente) {
+    RecibeUdp(Ajr este_agente) {
         // Inicializamos
         super();
         this.agente = este_agente;

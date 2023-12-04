@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import java.util.Date;
 
 public class AjrLocalizado {
@@ -7,7 +9,7 @@ public class AjrLocalizado {
     protected int puerto;
     protected long fecha_encontrado;
 
-    AccLocalizado(String ID, String IP, int puerto, long fecha_encontrado){
+    AjrLocalizado(String ID, String IP, int puerto, long fecha_encontrado){
         this.ID = ID;
         this.IP = IP;
         this.puerto = puerto;
@@ -24,9 +26,9 @@ public class AjrLocalizado {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof AccLocalizado))
+        if(!(obj instanceof AjrLocalizado))
             return false;
 
-        return this.ID.equals(((AccLocalizado) obj).ID) && this.IP.equals(((AccLocalizado) obj).IP) && this.puerto == (((AccLocalizado) obj).puerto);
+        return this.ID.equals(((AjrLocalizado) obj).ID) && this.IP.equals(((AjrLocalizado) obj).IP) && this.puerto == (((AjrLocalizado) obj).puerto);
     }
 }

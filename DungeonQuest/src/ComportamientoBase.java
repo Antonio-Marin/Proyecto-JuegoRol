@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -10,11 +12,11 @@ import java.util.List;
 import java.util.Random;
 public class ComportamientoBase implements Runnable{
 
-    protected Acc agente;
+    protected Ajr agente;
     protected long Tiempo_de_muerte;
     Random random = new Random();
 
-    ComportamientoBase(Acc este_agente) {
+    ComportamientoBase(Ajr este_agente) {
         this.agente = este_agente;
         Tiempo_de_muerte = System.currentTimeMillis() + agente.Tiempo_de_vida;
         new Thread(this, "comportamiento_base").start();

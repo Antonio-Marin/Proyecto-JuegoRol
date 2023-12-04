@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import java.util.Random;
 
 public class FuncionDeAventurero implements Runnable {
@@ -11,9 +13,9 @@ public class FuncionDeAventurero implements Runnable {
     protected int num_men_recibidos_fa; // Para identificar los mensajes recibidos por este agente y poder identificarlos de forma unívoca
 
 
-    protected Acc agente; // Para poder acceder a los datos generales de este agente
+    protected Ajr agente; // Para poder acceder a los datos generales de este agente
 
-    FuncionDeAgente(Acc este_agente) {
+    FuncionDeAventurero(Ajr este_agente) {
         // Para pruebas
         random = new Random();
         Frecuencia_envio = 0f;  // Entre 0 y 1. Cuanto mas pequeña menor frecuencia de envios
@@ -49,9 +51,9 @@ public class FuncionDeAventurero implements Runnable {
             {
                 // Miramos en el directorio y seleccionamos un agente para enviar
                 // PARA PRUEBAS, tomamos el primer agente del directorio y le enviamos el mensaje
-                if ((agente.num_elem_directorio_de_agentes() > 0) & (agente.Estado_Actual == Acc.Estado_del_ACC.VIVO )) {
+                if ((agente.num_elem_directorio_de_agentes() > 0) & (agente.Estado_Actual == Ajr.Estado_del_ACC.VIVO )) {
                     // seleccionamos el agente
-                    AccLocalizado otro_agente = agente.saca_de_directorio_de_agentes();
+                    AjrLocalizado otro_agente = agente.saca_de_directorio_de_agentes();
 
                     // Construimos el mensaje
                     num_men_enviados_fa = num_men_enviados_fa + 1;

@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -49,8 +51,8 @@ public class Mensaje {
     protected ArrayList<String> offeredCardQuantity;
     protected ArrayList<String> offeredCardCost;
     protected ArrayList<String> wishedCardType;
-    protected LinkedList<AccLocalizado> agentsDirectory;
-    protected LinkedList<AccLocalizado> deadAgents;
+    protected LinkedList<AjrLocalizado> agentsDirectory;
+    protected LinkedList<AjrLocalizado> deadAgents;
 
 //CONSTRUCTOR DE MENSAJE
 
@@ -208,11 +210,11 @@ public class Mensaje {
         return wishedCardType;
     }
 
-    public LinkedList<AccLocalizado> getAgentsDirectory() {
+    public LinkedList<AjrLocalizado> getAgentsDirectory() {
         return agentsDirectory;
     }
 
-    public LinkedList<AccLocalizado> getDeadAgents() {
+    public LinkedList<AjrLocalizado> getDeadAgents() {
         return deadAgents;
     }
 
@@ -289,11 +291,11 @@ public class Mensaje {
         this.wishedCardType = wishedCardType;
     }
 
-    public void setAgentsDirectory(LinkedList<AccLocalizado> agentsDirectory) {
+    public void setAgentsDirectory(LinkedList<AjrLocalizado> agentsDirectory) {
         this.agentsDirectory = agentsDirectory;
     }
 
-    public void setDeadAgents(LinkedList<AccLocalizado> deadAgents) {
+    public void setDeadAgents(LinkedList<AjrLocalizado> deadAgents) {
         this.deadAgents = deadAgents;
     }
 

@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import java.io.File;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -91,7 +93,7 @@ public class TratarXML { // Se permite la validación de un archivo XML con un e
         }
     }
 
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         String archivoXML = ".\\XML_PROTOCOLO_COMUNICACION_COMUN.xml";
         String archivoXSD = ".\\ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
         String archivoConError = ".\\XML_PROTOCOLO_COMUNICACION_COMUN_ERROR.xml";
@@ -111,4 +113,6 @@ public class TratarXML { // Se permite la validación de un archivo XML con un e
         System.out.println(validarXMLConEsquema(archivoConError, archivoXSD));
         // De esta forma es facil validar un xml e indicar al usuario si es valido o no y porque
         }
+
+     */
 }

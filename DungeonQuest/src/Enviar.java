@@ -1,3 +1,5 @@
+package DungeonQuest.src;
+
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,10 +14,10 @@ import java.net.Socket;
 
 public class Enviar extends Thread {
 
-    protected Acc agente;
+    protected Ajr agente;
     protected int latenciaDeAtencionDeEnvio;  // Es el tiempo en milisegundos que queremos que transcurra desde que
                                             // no encontramos mensajes a enviar hasta que volvemos a buscar de nuevo en la lista
-    Enviar(Acc este_agente){
+    Enviar(Ajr este_agente){
         super();
         this.agente = este_agente;
         this.latenciaDeAtencionDeEnvio = 10;
@@ -79,7 +81,7 @@ public class Enviar extends Thread {
         } // Fin de - while (true) {
     } // Fin de - public void run()
 
-    public void EnviaTcp(Mensaje mensajeAEnviar) throws ParserConfigurationException, IOException, SAXException {
+    /*public void EnviaTcp(Mensaje mensajeAEnviar) throws ParserConfigurationException, IOException, SAXException {
 
         int puerto_destino_TCP = Integer.parseInt(mensajeAEnviar.destinationPortTCP); // EL TCP es el puerto destino y el UDP es el mismo incrementado en uno
 
@@ -144,6 +146,7 @@ public class Enviar extends Thread {
                             "\n - mensaje : "+mensajeAEnviar.bodyInfo);
         }
     } // Fin de - public void EnviaTcp(Mensaje mensajeAEnviar) throws ParserConfigurationException, IOException, SAXException {
+     */
 
     public void EnviaUdp(Mensaje mensajeAEnviar)
     {

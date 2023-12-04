@@ -1,12 +1,14 @@
+package DungeonQuest.src;
+
 import java.util.Random;
 
 public class FuncionDios implements Runnable {
 
     // Para pruebas
     protected int num_men_recibidos_monitor; // Para identificar los mensajes recibidos por este agente y poder identificarlos de forma unívoca
-    protected Acc agente; // Para poder acceder a los datos generales de este agente
+    protected Ajr agente; // Para poder acceder a los datos generales de este agente
 
-    FuncionMonitor(Acc este_agente) {
+    FuncionDios(Ajr este_agente) {
         num_men_recibidos_monitor = 0;
         this.agente = este_agente;
 
