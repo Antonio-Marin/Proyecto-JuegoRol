@@ -1,5 +1,6 @@
 package DungeonQuest.src;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -7,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Ajr {
 
@@ -228,6 +230,94 @@ public class Ajr {
         this.num_tot_men_rec = 0;  // Numero total de mensajes recibidos por el agente
         this.num_id_local_men = 0;  // Cada vez que se solicita, se incrementa en uno, para generar un codigo local unico para los mensajes (ver dame_codigo_id_local_men())
     }
+
+    /**
+     * buscaNido() : Busca en la maquina dosde se esta ejecutando un puerto libre para alojar al agente
+     */
+    protected void buscaNido() {
+
+        Random rand = new Random();
+        int puerto_ini_busqueda = Puerto_Inicio + rand.nextInt(Rango_Puertos + 1);
+        puerto_ini_busqueda = (puerto_ini_busqueda / 2) * 2; // Nos aseguramos que el numero sea par
+        int puerto_busqueda = puerto_ini_busqueda;
+        boolean sigue_buscando = true;
+        // Para evitar que el proceso se eternice
+        int num_intentos = 0; // Para llevar una cuenta del numero de puertos en los que hemos intentado anidar
+        int max_num_intentos = 5000; // Para llevar una cuenta del numero de puertos en los que hemos intentado anidar
+        long T_ini_busqueda =  System.currentTimeMillis();  // La hora del sistema de esta maquina en la que se inicia la busqueda de nido
+        long T_max_busqueda = 1000 * 10;  // El periodo maximo de tiempo que permitimos que el agente este buscando su nido (en milisegundos)
+        long T_limite_busqueda = T_ini_busqueda + T_max_busqueda;  // El momento en el que el agente debe parar de buscar su nido (en milisegundos)
+
+        while (sigue_buscando) {
+            boolean TCP_ok = false;
+            try {
+                servidor_TCP = new ServerSocket(puerto_busqueda);
+                TCP_ok = true;
+                servidor_UDP = new DatagramSocket(puerto_busqueda + 1);
+
+                // Si hemos podido ocupar los dos puertos, ya son nuestros y por tanto anotamos nuestra localizacion
+                this.Puerto_Propio_TCP = puerto_busqueda;
+                this.Puerto_Propio_UDP = Puerto_Propio_TCP +1;
+
+                // Si los dos puertos han funcionado, ya tenemos nido y podemos para de buscar
+                sigue_buscando = false;
+
+                long T_actual = System.currentTimeMillis();
+                long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
+                System.out.println("\n ==> Desde Acc => buscaNido ANIDADO CORRECTAMENTE con num_intentos : "+num_intentos+
+                        " - con max_num_intentos : "+ max_num_intentos +
+                        " - con T_ini_busqueda : "+ T_ini_busqueda +
+                        " - con T_actual : "+ T_actual +
+                        " - con T_limite_busqueda : "+ T_limite_busqueda +
+                        " - tiempo invertido (milisegundos) : "+ T_buscando+
+                        "\n - anidado en Puerto_Propio : "+ this.Puerto_Propio_TCP +
+                        " - Puerto_Propio_TCP : " + this.Puerto_Propio_TCP +
+                        " - Puerto_Propio_UDP : " + this.Puerto_Propio_UDP);
+
+            } catch (Exception e) {
+                // Si NO hemos podido ocupar los dos puertos, debemos seguir buscando mas adelante
+                puerto_busqueda++;
+                num_intentos++;
+                if (puerto_busqueda > (Puerto_Inicio + Rango_Puertos)) {
+                    puerto_busqueda = Puerto_Inicio;
+                } // SI nos salimos del rango, volvemos al principio
+
+                if (TCP_ok) {
+                    // SI hemos llegado aqui es que hemos podido abrir "servidor_TCP", pero no "servidor_UDP", por lo que cerramos "servidor_TCP"
+                    // para que quede todo como estaba
+                    try {
+                        servidor_TCP.close();
+                    }
+                    catch (IOException IO_e )
+                    {
+                        long T_actual = System.currentTimeMillis();
+                        long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
+                        System.out.println("\n ==> ERROR. Desde Acc => buscaNido al intentar derrar el socket TCP con num_intentos : "+num_intentos+
+                                " - con max_num_intentos : "+ max_num_intentos +
+                                " - con T_ini_busqueda : "+ T_ini_busqueda +
+                                " - con T_actual : "+ T_actual +
+                                " - con T_limite_busqueda : "+ T_limite_busqueda +
+                                " - tiempo invertido (milisegundos) : "+ T_buscando+
+                                " - con IO_e : "+IO_e);
+                    }
+                } // Fin de - if (TCP_ok) {
+
+                // COntrolamos si debemos detener la busqueda de nido
+                long T_actual = System.currentTimeMillis();
+                if((num_intentos > max_num_intentos) || (T_actual > T_limite_busqueda))
+                {
+                    sigue_buscando = false;
+                    long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
+                    System.out.println("\n ==> Desde Acc => buscaNido.Detenemos la busqueda por exceso de intentos o tiempo con num_intentos : "+num_intentos+
+                            " - con max_num_intentos : "+ max_num_intentos +
+                            " - con T_ini_busqueda : "+ T_ini_busqueda +
+                            " - con T_actual : "+ T_actual +
+                            " - con T_limite_busqueda : "+ T_limite_busqueda +
+                            " - tiempo invertido (milisegundos) : "+ T_buscando);
+                }
+            } // Fin de - try catch
+        }  // FIn de - while (sigue_buscando)
+    } // FIn de - protected void buscaNido()
 
     /**
      * función notificaNacimiento()
