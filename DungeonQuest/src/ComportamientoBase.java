@@ -31,7 +31,7 @@ public class ComportamientoBase implements Runnable{
         int nueva_generacion = agente.Num_generacion + 1;
 
         // Con el while, gestionamos el tiempo de vida del agente
-        while ((Tiempo_de_muerte > System.currentTimeMillis()) & (agente.Estado_Actual == Acc.Estado_del_ACC.VIVO )) {
+        while ((Tiempo_de_muerte > System.currentTimeMillis()) & (agente.Estado_Actual == Ajr.Estado_del_AJR.VIVO )) {
 
             // ////////////////////////////////////////////////////////////////
             // ////////////////////////////////////////////////////////////////
@@ -45,8 +45,8 @@ public class ComportamientoBase implements Runnable{
                 agente.Num_hijos_generados++;  // Nos sirve tambien para definir identificadores únicos en la gerarquía
                 String nuev_ID_propio = agente.ID_propio + "_hijo_" + agente.Num_hijos_generados + "_nivel_" + nueva_generacion;
                 String nueva_generacion_str = String.valueOf(nueva_generacion);
-                String Puerto_Monitor_str = String.valueOf(agente.Puerto_Monitor);
-                GenerarNuevoAcc(nuev_ID_propio, nueva_generacion_str, "CAMBIACROMOS", agente.Ip_Monitor, Puerto_Monitor_str);
+                String Puerto_Monitor_str = String.valueOf(agente.Puerto_Dios);
+                GenerarNuevoAcc(nuev_ID_propio, nueva_generacion_str, "AVENTURERO", agente.Ip_Dios, Puerto_Monitor_str);
 
                 }
 
