@@ -49,8 +49,7 @@ public class FuncionDios implements Runnable {
                                     " - El agente : "+ mensajeRecibido.originId +
                                     " - desde la ip : "+ mensajeRecibido.originIp +
                                     " - puerto : "+ puerto_origen_str +
-                                    " - protocolo : "+ mensajeRecibido.comunicationProtocol +
-                                    " - envio el mensaje \n  * Mensaje recibido : "+ mensajeRecibido.bodyInfo);
+                                    " - protocolo : UDP - envio el mensaje \n  * Mensaje recibido : "+ mensajeRecibido.info);
     } // Fin de - void recogeMensajeRecibido() {
 
 
