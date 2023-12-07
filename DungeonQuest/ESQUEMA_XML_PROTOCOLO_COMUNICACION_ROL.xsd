@@ -109,7 +109,6 @@
             <xs:element type="xs:string" name="origin_id"/>
             <xs:element type="xs:string" name="origin_ip"/>
             <xs:element type="xs:integer" name="origin_port_UDP"/>
-            <xs:element type="xs:integer" name="origin_port_TCP"/>
             <xs:element type="xs:long" name="origin_time"/>
         </xs:sequence>
     </xs:complexType>
@@ -119,7 +118,6 @@
             <xs:element type="xs:string" name="destination_id"/>
             <xs:element type="xs:string" name="destination_ip"/>
             <xs:element type="xs:integer" name="destination_port_UDP"/>
-            <xs:element type="xs:integer" name="destination_port_TCP"/>
             <xs:element type="xs:long" name="destination_time"/>
         </xs:sequence>
     </xs:complexType>
