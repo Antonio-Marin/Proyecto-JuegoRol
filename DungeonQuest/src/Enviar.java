@@ -40,22 +40,6 @@ public class Enviar extends Thread {
                 if (agente.num_elem_lita_enviar() >0) {
                     Mensaje mensajeAEnviar = agente.saca_de_lita_enviar();
 
-                    String protocolo_mensaje = mensajeAEnviar.getComunicationProtocol();
-                    // Dependiendo del protocolo, enviamos el mensaje de una forma u otra
-                    if (protocolo_mensaje.equals("TCP")) {
-                        mensajeAEnviar.crearXML();
-                        TratarXML test = new TratarXML();
-                        String archivo_xml = "xml_"+ mensajeAEnviar.comuncId +".xml";
-                        String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
-                        if(test.validarXMLConEsquema(archivo_xml,archivo_xsd)){
-                            EnviaTcp(mensajeAEnviar);
-                            System.out.println("Mensaje valido. Mensaje enviado");
-                        } else{
-                            System.out.println("Mensaje no valido");
-                        }
-                    }
-                    else if(protocolo_mensaje.equals("UDP")){
-
                         mensajeAEnviar.crearXML();
                         TratarXML test = new TratarXML();
                         String archivo_xml = "xml_"+ mensajeAEnviar.comuncId +".xml";
@@ -66,10 +50,6 @@ public class Enviar extends Thread {
                         } else{
                             System.out.println("Mensaje no valido");
                         }
-                    }
-                    else {
-                        System.out.println("\n ==> Desde public class Enviar. ERROR. Protocolo desconocido : "+ protocolo_mensaje);
-                    }
                 }
                 else{
                     sleep(latenciaDeAtencionDeEnvio); // Para controlar la velocidad de envio
@@ -196,20 +176,19 @@ public class Enviar extends Thread {
                     "\n => Destinatario id_destino : "+mensajeAEnviar.destinationId+
                     " - con ip : "+mensajeAEnviar.destinationIp+
                     " - puerto destino : "+mensajeAEnviar.destinationPortUDP+
-                    " - y protocolo : "+mensajeAEnviar.comunicationProtocol+
-                    "\n => mensaje : "+mensajeAEnviar.bodyInfo);
+                    " - y protocolo : UDP \n => mensaje : "+mensajeAEnviar.info);
 
             // ////////////////////////////////////////////////////////
             // Ahora, si el mensaje no va destinado al Monitor, enviamos al monitor una copia de este mensaje
             // (hemos decidido qe monitorizaremos el SMA enviando copia de todos los mensajes al monitor)
-            if ((!mensajeAEnviar.destinationIp.equals(agente.Ip_Monitor)) & (puerto_destino_UDP != agente.Puerto_Monitor_UDP))
+            if ((!mensajeAEnviar.destinationIp.equals(agente.Ip_Dios)) & (puerto_destino_UDP != agente.Puerto_Dios_UDP))
             {
                 //Creamos el socket de UDP
                 DatagramSocket socketUDP_Monitor = new DatagramSocket();
                 //Convertimos el mensaje a bytes
-                byte[] mensaje_UDP_Monitor = mensajeAEnviar.bodyInfo.getBytes();
+                byte[] mensaje_UDP_Monitor = mensajeAEnviar.info.getBytes();
                 //Creamos un datagrama
-                DatagramPacket paquete_UDP_Monitor = new DatagramPacket(mensaje_UDP_Monitor, mensaje_UDP_Monitor.length, InetAddress.getByName(agente.Ip_Monitor), agente.Puerto_Monitor_UDP);
+                DatagramPacket paquete_UDP_Monitor = new DatagramPacket(mensaje_UDP_Monitor, mensaje_UDP_Monitor.length, InetAddress.getByName(agente.Ip_Dios), agente.Puerto_Dios);
                 //Lo enviamos con send
                 socketUDP.send(paquete_UDP_Monitor);
                 //Cerramos el socket
@@ -230,8 +209,7 @@ public class Enviar extends Thread {
                     "\n Destinatario id_destino : "+mensajeAEnviar.destinationId+
                     " - en la ip : "+mensajeAEnviar.destinationIp+
                     " - puerto destino : "+mensajeAEnviar.destinationPortUDP+
-                    " - protocolo : "+mensajeAEnviar.comunicationProtocol+
-                    "\n - mensaje : "+mensajeAEnviar.bodyInfo);
+                    " - protocolo : UDP \n - mensaje : "+mensajeAEnviar.info);
         }
     } // FIn de - public void EnviaUdp(Mensaje mensajeAEnviar)
 } // Fin de - public class Enviar extends Thread {
