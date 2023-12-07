@@ -15,27 +15,47 @@ import java.util.LinkedList;
 
 public class Mensaje {
 
-    protected String comuncId;
-    protected String msgId; // IP del agente que envía el mensaje
-    protected String tipoProtocolo; //Indica el protcolo del mensaje (intercambio, etc.)
-    protected String pasoProtocolo; //paso del protocolo
+    /** COMUNCID
+     *  1: Nacimiento
+     *  2: Luchar contra un monstruo
+     *      2.1: El aventurero informa a Dios de que quiere ir a una mazmorra
+     *      2.2: Dios manda un monstruo al aventurero (en el aventurero se procesa la información)
+     *      2.3: Aventurero manda mensaje del resultado a Dios (con nivel actual)
+     *  3: PVP
+     *      3.1: Aventurero_1 reta a Aventurero_2
+     *      3.2: Aventurero_2 confirma o niega ese reto del Aventurero_1
+     *      3.3: Si acepta intrcambian niveles y comienza la lucha (suma o resta de niveles)
+     *      3.4 : Una vez terminada la lucha cada Aventurero manda un mensaje a Dios con el resultado (guien gana y nuevo nivel)
+     *  4: Muerte
+     */
+    protected String comuncId; // Id de la comunicación
+    /**
+     * DATOS PARA COMUNICID 1: Naciminto
+     */
+    protected String msgId; // Id del mensaje
+    protected String tipoProtocolo; //Indica el protcolo del mensaje (Nacimiento, lucha, etc.)
+    protected String pasoProtocolo; //información del paso en el que esta el protocolo
 
     protected String originId; // Identificador único del agente que envía el mensaje
     protected String originIp; // IP del agente que envía el mensaje
     protected String originPortUDP; // Puerto del agente que envía el mensaje
-    protected String originTime;
+    protected String originTime; //hora del agente origen
 
     protected String destinationId; // Identificador único del agente destino de este mensaje
     protected String destinationIp; // IP del agente destino de este mensaje
-    protected String destinationPortUDP;
-    protected String destinationTime;
-
-    protected String info;  //Contenido del mensaje a enviar. s el contenido de este campo, lo que viajara al destino
+    protected String destinationPortUDP; //Puerto del agente que recibe el mensaje
+    protected String destinationTime; ////hora del agente destino
+    protected String info;  //Contenido del mensaje a enviar
+    /**
+     * DATOS PARA COMUNICID 4: Muerte
+     */
     protected String motivoMuerte;
-    protected String agenteFinalizadoNivel;
-    protected String monstruosDerrotados;
-    protected String deathTime;
-
+    protected String agenteFinalizadoNivel; // Nivel del agente muerto
+    protected String monstruosDerrotados; // Monstruos que derreotó
+    protected String deathTime; // Hora muerte
+    /**
+     * DATOS PARA COMUNICID 2: Luchar contra un monstruo
+     */
     protected String mazmorra;
     protected String nivelAventurero;
     protected String nombreMonstruo;
@@ -43,6 +63,9 @@ public class Mensaje {
     protected String resultadoFinal;
     protected String nivelAventureroFinal;
 
+    /**
+     * DATOS PARA COMUNICID 3: PVP
+     */
     protected String id1;
     protected String ip1;
     protected String nivel1;
