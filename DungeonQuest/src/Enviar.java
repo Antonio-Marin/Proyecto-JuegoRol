@@ -43,7 +43,7 @@ public class Enviar extends Thread {
                         mensajeAEnviar.crearXML();
                         TratarXML test = new TratarXML();
                         String archivo_xml = "xml_"+ mensajeAEnviar.msgId +".xml";
-                        String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
+                        String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION_ROL.xsd";
                         if(test.validarXMLConEsquema(archivo_xml,archivo_xsd)){
                             EnviaUdp(mensajeAEnviar);
                             System.out.println("Mensaje valido. Mensaje enviado");
