@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Ajr {
 
@@ -462,6 +463,25 @@ public class Ajr {
      */
 protected void menuInicial(){
     //TODO: hacer el menu
+    Scanner s = new Scanner(System.in);
+    boolean var = true;
+    while(var) {
+        int op;
+        System.out.println("Introduce una opción: \n 1. Ir a una mazmorra.\n 2. PVP\n 3. Salir");
+        op = s.nextInt();
+        switch (op){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                var = false;
+                break;
+            default:
+                System.out.println("Opcion incorrecta");
+                break;
+        }
+    }
 }
 
     /**
