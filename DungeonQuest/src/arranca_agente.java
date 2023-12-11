@@ -8,10 +8,10 @@ public class arranca_agente {
         //Ej.: para arrancar el proceso :
 
         //Para un AJR monitor
-        // PARÁMETROS: "nombre_agente_monitor_raiz" 1 "MONITOR" "ip monitor" "puerto monitor"
+        // PARÁMETROS: "nombre_agente_monitor_raiz" 1 "DIOS" "ip monitor" "puerto monitor"
 
         //Para un AJR AVENTURERO
-        // PARÁMETROS: "nombre_agente_raiz" 1 "CAMBIACROMOS" "ip monitor" "puerto monitor"
+        // PARÁMETROS: "nombre_agente_raiz" 1 "AVENTURERO" "ip monitor" "puerto monitor"
 
         //Codigo ejecución agente
         nuevo_agente = new Ajr(args[0], args[1], args[2], args[3], args[4]);

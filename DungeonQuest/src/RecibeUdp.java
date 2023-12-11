@@ -132,7 +132,7 @@ public class RecibeUdp extends Thread {
                         System.out.println("No se encontro la etiqueta: " + tagName);
                     }
 
-                        Mensaje mensaje_recibido_UDP = new Mensaje("1",
+                        Mensaje mensaje_recibido_UDP = new Mensaje(
                                 "El ID_mensaje viene en el cuerpo del mensaje", "Mensaje recibido por UDP", "Información recibida del agente",
                                 id_or, IP_or, Integer.toString(puerto_or), momento_actual,
                                 id_dest, IP_dest, Integer.toString(puerto_dest), momento_actual);

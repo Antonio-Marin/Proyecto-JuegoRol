@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 public class Mensaje {
 
-    /** COMUNCID
+    /** tipoProtocolo y pasoProtocolo
      *  1: Nacimiento
      *  2: Luchar contra un monstruo
      *      2.1: El aventurero informa a Dios de que quiere ir a una mazmorra
@@ -28,7 +28,6 @@ public class Mensaje {
      *      3.4 : Una vez terminada la lucha cada Aventurero manda un mensaje a Dios con el resultado (guien gana y nuevo nivel)
      *  4: Muerte
      */
-    protected String comuncId; // Id de la comunicación
     /**
      * DATOS PARA COMUNICID 1: Naciminto
      */
@@ -83,10 +82,9 @@ public class Mensaje {
 //CONSTRUCTOR DE MENSAJE
 
 
-    public Mensaje(String comuncId, String msgId, String tipoProtocolo, String pasoProtocolo,
+    public Mensaje(String msgId, String tipoProtocolo, String pasoProtocolo,
                    String originId, String originIp, String originPortUDP, String originTime,
                    String destinationId, String destinationIp, String destinationPortUDP, String destinationTime) {
-        this.comuncId = comuncId;
         this.msgId = msgId;
         this.tipoProtocolo = tipoProtocolo;
         this.pasoProtocolo = pasoProtocolo;
@@ -101,10 +99,6 @@ public class Mensaje {
     }
 
     //GETTERS
-
-    public String getComuncId() {
-        return comuncId;
-    }
 
     public String getMsgId() {
         return msgId;
@@ -356,10 +350,6 @@ public class Mensaje {
             Element mensajeElement = doc.createElement("Mensaje");
             doc.appendChild(mensajeElement);
 
-            Element comuncIdElement = doc.createElement("comunc_id");
-            comuncIdElement.appendChild(doc.createTextNode(this.comuncId));
-            mensajeElement.appendChild(comuncIdElement);
-
             Element msgIdElement = doc.createElement("msg_id");
             msgIdElement.appendChild(doc.createTextNode(this.msgId));
             mensajeElement.appendChild(msgIdElement);
@@ -575,7 +565,7 @@ public class Mensaje {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             //System.out.println("Llego hasta aquí");
-            File file = new File("xml_" + comuncId + ".xml");
+            File file = new File("xml_" + msgId + ".xml");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(file);
 

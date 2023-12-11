@@ -2,7 +2,6 @@
     <xs:element name="Mensaje">
         <xs:complexType>
             <xs:sequence>
-                <xs:element type="xs:integer" name="comunc_id"/>
                 <xs:element type="xs:integer" name="msg_id"/>
 
                 <xs:element name="header">

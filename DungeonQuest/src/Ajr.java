@@ -300,26 +300,26 @@ public class Ajr {
         String ID_mensaje = dame_codigo_id_local_men();
         String momento_actual = String.valueOf(System.currentTimeMillis());
         String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
-        String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
+        String Puerto_Dios_str = String.valueOf(Puerto_Dios_UDP);
         String cuerpo_mens = "Esto es el MENSAJE HE NACIDO  - que el agente con ID_propio : " + ID_propio +
                 " - con ip : " + Ip_Propia +
                 " - con Puerto_Propio : " + Puerto_Propio_str +
                 " - con ID_mensaje : " + ID_mensaje +
                 " - envia al monitor con Ip_Monitor : "+Ip_Dios+
-                " - con Puerto_Dios : "+Puerto_Dios_UDP_str+
+                " - con Puerto_Dios : "+Puerto_Dios_str+
                 " :  - en T : " + momento_actual;
 
-        Mensaje mensaje_he_nacido = new Mensaje("1",
-                ID_mensaje, "1", "Creación y envio de mensaje nacimiento (aventurero)",
+        Mensaje mensaje_he_nacido = new Mensaje(
+                ID_mensaje, "1", "0",
                 ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual,
-                "ID_Dios", Ip_Dios, Puerto_Dios_UDP_str, momento_actual);
+                "ID_Dios", Ip_Dios, Puerto_Dios_str, momento_actual);
         mensaje_he_nacido.setInfo(cuerpo_mens);
         //TODO: hacer los demas sets
 
         //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
         //directorio_de_agentes.add(ej);
-        mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
-        mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
+        //mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
+        //mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
 
 
         // Insertamos el mensaje
@@ -364,7 +364,7 @@ public class Ajr {
                     " - con T vivido : " + tiempo_vivido;
 
             //TODO: mensaje muerte revisar
-            Mensaje mensaje_fin_agente = new Mensaje("4",
+            Mensaje mensaje_fin_agente = new Mensaje(
                     ID_mensaje, "4", "Creación y envio de mensaje muerte (aventurero)",
                     ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
                     "ID_Monitor", Ip_Dios, Integer.toString(Puerto_Dios_UDP), momento_actual_str);

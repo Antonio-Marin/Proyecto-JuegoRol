@@ -46,7 +46,7 @@ public class ComportamientoBase implements Runnable{
                 String nuev_ID_propio = agente.ID_propio + "_hijo_" + agente.Num_hijos_generados + "_nivel_" + nueva_generacion;
                 String nueva_generacion_str = String.valueOf(nueva_generacion);
                 String Puerto_Monitor_str = String.valueOf(agente.Puerto_Dios);
-                GenerarNuevoAcc(nuev_ID_propio, nueva_generacion_str, "AVENTURERO", agente.Ip_Dios, Puerto_Monitor_str);
+                //GenerarNuevoAcc(nuev_ID_propio, nueva_generacion_str, "AVENTURERO", agente.Ip_Dios, Puerto_Monitor_str);
 
                 }
 
@@ -76,7 +76,7 @@ public class ComportamientoBase implements Runnable{
         agente.finalizaAgente();
     } // Fin de - public void run() {
 
-    void GenerarNuevoAcc(String nuevo_ID_propio, String nuevo_generacion, String nuevo_tipo_agente, String nuevo_Ip_Monitor, String nuevo_Puerto_Monitor) {
+    /*void GenerarNuevoAcc(String nuevo_ID_propio, String nuevo_generacion, String nuevo_tipo_agente, String nuevo_Ip_Monitor, String nuevo_Puerto_Monitor) {
         System.out.println("\n ==> Desde el agente con id  : "+agente.ID_propio+
                                                     " - en la ip : "+agente.Ip_Propia+
                                                     " - en el puerto : "+agente.Puerto_Propio_TCP+
@@ -114,6 +114,8 @@ public class ComportamientoBase implements Runnable{
             // throw new RuntimeException(e);
         }
     }
+
+     */
 
     void GestorDeDirectorio() {
         // Esta funcion, en esta version esta prototipada

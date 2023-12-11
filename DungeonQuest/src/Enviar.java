@@ -42,7 +42,7 @@ public class Enviar extends Thread {
 
                         mensajeAEnviar.crearXML();
                         TratarXML test = new TratarXML();
-                        String archivo_xml = "xml_"+ mensajeAEnviar.comuncId +".xml";
+                        String archivo_xml = "xml_"+ mensajeAEnviar.msgId +".xml";
                         String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
                         if(test.validarXMLConEsquema(archivo_xml,archivo_xsd)){
                             EnviaUdp(mensajeAEnviar);
@@ -134,7 +134,7 @@ public class Enviar extends Thread {
 
         try {
             //Creamos el socket de UDP
-            String filePath ="C:/Users/marti/IdeaProjects/SMA_23-24/base/" +"xml_"+mensajeAEnviar.comuncId+".xml";
+            String filePath ="C:/Users/marti/IdeaProjects/SMA_23-24/base/" +"xml_"+mensajeAEnviar.msgId+".xml";
             /*
             Ruta para:
             Pablo = C:/Users/pablo/IdeaProjects/SMA_23-24/base/
