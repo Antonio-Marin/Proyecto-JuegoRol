@@ -316,7 +316,7 @@ public class Ajr {
                 " :  - en T : " + momento_actual;
 
         Mensaje mensaje_he_nacido = new Mensaje(
-                ID_mensaje, "1", "0",
+                msgId, "1", "0",
                 ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual,
                 "ID_Dios", Ip_Dios, Puerto_Dios_str, momento_actual);
         mensaje_he_nacido.setInfo(cuerpo_mens);
@@ -340,7 +340,7 @@ public class Ajr {
         mensaje_he_nacido.setId2("-");
         mensaje_he_nacido.setIp2("-");
         mensaje_he_nacido.setNivel2("0");
-        mensaje_he_nacido.setReto("False");
+        mensaje_he_nacido.setReto("false");
         mensaje_he_nacido.setResultado("-");
         mensaje_he_nacido.setNivelFinal1("0");
         mensaje_he_nacido.setNivelFinal2("0");
