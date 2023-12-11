@@ -56,7 +56,7 @@ public class RecibeUdp extends Thread {
             while(true) {
                 // El servidor espera a que el cliente se conecte y devuelve un socket nuevo
                 // Obtiene el flujo de entrada y lee el objeto del stream
-//                DatagramPacket datos_recibido_UDP = new DatagramPacket(new byte[1024], 1024);
+                DatagramPacket datos_recibido_UDP = new DatagramPacket(new byte[1024], 1024);
                 DatagramPacket paquete_recibido_UDP = new DatagramPacket(bufer, bufer.length);
 
                 System.out.println("\n ==> ********************************** Desde  RecibeUdp ESPERANDO paquete UDP en el agente con id  : " + agente.ID_propio +
