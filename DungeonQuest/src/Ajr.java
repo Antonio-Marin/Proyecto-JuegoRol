@@ -86,7 +86,7 @@ public class Ajr {
 
     //TODO: Mirar ACC y añadir más código
 
-    public Ajr (String id_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor){
+    public Ajr (String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor){
         long pid = obtenerPID();
         System.out.println("\n ========================================================================================" +
                 "\n> =========================== INICIO AGENTE ==============================================" +
