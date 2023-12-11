@@ -47,6 +47,9 @@ public class Mensaje {
     protected String info;  //Contenido del mensaje a enviar
     /**
      * DATOS PARA COMUNICID 4: Muerte
+     * 0. consigue maximo nivel
+     * 1. Es derrotado
+     * 2. Sale voluntariamente
      */
     protected String motivoMuerte;
     protected String agenteFinalizadoNivel; // Nivel del agente muerto

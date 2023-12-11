@@ -84,6 +84,8 @@ public class Ajr {
     private  int num_tot_men_rec;  // Numero total de mensajes recibidos por el agente
     private  int num_id_local_men;  // Este numero, junto con el identificador del agente, generan un codigo unico de mensaje
 
+    private boolean salidaVoluntaria;
+
     //TODO: Mirar ACC y añadir más código
 
     public Ajr (String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor){
@@ -215,6 +217,7 @@ public class Ajr {
         this.Frecuencia_partos = 0.00; //CAMBIADO a 0.00 | anteriormente valia 0.01
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
+        this.salidaVoluntaria = false;
 
         // //////////////////////////////////////
         // Definimos datos del sistema de comunicaciones
@@ -471,9 +474,9 @@ protected void menuInicial(){
         op = s.nextInt();
         switch (op){
             case 1:
-                break;
+                var = mazmorra();
             case 2:
-                break;
+                var = pvp();
             case 3:
                 var = false;
                 break;
@@ -483,6 +486,70 @@ protected void menuInicial(){
         }
     }
 }
+
+
+    /**
+     * Función mazmorra()
+     * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
+     */
+    public static boolean mazmorra(){
+        Scanner s = new Scanner(System.in);
+        System.out.println("Hola valiente aventurero \n Has elegido entrar en una mazmorra \n Decide en cual: ");
+        String resp = s.next();
+
+        if(true) {// if resp es una mazmorra válida
+            // Crea mensaje petición monstruo al Dios (2.1)
+
+
+            //Espera mensaje del Dios dando un monstruo (2.2)
+
+
+            //Una vez recibe el mensaje  saca los datos necesarios y calcula el resultado del combate
+
+
+            System.out.println("Te has encontrado en la mazmorra [Mazmorra], al monstruo [Monstruo] de nivel [Nivel]");
+
+
+            System.out.println("Resultado: [Victoria/Derrota] \n Experiencia ganada: [Exp] \n Nivel actual: [Nivel]");
+
+            if(true){ //Si nivel del aventurero es >= 99
+                // nivel = 99
+                return false; // Ya que ha terminado la partida.
+            }else if(true){ // Si ha sido derrotado
+                return false; // Ya que ha terminado la partida.
+            } else {return true;}
+
+            //Crea mensaje info para el Dios (2.3)
+        }else {
+            System.out.println("Nombre de mazmorra no valido, volvemos al menu inicial");
+            return true;
+        }
+    }
+
+
+    /**
+     * Función pvp()
+     * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
+     */
+    public static boolean pvp(){
+        System.out.println("Con que el aventurero desea luchar con otro de su condición... \n Buscando un aventurero");
+        // Buscar un aventurero disponible.
+
+
+        //Mandar mensaje
+
+
+        //ToDO Terminar
+
+
+        if(true){ //Si nivel del aventurero es >= 99
+            // nivel = 99
+            return false; // Ya que ha terminado la partida.
+        }else if(true){ // Si ha sido derrotado
+            return false; // Ya que ha terminado la partida.
+        } else {return true;}
+    }
+
 
     /**
      * Funciones para sincronizar información
