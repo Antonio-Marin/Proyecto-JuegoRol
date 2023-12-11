@@ -185,7 +185,7 @@ public class Ajr {
         this.Rango_IPs = 0;
         this.Puerto_Inicio = 50000;
         this.Rango_Puertos = 10000;
-        this.localizacion_codigo = "C:/Users/marti/IdeaProjects/Proyecto/out\\production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
+        this.localizacion_codigo = "C:/Users/marti/IdeaProjects/Proyecto/out/production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
         /*
         Localización código:
         Pablo: C:/Users/pablo/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest

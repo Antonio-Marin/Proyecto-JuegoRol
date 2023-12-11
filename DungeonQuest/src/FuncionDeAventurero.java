@@ -80,7 +80,7 @@ public class FuncionDeAventurero implements Runnable {
                             " :  - en T = " + momento_actual;
 
 
-                    Mensaje nuevo_mensaje = new Mensaje("1", ID_mensaje, "Nacimiento", "Envio información al monitor",
+                    Mensaje nuevo_mensaje = new Mensaje(ID_mensaje, "Nacimiento", "Envio información al monitor",
                             id_or, IP_or, Integer.toString(puertoUDP_or),momento_actual,
                             id_dest, IP_dest, Integer.toString(puertoUDP_dest), momento_actual);
                     // Enviamos el mensaje a la cola de envíos
@@ -95,7 +95,7 @@ public class FuncionDeAventurero implements Runnable {
         Mensaje mensajeRecibido = agente.saca_de_lita_recibidos();
         mensajeRecibido.crearXML();
         TratarXML test = new TratarXML();
-        String archivo_xml = "xml_"+ mensajeRecibido.comuncId +".xml";
+        String archivo_xml = "xml_"+ mensajeRecibido.msgId +".xml";
         String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
         if(test.validarXMLConEsquema(archivo_xml, archivo_xsd)) {
             num_men_recibidos_fa = num_men_recibidos_fa + 1;
