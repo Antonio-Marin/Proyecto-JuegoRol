@@ -522,22 +522,22 @@ public class Mensaje {
 
             if (this.agentsDirectory != null) {
                 for (int i = 1; i <= this.agentsDirectory.size(); i++) {
-                    String text5 = "acc";
+                    String text5 = "ajr";
 
-                    Element accElement = doc.createElement(text5);
-                    agentsDirectoryElement.appendChild(accElement);
+                    Element ajrElement = doc.createElement(text5);
+                    agentsDirectoryElement.appendChild(ajrElement);
 
-                    Element idAccElement = doc.createElement("id");
-                    idAccElement.appendChild(doc.createTextNode(this.agentsDirectory.get(i - 1).ID));
-                    accElement.appendChild(idAccElement);
+                    Element idAjrElement = doc.createElement("id");
+                    idAjrElement.appendChild(doc.createTextNode(this.agentsDirectory.get(i - 1).ID));
+                    ajrElement.appendChild(idAjrElement);
 
                     Element portUDPAccElement = doc.createElement("port_UDP");
                     portUDPAccElement.appendChild(doc.createTextNode(Integer.toString(this.agentsDirectory.get(i - 1).puerto)));
-                    accElement.appendChild(portUDPAccElement);
+                    ajrElement.appendChild(portUDPAccElement);
 
                     Element ipAccElement = doc.createElement("ip");
                     ipAccElement.appendChild(doc.createTextNode(this.agentsDirectory.get(i - 1).IP));
-                    accElement.appendChild(ipAccElement);
+                    ajrElement.appendChild(ipAccElement);
 
                 }
             }
@@ -546,14 +546,14 @@ public class Mensaje {
             commonContentElement.appendChild(deadAgentsElement);
             if (this.deadAgents != null) {
                 for (int i = 1; i <= this.deadAgents.size(); i++) {
-                    String text6 = "dead_acc";
+                    String text6 = "dead_ajr";
 
-                    Element deadAccElement = doc.createElement(text6);
-                    deadAgentsElement.appendChild(deadAccElement);
+                    Element deadAjrElement = doc.createElement(text6);
+                    deadAgentsElement.appendChild(deadAjrElement);
 
-                    Element idAccElement = doc.createElement("id");
-                    idAccElement.appendChild(doc.createTextNode(this.deadAgents.get(i - 1).ID));
-                    deadAccElement.appendChild(idAccElement);
+                    Element idAjrElement = doc.createElement("id");
+                    idAjrElement.appendChild(doc.createTextNode(this.deadAgents.get(i - 1).ID));
+                    deadAjrElement.appendChild(idAjrElement);
                 }
             }
 

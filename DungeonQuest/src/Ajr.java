@@ -299,6 +299,7 @@ public class Ajr {
         // Construimos el mensaje
 
         String ID_mensaje = dame_codigo_id_local_men();
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
         String momento_actual = String.valueOf(System.currentTimeMillis());
         String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
         String Puerto_Dios_str = String.valueOf(Puerto_Dios_UDP);
@@ -315,12 +316,35 @@ public class Ajr {
                 ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual,
                 "ID_Dios", Ip_Dios, Puerto_Dios_str, momento_actual);
         mensaje_he_nacido.setInfo(cuerpo_mens);
-        //TODO: hacer los demas sets
+        //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
 
-        //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
-        //directorio_de_agentes.add(ej);
-        //mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
-        //mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
+        mensaje_he_nacido.setMotivoMuerte("0");
+        mensaje_he_nacido.setAgenteFinalizadoNivel("0");
+        mensaje_he_nacido.setMonstruosDerrotados("0");
+        mensaje_he_nacido.setDeathTime("0");
+
+        mensaje_he_nacido.setMazmorra("-");
+        mensaje_he_nacido.setNivelAventurero("0");
+        mensaje_he_nacido.setNombreMonstruo("-");
+        mensaje_he_nacido.setNivelMonstruo("0");
+        mensaje_he_nacido.setResultadoFinal("-");
+        mensaje_he_nacido.setNivelAventureroFinal("0");
+
+        mensaje_he_nacido.setId1("-");
+        mensaje_he_nacido.setIp1("-");
+        mensaje_he_nacido.setNivel1("0");
+        mensaje_he_nacido.setId2("-");
+        mensaje_he_nacido.setIp2("-");
+        mensaje_he_nacido.setNivel2("0");
+        mensaje_he_nacido.setReto("False");
+        mensaje_he_nacido.setResultado("-");
+        mensaje_he_nacido.setNivelFinal1("0");
+        mensaje_he_nacido.setNivelFinal2("0");
+
+        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
+        directorio_de_agentes.add(ej);
+        mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
+        mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
 
 
         // Insertamos el mensaje
