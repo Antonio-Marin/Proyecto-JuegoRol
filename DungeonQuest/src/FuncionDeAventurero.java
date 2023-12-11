@@ -58,7 +58,7 @@ public class FuncionDeAventurero implements Runnable {
                     // Construimos el mensaje
                     num_men_enviados_fa = num_men_enviados_fa + 1;
                     String IP_or = agente.Ip_Propia;
-                    int puertoTCP_or = agente.Puerto_Propio_TCP;
+                    //int puertoTCP_or = agente.Puerto_Propio_TCP;
                     int puertoUDP_or = agente.Puerto_Propio_UDP;
                     String id_or = agente.ID_propio;
                     String IP_dest = otro_agente.IP;
