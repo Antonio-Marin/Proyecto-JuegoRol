@@ -1,0 +1,139 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Mensaje">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:integer" name="comunc_id"/>
+                <xs:element type="xs:integer" name="msg_id"/>
+
+                <xs:element name="header">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:integer" name="tipo_protocolo"/>
+                            <xs:element type="xs:integer" name="paso_protocolo"/>
+
+                            <xs:element type="header_origin_info" name="origin"/>
+
+                            <xs:element type="header_destination_info" name="destination"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="body">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="info"/>
+
+                            <xs:element minOccurs="0" name="contenido_finalizacion">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:integer" name="motivo_muerte"/>
+
+                                        <xs:element name="agente_finalizado_info">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:integer" name="agente_finalizado_nivel"/>
+
+                                                    <xs:element type="xs:integer" name="monstruos_derrotados"/>
+
+                                                    <xs:element type="xs:long" name="death_time"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element minOccurs="0" name="contenido_monstruo">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="mazmorra"/>
+                                        <xs:element type="xs:integer" name="nivel_aventurero"/>
+                                        <xs:element type="xs:string" name="nombre_monstruo"/>
+                                        <xs:element type="xs:integer" name="nivel_monstruo"/>
+                                        <xs:element type="xs:string" name="resultado_final"/>
+                                        <xs:element type="xs:integer" name="nivel_aventurero_final"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element minOccurs="0" name="contenido_PVP">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="id_1"/>
+                                        <xs:element type="xs:string" name="ip_1"/>
+                                        <xs:element minOccurs="0" type="xs:integer" name="nivel_1"/>
+                                        <xs:element type="xs:string" name="id_2"/>
+                                        <xs:element type="xs:string" name="ip_2"/>
+                                        <xs:element minOccurs="0" type="xs:integer" name="nivel_2"/>
+                                        <xs:element minOccurs="0" type="xs:boolean" name="reto"/>
+                                        <xs:element minOccurs="0" type="xs:string" name="resultado"/>
+                                        <xs:element minOccurs="0" type="xs:integer" name="nivel_final_1"/>
+                                        <xs:element minOccurs="0" type="xs:integer" name="nivel_final_2"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="common_content">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="agents_directory">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="dir_agent" name="acc" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                            <xs:element name="dead_agents">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="dead_agent" name="dead_acc" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="header_origin_info">
+        <xs:sequence>
+            <xs:element type="xs:string" name="origin_id"/>
+            <xs:element type="xs:string" name="origin_ip"/>
+            <xs:element type="xs:integer" name="origin_port_UDP"/>
+            <xs:element type="xs:long" name="origin_time"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="header_destination_info">
+        <xs:sequence>
+            <xs:element type="xs:string" name="destination_id"/>
+            <xs:element type="xs:string" name="destination_ip"/>
+            <xs:element type="xs:integer" name="destination_port_UDP"/>
+            <xs:element type="xs:long" name="destination_time"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dir_agent">
+        <xs:sequence>
+            <xs:element type="xs:string" name="id"/>
+            <xs:element type="xs:integer" name="port_UDP"/>
+            <xs:element type="xs:string" name="ip"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dead_agent">
+        <xs:sequence>
+            <xs:element type="xs:string" name="id"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
