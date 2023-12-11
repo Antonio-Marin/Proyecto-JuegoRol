@@ -6,10 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Ajr {
 
@@ -84,7 +81,10 @@ public class Ajr {
     private  int num_tot_men_rec;  // Numero total de mensajes recibidos por el agente
     private  int num_id_local_men;  // Este numero, junto con el identificador del agente, generan un codigo unico de mensaje
 
-    //TODO: Mirar ACC y añadir más código
+    private LinkedList<Monstruo> mazmorra_principiantes = new LinkedList<>();
+    private LinkedList<Monstruo> mazmorra_intermedia = new LinkedList<>();
+    private LinkedList<Monstruo> mazmorra_avanzado = new LinkedList<>();
+
 
     public Ajr (String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor){
         long pid = obtenerPID();
@@ -132,6 +132,7 @@ public class Ajr {
             // Para el agente CAMBIACROMOS arrancamos su funcion del agente y notificamos al monitor su nacimiento
             this.funcionAventurero = new FuncionDeAventurero(this);
             notificaNacimiento();
+            randomizedDungeons(); //Crea las mazmorras con los monstruos aleatorios
             menuInicial();
         }
         else if (this.tipo_agente == tipos_de_agentes.DIOS)
@@ -456,7 +457,26 @@ public class Ajr {
         // Si no se pudo obtener el PID, devolver un valor predeterminado
         return -1;
     }
+    /**
+     * Función randomizedDungeons()
+     * Antes de pasar al menu y despues de haber notificado
+     * el nacimiento se crearan las mazmorras aleatoriamente
+     */
+    protected void randomizedDungeons(){
+        Random rand = new Random();
+        List<String> nombres_principiante = Arrays.asList("Slime", "Hilichurl", "Megaflora", "Hilichurl ballestero", "Samachurl", "Duende", "Bokoblin", "Esqueleto");
+        List<String> nombres_intermedio = Arrays.asList("Skulltula", "Lawachurl", "Ogro", "Recaudador Fatui", "Fantasma", "Zombie", "Caballero errante", "Jauría de lobos");
+        List<String> nombres_avanzado = Arrays.asList("Dragón", "Regisvid", "Oceánida", "Protrodragarto", "Oni Espadachín", "Serpiente de las Ruinas", "Kraken", "Cíclope");
+        for(int i =0 ; i<10; i++){
+            Monstruo monstruo_principiante = new Monstruo(nombres_principiante.get(rand.nextInt(8)), rand.nextInt(1,6));
+            Monstruo monstruo_intermedio = new Monstruo(nombres_intermedio.get(rand.nextInt(8)), rand.nextInt(6, 16));
+            Monstruo monstruo_avanzado = new Monstruo(nombres_avanzado.get(rand.nextInt(8)), rand.nextInt(16, 30));
+            this.mazmorra_principiantes.add(monstruo_principiante);
+            this.mazmorra_intermedia.add(monstruo_intermedio);
+            this.mazmorra_avanzado.add(monstruo_intermedio);
+        }
 
+    }
     /**
      * Función menuInicial()
      * Será el menú inicial del Aventurero.
