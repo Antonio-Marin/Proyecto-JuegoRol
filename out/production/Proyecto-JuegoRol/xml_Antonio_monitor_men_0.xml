@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Mensaje>
-    <comunc_id>1</comunc_id>
-    <msg_id>1</msg_id>
+    <msg_id>Antonio_monitor_men_0</msg_id>
     <header>
         <tipo_protocolo>1</tipo_protocolo>
-        <paso_protocolo>1</paso_protocolo>
+        <paso_protocolo>0</paso_protocolo>
         <origin>
-            <origin_id>1</origin_id>
-            <origin_ip>192.1.1.1</origin_ip>
-            <origin_port_UDP>7</origin_port_UDP>
-            <origin_time>1000</origin_time>
+            <origin_id>Antonio_monitor</origin_id>
+            <origin_ip>192.168.55.107</origin_ip>
+            <origin_port_UDP>56942</origin_port_UDP>
+            <origin_time>1702300258492</origin_time>
         </origin>
         <destination>
-            <destination_id>1</destination_id>
-            <destination_ip>192.1.1.1</destination_ip>
+            <destination_id>ID_Dios</destination_id>
+            <destination_ip/>
             <destination_port_UDP>7</destination_port_UDP>
-            <destination_time>1000</destination_time>
+            <destination_time>1702300258492</destination_time>
         </destination>
     </header>
     <body>
-        <info/>
+        <info>Esto es el MENSAJE HE NACIDO  - que el agente con ID_propio : Antonio_monitor - con ip : 192.168.55.107 - con Puerto_Propio : 56942 - con ID_mensaje : Antonio_monitor_men_0 - envia al monitor con Ip_Monitor : null - con Puerto_Dios : 7 :  - en T : 1702300258492</info>
         <contenido_finalizacion>
             <motivo_muerte/>
             <agente_finalizado_info>
