@@ -20,10 +20,9 @@ public class Ajr {
     // Datos del agente
     protected String ID_propio; // Identificador unico de este agente
     protected String Ip_Propia;  // Ip donde reside este agente
-    protected int Puerto_Propio_TCP;  // Es el puerto de servidor TCP del agente (coincide con el puerto asociado al agente)
     protected int Puerto_Propio_UDP;  // Es el puerto de servidor UDP del agente (es el siguiente a "Puerto_Propio" osea - Puerto_Propio_UDP = Puerto_Propio+1)
     protected long Tiempo_de_nacimiento;  // La hora del sistema de esta maquina en la que se genera el agente
-    protected tipos_de_agentes tipo_agente;  // Para indicar si es cambiacromos o Dios
+    protected tipos_de_agentes tipo_agente;  // Para indicar si es aventurero o Dios
     protected enum tipos_de_agentes
     {
         AVENTURERO, DIOS
@@ -33,7 +32,6 @@ public class Ajr {
     // Datos del entorno de ejecución
     protected String Ip_Dios;  // Es la IP donde reside el Dios (es la misma para todos los agentes del SMA)
     protected int Puerto_Dios;  // Es el puerto donde reside el Dios (es la misma para todos los agentes del SMA)
-    protected int Puerto_Dios_TCP;  // Es el puerto de servidor TCP del agente Dios (es el mismo que "Puerto_Dios" y es la misma para todos los agentes del SMA)
     protected int Puerto_Dios_UDP;  // Es el puerto de servidor UDP del agente Dios (es el mismo que "Puerto_Dios+1" y es la misma para todos los agentes del SMA)
     protected String Inicio_rango_IPs; // Para indicar el inicio del rango de IPs donde este agente podrá buscar otros agentes
     protected int Rango_IPs; // Se suma a "Inicio_rango_IPs" para definir la ultima IP del rango donde este agente podrá buscar otros agentes
@@ -75,7 +73,6 @@ public class Ajr {
     protected Enviar enviar;  // Sera un hlo de ejecución
     protected RecibeUdp recibeUdp;  // Sera un hilo de ejecución
 
-    protected ServerSocket servidor_TCP;  // Puerto para el servicio por TCP
     protected DatagramSocket servidor_UDP;  // Puerto para el servicio por UDP
 
     private LinkedList<AjrLocalizado> directorio_de_agentes = new LinkedList<>(); // Contenedor para almacenar cada uno de los mensajes para enviar por un agente
@@ -110,17 +107,14 @@ public class Ajr {
         }
         else if (this.tipo_agente == tipos_de_agentes.DIOS) {
             // Para el agente DIOS los puertos vienen fijados al generar el agente
-            //this.Puerto_Propio_TCP = this.Puerto_Dios;
-            this.Puerto_Propio_UDP = this.Puerto_Propio_TCP + 1;
+            this.Puerto_Propio_UDP = this.Puerto_Dios;
 
             // Generamos los sockets de TCP y UDP en el monitor, ya que este sabe cuales son sus puerton y no usa "buscaNido()" para localizarse
             try {
                 //servidor_TCP = new ServerSocket(Puerto_Propio_TCP);
                 servidor_UDP = new DatagramSocket(Puerto_Propio_UDP);
             } catch (Exception e) {
-                System.out.println("\n ==> ERROR. Desde Ajr al abrir los puertos de comunicaciones con Puerto_Propio : " + Puerto_Propio_TCP +
-                       // " - con Puerto_Propio_TCP : " + Puerto_Propio_TCP +
-                        " - con Puerto_Propio_UDP : " + Puerto_Propio_UDP +
+                System.out.println("\n ==> ERROR. Desde Ajr al abrir los puertos de comunicaciones con Puerto_Propio_UDP : " + Puerto_Propio_UDP +
                         " - en el MONITOR");
             }
         }
@@ -184,18 +178,17 @@ public class Ajr {
             System.out.println("Desde public Ajr. ERROR Definiendo DATOS DEL ENTORNO : " + este_tipo_agente + " - no es un tipo de agente conocido");
         }
         this.Puerto_Dios = Integer.parseInt(este_Puerto_Monitor);  // El puerto de monitor se define como parametro de llamada al proceso
-        //this.Puerto_Monitor_TCP = this.Puerto_Monitor;  // Es el puerto de servidor TCP del agente monitor (es el mismo que "Puerto_Monitor" y es la misma para todos los agentes del SMA)
-        this.Puerto_Dios_UDP = this.Puerto_Dios + 1;  // Es el puerto de servidor UDP del agente monitor (es el mismo que "Puerto_Monitor+1" y es la misma para todos los agentes del SMA)
+        this.Puerto_Dios_UDP = this.Puerto_Dios;  // Es el puerto de servidor UDP del agente monitor (es el mismo que "Puerto_Monitor+1" y es la misma para todos los agentes del SMA)
 
         this.Inicio_rango_IPs = Ip_Propia;  // Solo para pruebas
         this.Rango_IPs = 0;
         this.Puerto_Inicio = 50000;
         this.Rango_Puertos = 10000;
-        this.localizacion_codigo = "C:/Users/pablo/IdeaProjects/SMA_23-24/base/out/production/base"; //cambia segun quien lo ejecute
+        this.localizacion_codigo = "C:/Users/marti/IdeaProjects/Proyecto/out\\production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
         /*
         Localización código:
-        Pablo: C:/Users/pablo/IdeaProjects/SMA_23-24/base/out/production/base
-        Antonio: C:/Users/marti/IdeaProjects/SMA_23-24/base/out/production/base
+        Pablo: C:/Users/pablo/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
+        Antonio: C:/Users/marti/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
          */
         this.tiempo_espera_fin_env = 1000 * 1; // Es el tiempo (milisegundos) que esperaremos para enviar los mensajen pendientes en la cola de envios, antes de finalizar el agente
 
@@ -248,15 +241,11 @@ public class Ajr {
         long T_limite_busqueda = T_ini_busqueda + T_max_busqueda;  // El momento en el que el agente debe parar de buscar su nido (en milisegundos)
 
         while (sigue_buscando) {
-            boolean TCP_ok = false;
             try {
-                servidor_TCP = new ServerSocket(puerto_busqueda);
-                TCP_ok = true;
                 servidor_UDP = new DatagramSocket(puerto_busqueda + 1);
 
                 // Si hemos podido ocupar los dos puertos, ya son nuestros y por tanto anotamos nuestra localizacion
-                this.Puerto_Propio_TCP = puerto_busqueda;
-                this.Puerto_Propio_UDP = Puerto_Propio_TCP +1;
+                this.Puerto_Propio_UDP = puerto_busqueda;
 
                 // Si los dos puertos han funcionado, ya tenemos nido y podemos para de buscar
                 sigue_buscando = false;
@@ -269,8 +258,7 @@ public class Ajr {
                         " - con T_actual : "+ T_actual +
                         " - con T_limite_busqueda : "+ T_limite_busqueda +
                         " - tiempo invertido (milisegundos) : "+ T_buscando+
-                        "\n - anidado en Puerto_Propio : "+ this.Puerto_Propio_TCP +
-                        " - Puerto_Propio_TCP : " + this.Puerto_Propio_TCP +
+                        "\n - anidado en Puerto_Propio : "+ this.Puerto_Propio_UDP +
                         " - Puerto_Propio_UDP : " + this.Puerto_Propio_UDP);
 
             } catch (Exception e) {
@@ -280,26 +268,6 @@ public class Ajr {
                 if (puerto_busqueda > (Puerto_Inicio + Rango_Puertos)) {
                     puerto_busqueda = Puerto_Inicio;
                 } // SI nos salimos del rango, volvemos al principio
-
-                if (TCP_ok) {
-                    // SI hemos llegado aqui es que hemos podido abrir "servidor_TCP", pero no "servidor_UDP", por lo que cerramos "servidor_TCP"
-                    // para que quede todo como estaba
-                    try {
-                        servidor_TCP.close();
-                    }
-                    catch (IOException IO_e )
-                    {
-                        long T_actual = System.currentTimeMillis();
-                        long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
-                        System.out.println("\n ==> ERROR. Desde Acc => buscaNido al intentar derrar el socket TCP con num_intentos : "+num_intentos+
-                                " - con max_num_intentos : "+ max_num_intentos +
-                                " - con T_ini_busqueda : "+ T_ini_busqueda +
-                                " - con T_actual : "+ T_actual +
-                                " - con T_limite_busqueda : "+ T_limite_busqueda +
-                                " - tiempo invertido (milisegundos) : "+ T_buscando+
-                                " - con IO_e : "+IO_e);
-                    }
-                } // Fin de - if (TCP_ok) {
 
                 // COntrolamos si debemos detener la busqueda de nido
                 long T_actual = System.currentTimeMillis();
@@ -331,43 +299,25 @@ public class Ajr {
 
         String ID_mensaje = dame_codigo_id_local_men();
         String momento_actual = String.valueOf(System.currentTimeMillis());
-        String Puerto_Propio_str = String.valueOf(Puerto_Propio_TCP);
-        String Puerto_Monitor_UDP_str = String.valueOf(Puerto_Monitor_UDP);
+        String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
+        String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
         String cuerpo_mens = "Esto es el MENSAJE HE NACIDO  - que el agente con ID_propio : " + ID_propio +
                 " - con ip : " + Ip_Propia +
                 " - con Puerto_Propio : " + Puerto_Propio_str +
                 " - con ID_mensaje : " + ID_mensaje +
-                " - envia al monitor con Ip_Monitor : "+Ip_Monitor+
-                " - con Puerto_Monitor : "+Puerto_Monitor_UDP_str+
+                " - envia al monitor con Ip_Monitor : "+Ip_Dios+
+                " - con Puerto_Dios : "+Puerto_Dios_UDP_str+
                 " :  - en T : " + momento_actual;
 
         Mensaje mensaje_he_nacido = new Mensaje("1",
-                "1", "1", "0", "UDP",
-                ID_propio, Ip_Propia, Integer.toString(Puerto_Propio_TCP+1), Puerto_Propio_str, momento_actual,
-                "ID_Monitor", Ip_Monitor, Puerto_Monitor_UDP_str, Integer.toString(Puerto_Monitor_TCP), momento_actual);
-        mensaje_he_nacido.setBodyInfo(cuerpo_mens);
-        mensaje_he_nacido.setDeathReason("0");
-        ArrayList<String> e = new ArrayList();
-        e.add("0");
-        mensaje_he_nacido.setOwnedCardCost(e);
-        mensaje_he_nacido.setOwnedCardQuantity(e);
-        mensaje_he_nacido.setOwnedCardType(e);
-        mensaje_he_nacido.setWantedCardType(e);
-        mensaje_he_nacido.setOwnedMoney("0");
-        mensaje_he_nacido.setCreatedChilds(String.valueOf(this.Num_hijos_generados));
-        mensaje_he_nacido.setDeathTime("0");
-        mensaje_he_nacido.setPastTradeWantedCard("-");
-        mensaje_he_nacido.setPastTradeGivenCard("-");
-        mensaje_he_nacido.setTradeWantedCard("-");
-        mensaje_he_nacido.setTradeGivenCard("-");
-        mensaje_he_nacido.setOfferedCardType(e);
-        mensaje_he_nacido.setOfferedCardCost(e);
-        mensaje_he_nacido.setOfferedCardQuantity(e);
-        mensaje_he_nacido.setWishedCardType(e);
-        mensaje_he_nacido.setTradeMoney("0");
-        ArrayList<AccTest> h = new ArrayList<>();
-        AccLocalizado ej = new AccLocalizado("id", "ip", 10000000,15550005 );
-        directorio_de_agentes.add(ej);
+                ID_mensaje, "1", "Creación y envio de mensaje nacimiento (aventurero)",
+                ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual,
+                "ID_Dios", Ip_Dios, Puerto_Dios_UDP_str, momento_actual);
+        mensaje_he_nacido.setInfo(cuerpo_mens);
+        //TODO: hacer los demas sets
+
+        //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
+        //directorio_de_agentes.add(ej);
         mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
         mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
 
@@ -379,7 +329,7 @@ public class Ajr {
         String Tiempo_de_nacimiento_str = String.valueOf(this.Tiempo_de_nacimiento);
         System.out.println("\n ==> Ha nacido un agente en la IP = "+Ip_Propia+
                 " - con ID_propio :" + this.ID_propio +
-                " - en el puerto :" + this.Puerto_Propio_TCP +
+                " - en el puerto :" + this.Puerto_Propio_UDP +
                 " - Su generación es :" + Num_generacion_str +
                 " - t de generación :" + Tiempo_de_nacimiento_str);
     }
@@ -401,45 +351,27 @@ public class Ajr {
             long momento_actual = System.currentTimeMillis();
             String momento_actual_str = String.valueOf(System.currentTimeMillis());
             String tiempo_vivido = String.valueOf(System.currentTimeMillis() - Tiempo_de_nacimiento);
-            String Puerto_Propio_str = String.valueOf(Puerto_Propio_TCP);
-            String Puerto_Monitor_TCP_str = String.valueOf(Puerto_Monitor_TCP);
+            String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
+            String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
             String cuerpo_mens_fin_agente = "Esto es el MENSAJE FIN DE AGENTE  - que el agente con ID_propio : " + ID_propio +
                     " - con ip : " + Ip_Propia +
                     " - con Puerto_Propio : " + Puerto_Propio_str +
                     " - con ID_mensaje : " + ID_mensaje +
-                    " - envia al monitor con Ip_Monitor : " + Ip_Monitor +
-                    " - con Puerto_Monitor : " + Puerto_Monitor_TCP_str +
+                    " - envia al monitor con Ip_Monitor : " + Ip_Dios +
+                    " - con Puerto_Monitor : " + Puerto_Dios_UDP_str +
                     " - en T : " + momento_actual_str +
                     " - con T de vida : " + Tiempo_de_vida +
                     " - con T vivido : " + tiempo_vivido;
 
             //TODO: mensaje muerte revisar
-            Mensaje mensaje_fin_agente = new Mensaje("2",
-                    "2", "2", "0", "UDP",
-                    ID_propio, Ip_Propia, Integer.toString(Puerto_Propio_TCP + 1), Puerto_Propio_str, momento_actual_str,
-                    "ID_Monitor", Ip_Monitor, Integer.toString(Puerto_Monitor_TCP + 1), Integer.toString(Puerto_Monitor_TCP), momento_actual_str);
-            mensaje_fin_agente.setBodyInfo(cuerpo_mens_fin_agente);
-            mensaje_fin_agente.setDeathReason("2");
-            ArrayList<String> e = new ArrayList();
-            e.add("0");
-            mensaje_fin_agente.setOwnedCardCost(e);
-            mensaje_fin_agente.setOwnedCardQuantity(e);
-            mensaje_fin_agente.setOwnedCardType(e);
-            mensaje_fin_agente.setWantedCardType(e);
-            mensaje_fin_agente.setOwnedMoney("0");
-            mensaje_fin_agente.setCreatedChilds(String.valueOf(this.Num_hijos_generados));
-            mensaje_fin_agente.setDeathTime(String.valueOf(this.Tiempo_de_vida));
-            mensaje_fin_agente.setPastTradeWantedCard("-");
-            mensaje_fin_agente.setPastTradeGivenCard("-");
-            mensaje_fin_agente.setTradeWantedCard("-");
-            mensaje_fin_agente.setTradeGivenCard("-");
-            mensaje_fin_agente.setOfferedCardType(e);
-            mensaje_fin_agente.setOfferedCardCost(e);
-            mensaje_fin_agente.setOfferedCardQuantity(e);
-            mensaje_fin_agente.setWishedCardType(e);
-            mensaje_fin_agente.setTradeMoney("0");
-            ArrayList<AccTest> h = new ArrayList<>();
-            //AccLocalizado ej = new AccLocalizado("id", "ip", 10000000,15550005 );
+            Mensaje mensaje_fin_agente = new Mensaje("4",
+                    ID_mensaje, "4", "Creación y envio de mensaje muerte (aventurero)",
+                    ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
+                    "ID_Monitor", Ip_Dios, Integer.toString(Puerto_Dios_UDP), momento_actual_str);
+            mensaje_fin_agente.setInfo(cuerpo_mens_fin_agente);
+            //TODO: hacer los demas sets
+
+            //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
             //directorio_de_agentes.add(ej);
             mensaje_fin_agente.setAgentsDirectory(this.directorio_de_agentes);
             mensaje_fin_agente.setDeadAgents(this.directorio_de_agentes);
@@ -528,7 +460,9 @@ public class Ajr {
      * Función menuInicial()
      * Será el menú inicial del Aventurero.
      */
-
+protected void menuInicial(){
+    //TODO: hacer el menu
+}
 
     /**
      * Funciones para sincronizar información
