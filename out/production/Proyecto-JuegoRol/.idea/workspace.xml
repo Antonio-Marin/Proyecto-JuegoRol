@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4134a981-ba58-40bc-918f-b87c330e5a2e" name="Changes" comment="Cambio TCP → UDP" />
+    <list default="true" id="4134a981-ba58-40bc-918f-b87c330e5a2e" name="Changes" comment="Descomentada linea" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,7 +52,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Ajr",
+    "git-widget-placeholder": "Mensaje",
     "last_opened_file_path": "C:/Users/marti/IdeaProjects/SMA_23-24/base"
   }
 }]]></component>
@@ -60,7 +60,7 @@
     <configuration name="arranca_agente" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="DungeonQuest.src.arranca_agente" />
       <module name="Proyecto-JuegoRol" />
-      <option name="PROGRAM_PARAMETERS" value="&quot;Antonio_monitor_raiz&quot; 0 &quot;MONITOR&quot; &quot;192.168.55.107&quot; &quot;6&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;Antonio_monitor&quot; 0 &quot;DIOS&quot; &quot;192.168.55.107&quot; &quot;6&quot;" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="DungeonQuest.src.*" />
@@ -185,7 +185,39 @@
       <option name="project" value="LOCAL" />
       <updated>1702297952307</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Cambio de id_propio → ID_propio">
+      <option name="closed" value="true" />
+      <created>1702299465974</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1702299465974</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Cambio ejemplo de como inicializar los agentes">
+      <option name="closed" value="true" />
+      <created>1702299495876</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1702299495876</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Comentada linea PuertoTCP_or">
+      <option name="closed" value="true" />
+      <created>1702299525814</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1702299525814</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Descomentada linea">
+      <option name="closed" value="true" />
+      <created>1702299550607</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1702299550607</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -202,6 +234,10 @@
     <MESSAGE value="Cambios de TCP a UDP. correción de errores en mensajes y añadidos TODOs" />
     <MESSAGE value="Menu básico" />
     <MESSAGE value="Cambio TCP → UDP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cambio TCP → UDP" />
+    <MESSAGE value="Cambio de id_propio → ID_propio" />
+    <MESSAGE value="Cambio ejemplo de como inicializar los agentes" />
+    <MESSAGE value="Comentada linea PuertoTCP_or" />
+    <MESSAGE value="Descomentada linea" />
+    <option name="LAST_COMMIT_MESSAGE" value="Descomentada linea" />
   </component>
 </project>
