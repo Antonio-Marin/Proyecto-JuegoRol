@@ -54,14 +54,14 @@ public class Ajr {
     }
     protected Estado_del_AJR Estado_Actual;
     protected long Tiempo_de_vida; // Definimos aqui en milisegundos el tiempo que el proceso del agente estara activo antes de terminarse
-	/**
+
     protected int Num_generacion; // Un agente que se arranca en una maquina genera procesos hijos y estos generan procesos nietos, este numero
                                     // indica a que generación correspondeeste agente como descendiente del agente inicial
     protected int Num_max_de_generaciones; // Los agentes de este nivel de generaciones, no generaran agente hijos
     protected int Num_hijos_generados; // Define el numero de descendientes que este agente ha generado (en primera generación)
     protected int Num_max_hijos_generados; // Define el numero maximo de descendientes de primera generación. que este agente ùede generar
     protected double Frecuencia_partos;  // Para manejar la velocidad en la que el agente se reproduce
-	**/
+
     protected double Frecuencia_rastreo_puertos; // Para manejar la velocidad en la que el agente busca otros agentes
 
     // //////////////////////////////////////
@@ -214,13 +214,12 @@ public class Ajr {
             System.out.println("Desde public Acc. ERROR definiendo Tiempo_de_vida : " + este_tipo_agente + " - no es un tipo de agente conocido");
         }
         int este_Num_generacion = Integer.parseInt(este_Num_generacion_str);
-        /*this.Num_generacion = este_Num_generacion;
+        this.Num_generacion = este_Num_generacion;
         this.Num_max_de_generaciones = 0; //CAMBIADO a 0
         this.Num_hijos_generados = 0; // Por ahora el agente no ha generado ningún descendiente
         this.Num_max_hijos_generados = 0; // CAMBIADO a 0 | el agente no debe superar este numero de descendientes en primera generacion (en principio arbitrario)
         this.Frecuencia_partos = 0.00; //CAMBIADO a 0.00 | anteriormente valia 0.01
 
-         */
         this.Frecuencia_rastreo_puertos = 0.00001f;
 
         // //////////////////////////////////////

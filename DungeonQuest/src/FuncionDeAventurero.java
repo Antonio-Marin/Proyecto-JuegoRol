@@ -51,7 +51,7 @@ public class FuncionDeAventurero implements Runnable {
             {
                 // Miramos en el directorio y seleccionamos un agente para enviar
                 // PARA PRUEBAS, tomamos el primer agente del directorio y le enviamos el mensaje
-                if ((agente.num_elem_directorio_de_agentes() > 0) & (agente.Estado_Actual == Ajr.Estado_del_ACC.VIVO )) {
+                if ((agente.num_elem_directorio_de_agentes() > 0) & (agente.Estado_Actual == Ajr.Estado_del_AJR.VIVO )) {
                     // seleccionamos el agente
                     AjrLocalizado otro_agente = agente.saca_de_directorio_de_agentes();
 
@@ -79,11 +79,10 @@ public class FuncionDeAventurero implements Runnable {
                             " - con puerto_dest = "+puerto_dest_str+
                             " :  - en T = " + momento_actual;
 
-                    Mensaje nuevo_mensaje = new Mensaje("1",
-                            ID_mensaje, "Nacimiento", "Envio información al monitor", protocolo,
-                            id_or, IP_or, Integer.toString(puertoUDP_or), Integer.toString(puertoTCP_or), momento_actual,
-                            id_dest, IP_dest, Integer.toString(puertoUDP_dest), Integer.toString(puertoTCP_dest), momento_actual);
 
+                    Mensaje nuevo_mensaje = new Mensaje("1", ID_mensaje, "Nacimiento", "Envio información al monitor",
+                            id_or, IP_or, Integer.toString(puertoUDP_or),momento_actual,
+                            id_dest, IP_dest, Integer.toString(puertoUDP_dest), momento_actual);
                     // Enviamos el mensaje a la cola de envíos
                     enviaMensaje(nuevo_mensaje);
                 }
@@ -105,7 +104,7 @@ public class FuncionDeAventurero implements Runnable {
             String momento_actual = String.valueOf(System.currentTimeMillis());
             System.out.println("Desde procesaMensajeRecibido. El agenteagente : " + agente.ID_propio +
                     " - con ip " + agente.Ip_Propia +
-                    " - ha recibido el mensaje  : " + mensajeRecibido.bodyInfo +
+                    " - ha recibido el mensaje  : " + mensajeRecibido.info +
                     " - ordinal = " + num_men_recibidos_fa +
                     " - en T = " + momento_actual);
         }else{
@@ -121,7 +120,7 @@ public class FuncionDeAventurero implements Runnable {
         String momento_actual = String.valueOf(System.currentTimeMillis());
         System.out.println("Desde generaMensajeAEnviar. El agenteagente : "+agente.ID_propio+
                                     " - con ip "+agente.Ip_Propia+
-                                    " - envia el mensaje  : "+ nuevo_mensaje.bodyInfo+
+                                    " - envia el mensaje  : "+ nuevo_mensaje.info+
                                     " - ordinal = "+num_men_enviados_fa+
                                     " - en T = "+momento_actual);
     } // Fin de - void enviaMensaje(Mensaje nuevo_mensaje) {

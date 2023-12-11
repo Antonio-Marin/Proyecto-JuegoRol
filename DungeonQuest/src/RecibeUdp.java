@@ -115,7 +115,7 @@ public class RecibeUdp extends Thread {
 
                     document.getDocumentElement().normalize();
 
-                    String tagName = "body_info";
+                    String tagName = "info";
 
                     NodeList nodeList = document.getElementsByTagName(tagName);
 
@@ -133,20 +133,20 @@ public class RecibeUdp extends Thread {
                     }
 
                         Mensaje mensaje_recibido_UDP = new Mensaje("1",
-                                "El ID_mensaje viene en el cuerpo del mensaje", "mensaje_recibido_UDP", "Envio informacón", protocolo,
-                                id_or, IP_or, Integer.toString(puerto_or), Integer.toString(puerto_dest), momento_actual,
-                                id_dest, IP_dest, Integer.toString(puerto_dest), Integer.toString(puerto_dest - 1), momento_actual);
-                        mensaje_recibido_UDP.setBodyInfo(cuerpo_mens);
+                                "El ID_mensaje viene en el cuerpo del mensaje", "Mensaje recibido por UDP", "Información recibida del agente",
+                                id_or, IP_or, Integer.toString(puerto_or), momento_actual,
+                                id_dest, IP_dest, Integer.toString(puerto_dest), momento_actual);
+                        mensaje_recibido_UDP.setInfo(cuerpo_mens);
 
 
                         String num_men_por_recibidos_str = String.valueOf(agente.num_elem_lita_recibidos());
-                        System.out.println("\n ==> Mensaje UDP RECIBIDO desde el agente: " + mensaje_recibido_UDP.bodyInfo +
+                        System.out.println("\n ==> Mensaje UDP RECIBIDO desde el agente: " + mensaje_recibido_UDP.info +
                                 "\n- mensaje en cola de envio : " + num_men_por_recibidos_str +
                                 " - total mensajes enviados : " + agente.num_elem_lita_enviar() +
                                 "\n Destinatario id_destino : " + mensaje_recibido_UDP.destinationId +
                                 " - en la ip : " + mensaje_recibido_UDP.destinationIp +
                                 " - puerto destino : " + mensaje_recibido_UDP.destinationPortUDP +
-                                " - protocolo : " + mensaje_recibido_UDP.comunicationProtocol
+                                " - protocolo : UDP"
                         );
 
                         // Llevamos el mensaje al contenedor de recibidos
