@@ -60,6 +60,8 @@ public class Ajr {
     protected int Num_hijos_generados; // Define el numero de descendientes que este agente ha generado (en primera generación)
     protected int Num_max_hijos_generados; // Define el numero maximo de descendientes de primera generación. que este agente ùede generar
     protected double Frecuencia_partos;  // Para manejar la velocidad en la que el agente se reproduce
+    protected int nivelAventurero;
+    protected int monstruosDerrotados;
 
     protected double Frecuencia_rastreo_puertos; // Para manejar la velocidad en la que el agente busca otros agentes
 
@@ -213,6 +215,8 @@ public class Ajr {
         this.Num_hijos_generados = 0; // Por ahora el agente no ha generado ningún descendiente
         this.Num_max_hijos_generados = 0; // CAMBIADO a 0 | el agente no debe superar este numero de descendientes en primera generacion (en principio arbitrario)
         this.Frecuencia_partos = 0.00; //CAMBIADO a 0.00 | anteriormente valia 0.01
+        this.nivelAventurero = 0;
+        this.monstruosDerrotados = 0;
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
 
@@ -394,10 +398,34 @@ public class Ajr {
                     ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
                     "ID_Monitor", Ip_Dios, Integer.toString(Puerto_Dios_UDP), momento_actual_str);
             mensaje_fin_agente.setInfo(cuerpo_mens_fin_agente);
-            //TODO: hacer los demas sets
 
-            //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
-            //directorio_de_agentes.add(ej);
+            if (this.nivelAventurero == 99){
+                mensaje_fin_agente.setMotivoMuerte("1");
+            } else{mensaje_fin_agente.setMotivoMuerte("1");}
+            mensaje_fin_agente.setAgenteFinalizadoNivel(Integer.toString(this.nivelAventurero));
+            mensaje_fin_agente.setMonstruosDerrotados(Integer.toString(this.monstruosDerrotados));
+            mensaje_fin_agente.setDeathTime(momento_actual_str);
+
+            //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
+
+            mensaje_fin_agente.setMazmorra("-");
+            mensaje_fin_agente.setNivelAventurero("0");
+            mensaje_fin_agente.setNombreMonstruo("-");
+            mensaje_fin_agente.setNivelMonstruo("0");
+            mensaje_fin_agente.setResultadoFinal("-");
+            mensaje_fin_agente.setNivelAventureroFinal("0");
+
+            mensaje_fin_agente.setId1("-");
+            mensaje_fin_agente.setIp1("-");
+            mensaje_fin_agente.setNivel1("0");
+            mensaje_fin_agente.setId2("-");
+            mensaje_fin_agente.setIp2("-");
+            mensaje_fin_agente.setNivel2("0");
+            mensaje_fin_agente.setReto("False");
+            mensaje_fin_agente.setResultado("-");
+            mensaje_fin_agente.setNivelFinal1("0");
+            mensaje_fin_agente.setNivelFinal2("0");
+
             mensaje_fin_agente.setAgentsDirectory(this.directorio_de_agentes);
             mensaje_fin_agente.setDeadAgents(this.directorio_de_agentes);
 
