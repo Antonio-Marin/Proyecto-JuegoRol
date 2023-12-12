@@ -463,6 +463,10 @@ public class Ajr {
      * el nacimiento se crearan las mazmorras aleatoriamente
      */
     protected void randomizedDungeons(){
+        this.mazmorra_principiantes.clear();
+        this.mazmorra_intermedia.clear();
+        this.mazmorra_avanzado.clear();
+
         Random rand = new Random();
         List<String> nombres_principiante = Arrays.asList("Slime", "Hilichurl", "Megaflora", "Hilichurl ballestero", "Samachurl", "Duende", "Bokoblin", "Esqueleto");
         List<String> nombres_intermedio = Arrays.asList("Skulltula", "Lawachurl", "Ogro", "Recaudador Fatui", "Fantasma", "Zombie", "Caballero errante", "Jauría de lobos");
@@ -473,7 +477,7 @@ public class Ajr {
             Monstruo monstruo_avanzado = new Monstruo(nombres_avanzado.get(rand.nextInt(8)), rand.nextInt(16, 30));
             this.mazmorra_principiantes.add(monstruo_principiante);
             this.mazmorra_intermedia.add(monstruo_intermedio);
-            this.mazmorra_avanzado.add(monstruo_intermedio);
+            this.mazmorra_avanzado.add(monstruo_avanzado);
         }
 
     }
@@ -503,6 +507,27 @@ protected void menuInicial(){
         }
     }
 }
+/**        PRUEBA PARA MOSTRAR LOS ENEMIGOS DE LAS MAZMORRAS (FUNCIONA)
+ *
+ *         System.out.println("======== ===================== ========");
+ *         System.out.println("======== MAZMORRA PRINCIPIANTE ========");
+ *         System.out.println("======== ===================== ========");
+ *         for (Monstruo elemento : this.mazmorra_principiantes) {
+ *             System.out.println(elemento.toString());
+ *         }
+ *         System.out.println("======== ===================== ========");
+ *         System.out.println("======== MAZMORRA INTERMEDIA ========");
+ *         System.out.println("======== ===================== ========");
+ *         for (Monstruo elemento : this.mazmorra_intermedia) {
+ *             System.out.println(elemento.toString());
+ *         }
+ *         System.out.println("======== ===================== ========");
+ *         System.out.println("======== MAZMORRA AVANZADA ========");
+ *         System.out.println("======== ===================== ========");
+ *         for (Monstruo elemento : this.mazmorra_avanzado) {
+ *             System.out.println(elemento.toString());
+ *         }
+ */
 
     /**
      * Funciones para sincronizar información
