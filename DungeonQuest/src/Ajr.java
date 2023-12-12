@@ -465,7 +465,7 @@ public class Ajr {
      * Será el menú inicial del Aventurero.
      */
 protected void menuInicial(){
-    //TODO: hacer el menu
+    //TODO: hacer más bonito el menú inicial
     Scanner s = new Scanner(System.in);
     boolean var = true;
     while(var) {
@@ -536,10 +536,16 @@ protected void menuInicial(){
         // Buscar un aventurero disponible.
 
 
-        //Mandar mensaje
+        //Mandar mensaje (3.1)
 
 
-        //ToDO Terminar
+        //Esperar confirmación (3.2)
+
+
+        // Si esa confirmación es true le manda el nivel (3.3) y el otro aventurero procesa el resultado
+
+
+        //Recibes el resultado (3.4) y te actualizas
 
 
         if(true){ //Si nivel del aventurero es >= 99
