@@ -225,7 +225,7 @@ public class Ajr {
         this.salidaVoluntaria = 0;
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
-        this.salidaVoluntaria = false;
+        //this.salidaVoluntaria = false;
 
         // //////////////////////////////////////
         // Definimos datos del sistema de comunicaciones
