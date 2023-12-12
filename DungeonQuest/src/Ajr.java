@@ -84,7 +84,7 @@ public class Ajr {
     private  int num_tot_men_rec;  // Numero total de mensajes recibidos por el agente
     private  int num_id_local_men;  // Este numero, junto con el identificador del agente, generan un codigo unico de mensaje
 
-    private boolean salidaVoluntaria;
+    //private boolean salidaVoluntaria;
 
     private LinkedList<Monstruo> mazmorra_principiantes = new LinkedList<>();
     private LinkedList<Monstruo> mazmorra_intermedia = new LinkedList<>();
