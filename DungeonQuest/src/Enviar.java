@@ -134,11 +134,11 @@ public class Enviar extends Thread {
 
         try {
             //Creamos el socket de UDP
-            String filePath ="C:/Users/marti/IdeaProjects/SMA_23-24/base/" +"xml_"+mensajeAEnviar.msgId+".xml";
+            String filePath ="C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/" +"xml_"+mensajeAEnviar.msgId+".xml";
             /*
             Ruta para:
-            Pablo = C:/Users/pablo/IdeaProjects/SMA_23-24/base/
-            Antonio = C:/Users/marti/IdeaProjects/SMA_23-24/base
+            Pablo = C:\Users\pablo\IdeaProjects\Proyecto-JuegoRol\out\production\Proyecto-JuegoRol\DungeonQuest
+            Antonio = C:/Users/marti/IdeaProjects/SMA_23-24/Proyecto/
              */
             String fileName = new File(filePath).getName();
             DatagramSocket socketUDP = new DatagramSocket();

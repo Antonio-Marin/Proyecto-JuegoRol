@@ -101,10 +101,10 @@ public class RecibeUdp extends Thread {
                     String momento_actual = String.valueOf(System.currentTimeMillis());
                     String cuerpo_mens = "";
 
-                    File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/base/" + fileName);
+                    File xmlFile = new File("C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol" + fileName);
                     /*
                     Ruta para:
-                    Pablo = C:/Users/pablo/IdeaProjects/SMA_23-24/base/
+                    Pablo = C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol
                     Antonio = C:/Users/marti/IdeaProjects/SMA_23-24/base
                      */
 

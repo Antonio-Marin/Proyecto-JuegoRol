@@ -57,6 +57,9 @@ public class Ajr {
     protected int Num_hijos_generados; // Define el numero de descendientes que este agente ha generado (en primera generación)
     protected int Num_max_hijos_generados; // Define el numero maximo de descendientes de primera generación. que este agente ùede generar
     protected double Frecuencia_partos;  // Para manejar la velocidad en la que el agente se reproduce
+    protected int nivelAventurero;
+    protected int monstruosDerrotados;
+    protected int salidaVoluntaria;
 
     protected double Frecuencia_rastreo_puertos; // Para manejar la velocidad en la que el agente busca otros agentes
 
@@ -189,10 +192,10 @@ public class Ajr {
         this.Rango_IPs = 0;
         this.Puerto_Inicio = 50000;
         this.Rango_Puertos = 10000;
-        this.localizacion_codigo = "C:/Users/marti/IdeaProjects/Proyecto/out/production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
+        this.localizacion_codigo = "C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/out/production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
         /*
         Localización código:
-        Pablo: C:/Users/pablo/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
+        Pablo: C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/out/production/Proyecto-JuegoRol/DungeonQuest
         Antonio: C:/Users/marti/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
          */
         this.tiempo_espera_fin_env = 1000 * 1; // Es el tiempo (milisegundos) que esperaremos para enviar los mensajen pendientes en la cola de envios, antes de finalizar el agente
@@ -217,6 +220,9 @@ public class Ajr {
         this.Num_hijos_generados = 0; // Por ahora el agente no ha generado ningún descendiente
         this.Num_max_hijos_generados = 0; // CAMBIADO a 0 | el agente no debe superar este numero de descendientes en primera generacion (en principio arbitrario)
         this.Frecuencia_partos = 0.00; //CAMBIADO a 0.00 | anteriormente valia 0.01
+        this.nivelAventurero = 0;
+        this.monstruosDerrotados = 0;
+        this.salidaVoluntaria = 0;
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
         this.salidaVoluntaria = false;
@@ -304,6 +310,7 @@ public class Ajr {
         // Construimos el mensaje
 
         String ID_mensaje = dame_codigo_id_local_men();
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
         String momento_actual = String.valueOf(System.currentTimeMillis());
         String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
         String Puerto_Dios_str = String.valueOf(Puerto_Dios_UDP);
@@ -316,16 +323,39 @@ public class Ajr {
                 " :  - en T : " + momento_actual;
 
         Mensaje mensaje_he_nacido = new Mensaje(
-                ID_mensaje, "1", "0",
+                msgId, "1", "0",
                 ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual,
                 "ID_Dios", Ip_Dios, Puerto_Dios_str, momento_actual);
         mensaje_he_nacido.setInfo(cuerpo_mens);
-        //TODO: hacer los demas sets
+        //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
 
-        //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
-        //directorio_de_agentes.add(ej);
-        //mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
-        //mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
+        mensaje_he_nacido.setMotivoMuerte("0");
+        mensaje_he_nacido.setAgenteFinalizadoNivel("0");
+        mensaje_he_nacido.setMonstruosDerrotados("0");
+        mensaje_he_nacido.setDeathTime("0");
+
+        mensaje_he_nacido.setMazmorra("-");
+        mensaje_he_nacido.setNivelAventurero("0");
+        mensaje_he_nacido.setNombreMonstruo("-");
+        mensaje_he_nacido.setNivelMonstruo("0");
+        mensaje_he_nacido.setResultadoFinal("-");
+        mensaje_he_nacido.setNivelAventureroFinal("0");
+
+        mensaje_he_nacido.setId1("-");
+        mensaje_he_nacido.setIp1("-");
+        mensaje_he_nacido.setNivel1("0");
+        mensaje_he_nacido.setId2("-");
+        mensaje_he_nacido.setIp2("-");
+        mensaje_he_nacido.setNivel2("0");
+        mensaje_he_nacido.setReto("false");
+        mensaje_he_nacido.setResultado("-");
+        mensaje_he_nacido.setNivelFinal1("0");
+        mensaje_he_nacido.setNivelFinal2("0");
+
+        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
+        directorio_de_agentes.add(ej);
+        mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
+        mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
 
 
         // Insertamos el mensaje
@@ -354,6 +384,7 @@ public class Ajr {
         // Notificamos al monitor que este agente ha finalizadO
         if (tipo_agente == tipos_de_agentes.AVENTURERO) {
             String ID_mensaje = dame_codigo_id_local_men();
+            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
             long momento_actual = System.currentTimeMillis();
             String momento_actual_str = String.valueOf(System.currentTimeMillis());
             String tiempo_vivido = String.valueOf(System.currentTimeMillis() - Tiempo_de_nacimiento);
@@ -371,14 +402,46 @@ public class Ajr {
 
             //TODO: mensaje muerte revisar
             Mensaje mensaje_fin_agente = new Mensaje(
-                    ID_mensaje, "4", "Creación y envio de mensaje muerte (aventurero)",
+                    msgId, "4", "0",
                     ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
                     "ID_Monitor", Ip_Dios, Integer.toString(Puerto_Dios_UDP), momento_actual_str);
             mensaje_fin_agente.setInfo(cuerpo_mens_fin_agente);
-            //TODO: hacer los demas sets
 
-            //AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
-            //directorio_de_agentes.add(ej);
+            // 0 --> Derrotado
+            // 1 --> Nivel Máximo
+            // 2 --> Salida Voluntaria
+            if (this.salidaVoluntaria != 0){
+                mensaje_fin_agente.setMotivoMuerte("2");
+            } else if(this.nivelAventurero == 99){
+                mensaje_fin_agente.setMotivoMuerte("1");
+            }
+            else{mensaje_fin_agente.setMotivoMuerte("0");}
+
+
+            mensaje_fin_agente.setAgenteFinalizadoNivel(Integer.toString(this.nivelAventurero));
+            mensaje_fin_agente.setMonstruosDerrotados(Integer.toString(this.monstruosDerrotados));
+            mensaje_fin_agente.setDeathTime(momento_actual_str);
+
+            //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
+
+            mensaje_fin_agente.setMazmorra("-");
+            mensaje_fin_agente.setNivelAventurero("0");
+            mensaje_fin_agente.setNombreMonstruo("-");
+            mensaje_fin_agente.setNivelMonstruo("0");
+            mensaje_fin_agente.setResultadoFinal("-");
+            mensaje_fin_agente.setNivelAventureroFinal("0");
+
+            mensaje_fin_agente.setId1("-");
+            mensaje_fin_agente.setIp1("-");
+            mensaje_fin_agente.setNivel1("0");
+            mensaje_fin_agente.setId2("-");
+            mensaje_fin_agente.setIp2("-");
+            mensaje_fin_agente.setNivel2("0");
+            mensaje_fin_agente.setReto("false");
+            mensaje_fin_agente.setResultado("-");
+            mensaje_fin_agente.setNivelFinal1("0");
+            mensaje_fin_agente.setNivelFinal2("0");
+
             mensaje_fin_agente.setAgentsDirectory(this.directorio_de_agentes);
             mensaje_fin_agente.setDeadAgents(this.directorio_de_agentes);
 
@@ -504,6 +567,7 @@ protected void menuInicial(){
                 var = pvp();
             case 3:
                 var = false;
+                this.salidaVoluntaria = 1;
                 break;
             default:
                 System.out.println("Opcion incorrecta");
