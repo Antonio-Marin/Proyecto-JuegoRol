@@ -9,4 +9,8 @@ public class Monstruo {
         this.nivel = nivel;
     }
 
+    @Override
+    public String toString() {
+        return "Monstruo{" + "nombre='" + nombre + '\'' + ", nivel=" + nivel + '}';
+    }
 }
