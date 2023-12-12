@@ -62,6 +62,7 @@ public class Ajr {
     protected double Frecuencia_partos;  // Para manejar la velocidad en la que el agente se reproduce
     protected int nivelAventurero;
     protected int monstruosDerrotados;
+    protected int salidaVoluntaria;
 
     protected double Frecuencia_rastreo_puertos; // Para manejar la velocidad en la que el agente busca otros agentes
 
@@ -187,10 +188,10 @@ public class Ajr {
         this.Rango_IPs = 0;
         this.Puerto_Inicio = 50000;
         this.Rango_Puertos = 10000;
-        this.localizacion_codigo = "C:/Users/marti/IdeaProjects/Proyecto/out/production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
+        this.localizacion_codigo = "C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/out/production/Proyecto-JuegoRol/DungeonQuest"; //cambia segun quien lo ejecute
         /*
         Localización código:
-        Pablo: C:/Users/pablo/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
+        Pablo: C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/out/production/Proyecto-JuegoRol/DungeonQuest
         Antonio: C:/Users/marti/IdeaProjects/Proyecto/out\production/Proyecto-JuegoRol/DungeonQuest
          */
         this.tiempo_espera_fin_env = 1000 * 1; // Es el tiempo (milisegundos) que esperaremos para enviar los mensajen pendientes en la cola de envios, antes de finalizar el agente
@@ -217,6 +218,7 @@ public class Ajr {
         this.Frecuencia_partos = 0.00; //CAMBIADO a 0.00 | anteriormente valia 0.01
         this.nivelAventurero = 0;
         this.monstruosDerrotados = 0;
+        this.salidaVoluntaria = 0;
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
 
@@ -377,6 +379,7 @@ public class Ajr {
         // Notificamos al monitor que este agente ha finalizadO
         if (tipo_agente == tipos_de_agentes.AVENTURERO) {
             String ID_mensaje = dame_codigo_id_local_men();
+            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
             long momento_actual = System.currentTimeMillis();
             String momento_actual_str = String.valueOf(System.currentTimeMillis());
             String tiempo_vivido = String.valueOf(System.currentTimeMillis() - Tiempo_de_nacimiento);
@@ -394,14 +397,22 @@ public class Ajr {
 
             //TODO: mensaje muerte revisar
             Mensaje mensaje_fin_agente = new Mensaje(
-                    ID_mensaje, "4", "Creación y envio de mensaje muerte (aventurero)",
+                    msgId, "4", "0",
                     ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
                     "ID_Monitor", Ip_Dios, Integer.toString(Puerto_Dios_UDP), momento_actual_str);
             mensaje_fin_agente.setInfo(cuerpo_mens_fin_agente);
 
-            if (this.nivelAventurero == 99){
+            // 0 --> Derrotado
+            // 1 --> Nivel Máximo
+            // 2 --> Salida Voluntaria
+            if (this.salidaVoluntaria != 0){
+                mensaje_fin_agente.setMotivoMuerte("2");
+            } else if(this.nivelAventurero == 99){
                 mensaje_fin_agente.setMotivoMuerte("1");
-            } else{mensaje_fin_agente.setMotivoMuerte("1");}
+            }
+            else{mensaje_fin_agente.setMotivoMuerte("0");}
+
+
             mensaje_fin_agente.setAgenteFinalizadoNivel(Integer.toString(this.nivelAventurero));
             mensaje_fin_agente.setMonstruosDerrotados(Integer.toString(this.monstruosDerrotados));
             mensaje_fin_agente.setDeathTime(momento_actual_str);
@@ -421,7 +432,7 @@ public class Ajr {
             mensaje_fin_agente.setId2("-");
             mensaje_fin_agente.setIp2("-");
             mensaje_fin_agente.setNivel2("0");
-            mensaje_fin_agente.setReto("False");
+            mensaje_fin_agente.setReto("false");
             mensaje_fin_agente.setResultado("-");
             mensaje_fin_agente.setNivelFinal1("0");
             mensaje_fin_agente.setNivelFinal2("0");
@@ -528,6 +539,7 @@ protected void menuInicial(){
                 break;
             case 3:
                 var = false;
+                this.salidaVoluntaria = 1;
                 break;
             default:
                 System.out.println("Opcion incorrecta");

@@ -5,20 +5,20 @@
         <tipo_protocolo>1</tipo_protocolo>
         <paso_protocolo>0</paso_protocolo>
         <origin>
-            <origin_id>Antonio_av</origin_id>
-            <origin_ip>192.168.55.107</origin_ip>
-            <origin_port_UDP>52372</origin_port_UDP>
-            <origin_time>1702317448100</origin_time>
+            <origin_id>Pablo_Aventurero</origin_id>
+            <origin_ip>126.35.20.2</origin_ip>
+            <origin_port_UDP>58568</origin_port_UDP>
+            <origin_time>1702402437708</origin_time>
         </origin>
         <destination>
             <destination_id>ID_Dios</destination_id>
             <destination_ip/>
-            <destination_port_UDP>7</destination_port_UDP>
-            <destination_time>1702317448100</destination_time>
+            <destination_port_UDP>6</destination_port_UDP>
+            <destination_time>1702402437708</destination_time>
         </destination>
     </header>
     <body>
-        <info>Esto es el MENSAJE HE NACIDO  - que el agente con ID_propio : Antonio_av - con ip : 192.168.55.107 - con Puerto_Propio : 52372 - con ID_mensaje : Antonio_av_men_0 - envia al monitor con Ip_Monitor : null - con Puerto_Dios : 7 :  - en T : 1702317448100</info>
+        <info>Esto es el MENSAJE HE NACIDO  - que el agente con ID_propio : Pablo_Aventurero - con ip : 126.35.20.2 - con Puerto_Propio : 58568 - con ID_mensaje : Pablo_Aventurero_men_0 - envia al monitor con Ip_Monitor : null - con Puerto_Dios : 6 :  - en T : 1702402437708</info>
         <contenido_finalizacion>
             <motivo_muerte>0</motivo_muerte>
             <agente_finalizado_info>
