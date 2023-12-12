@@ -15,7 +15,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class RecibeUdp extends Thread {
 
@@ -100,12 +102,14 @@ public class RecibeUdp extends Thread {
                     String protocolo = "UDP";
                     String momento_actual = String.valueOf(System.currentTimeMillis());
                     String cuerpo_mens = "";
+                    String tipo_protocolo = "";
+                    String paso_protocolo = "";
 
-                    File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/base/" + fileName);
+                    File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/Proyecto/" + fileName);
                     /*
                     Ruta para:
-                    Pablo = C:/Users/pablo/IdeaProjects/SMA_23-24/base/
-                    Antonio = C:/Users/marti/IdeaProjects/SMA_23-24/base
+                    Pablo = C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/
+                    Antonio = C:/Users/marti/IdeaProjects/Proyecto/
                      */
 
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -115,22 +119,45 @@ public class RecibeUdp extends Thread {
 
                     document.getDocumentElement().normalize();
 
-                    String tagName = "info";
+                    /**
+                     * info: obtener la info y mostrarlo por pantalla ya que son los datos de quien
+                     * manda el mensaje (todo esto va en cuerpo_mens)
+                     * tipo_protocolo: obtener el tipo de protocolo y guardarlo para despues
+                     * procesarlo al final (todo esto va en tipo_protocolo)
+                     * paso_protocolo: parecido a la anterior pero con el paso del protocolo
+                     * (todo esto va en paso_protocolo)
+                     */
 
-                    NodeList nodeList = document.getElementsByTagName(tagName);
+                    List<String> nombresEtiquetas = new ArrayList<>();
+                    nombresEtiquetas.add("info");
+                    nombresEtiquetas.add("tipo_protocolo");
+                    nombresEtiquetas.add("paso_protocolo");
+                    for (String nombreEtiqueta : nombresEtiquetas) {
+                        NodeList listaNodos = document.getElementsByTagName(nombreEtiqueta);
 
-                    if (nodeList.getLength() > 0) {
-                        for (int i = 0; i < nodeList.getLength(); i++) {
-                            Node node = nodeList.item(i);
+                        // Recorrer la lista de nodos y procesar cada elemento
+                        for (int i = 0; i < listaNodos.getLength(); i++) {
+                            Node nodo = listaNodos.item(i);
 
-                            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                Element element = (Element) node;
-                                cuerpo_mens = element.getTextContent();
+                            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                                Element elemento = (Element) nodo;
+
+                                // Obtener y procesar los datos del elemento según la etiqueta
+                                switch (nombreEtiqueta) {
+                                    case "info":
+                                        cuerpo_mens = elemento.getTextContent();
+                                        break;
+                                    case "tipo_protocolo":
+                                        tipo_protocolo = elemento.getTextContent();
+                                        break;
+                                    case "paso_protocolo":
+                                        paso_protocolo = elemento.getTextContent();
+                                        break;
+                                }
                             }
                         }
-                    }else{
-                        System.out.println("No se encontro la etiqueta: " + tagName);
                     }
+
 
                         Mensaje mensaje_recibido_UDP = new Mensaje(
                                 "El ID_mensaje viene en el cuerpo del mensaje", "Mensaje recibido por UDP", "Información recibida del agente",
@@ -154,6 +181,36 @@ public class RecibeUdp extends Thread {
                         System.out.println("\n ==> Desde RecibeUdp, hemos recibido un mensaje almacenado en " + fileName +
                                 " - en contenedor tenemos : " + String.valueOf(agente.num_elem_lita_recibidos()) +
                                 " - total recibidos : " + agente.num_elem_lita_recibidos());
+
+                        if (tipo_protocolo == "2"){
+                            if (paso_protocolo == "2.1"){
+                                //Llamar a la funcion en relación con el paso protocolo 2.1
+                            } else if (paso_protocolo == "2.2") {
+                                //Llamar a la funcion en relación con el paso protocolo 2.2
+                            }else if (paso_protocolo=="2.3"){
+                                //Llamar a la funcion en relación con el paso protocolo 2.3
+                            }else{
+                                System.out.println("=============================");
+                                System.out.println("Paso de protocolo INCORRECTO.");
+                                System.out.println("=============================");
+                            }
+
+                        }else if (tipo_protocolo == "3"){
+                            if (paso_protocolo == "3.1"){
+                                //Llamar a la funcion en relación con el paso protocolo 3.1
+                            } else if (paso_protocolo == "3.2") {
+                                //Llamar a la funcion en relación con el paso protocolo 3.2
+                            }else if (paso_protocolo=="3.3"){
+                                //Llamar a la funcion en relación con el paso protocolo 3.3
+                            }else if (paso_protocolo=="3.4"){
+                                //Llamar a la funcion en relación con el paso protocolo 3.4
+                            }else{
+                                System.out.println("=============================");
+                                System.out.println("Paso de protocolo INCORRECTO.");
+                                System.out.println("=============================");
+                            }
+                        }// Fin comprobacion del tipo_protocolo
+
                     } else {
                         System.out.println("El archivo se ha sometido a verificación y no es correcto");
                     }// Fin de if(Validar...
