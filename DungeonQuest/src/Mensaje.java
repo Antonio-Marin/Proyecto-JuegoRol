@@ -28,8 +28,9 @@ public class Mensaje {
      *      3.4 : Una vez terminada la lucha cada Aventurero manda un mensaje a Dios con el resultado (guien gana y nuevo nivel)
      *  4: Muerte
      */
+
     /**
-     * DATOS PARA COMUNICID 1: Naciminto
+     * DATOS PARA 1: Naciminto
      */
     protected String msgId; // Id del mensaje
     protected String tipoProtocolo; //Indica el protcolo del mensaje (Nacimiento, lucha, etc.)
@@ -46,7 +47,7 @@ public class Mensaje {
     protected String destinationTime; ////hora del agente destino
     protected String info;  //Contenido del mensaje a enviar
     /**
-     * DATOS PARA COMUNICID 4: Muerte
+     * DATOS PARA 4: Muerte
      * 0. consigue maximo nivel
      * 1. Es derrotado
      * 2. Sale voluntariamente
@@ -56,7 +57,7 @@ public class Mensaje {
     protected String monstruosDerrotados; // Monstruos que derreotó
     protected String deathTime; // Hora muerte
     /**
-     * DATOS PARA COMUNICID 2: Luchar contra un monstruo
+     * DATOS PARA 2: Luchar contra un monstruo
      */
     protected String mazmorra;
     protected String nivelAventurero;
@@ -66,7 +67,7 @@ public class Mensaje {
     protected String nivelAventureroFinal;
 
     /**
-     * DATOS PARA COMUNICID 3: PVP
+     * DATOS PARA 3: PVP
      */
     protected String id1;
     protected String ip1;
