@@ -624,30 +624,110 @@ protected void menuInicial(){
      * Función mazmorra()
      * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
      */
-    public static boolean mazmorra(){
+    public boolean mazmorra(){
         Scanner s = new Scanner(System.in);
         System.out.println("Hola valiente aventurero \n Has elegido entrar en una mazmorra \n Decide en cual: ");
         String resp = s.next();
 
         if(true) {// if resp es una mazmorra válida
             // Crea mensaje petición monstruo al Dios (2.1)
+            String ID_mensaje = dame_codigo_id_local_men();
+            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
+            String momento_actual_str = String.valueOf(System.currentTimeMillis());
+            String Puerto_Propio_UDP_str = String.valueOf(Puerto_Propio_UDP);
+            String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
+            Mensaje mazmorra = new Mensaje(
+                    msgId, "2", "1",
+                    ID_propio, Ip_Propia, Puerto_Propio_UDP_str, momento_actual_str,
+                    "ID_Dios", Ip_Dios, Puerto_Dios_UDP_str, momento_actual_str);
 
+            String cuerpo_mens_mazmorra = "Esto es el MENSAJE FIN DE AGENTE  - que el agente con ID_propio : " + ID_propio +
+                    " - con ip : " + Ip_Propia +
+                    " - con Puerto_Propio : " + Puerto_Propio_UDP_str +
+                    " - con ID_mensaje : " + ID_mensaje +
+                    " - envia al monitor con Ip_Monitor : " + Ip_Dios +
+                    " - con Puerto_Monitor : " + Puerto_Dios_UDP_str +
+                    " - en T : " + momento_actual_str +
+                    " - con dificultad mazmorra: " + resp+
+                    " - con nivel de aventurero" + aventurero.nivel;
+
+            mazmorra.setInfo(cuerpo_mens_mazmorra);
+            mazmorra.setMazmorra(resp);
+            mazmorra.setNivelAventurero(""+nivelAventurero);
+
+            //Pa que no de fallo manin
+            mazmorra.setNombreMonstruo("-");
+            mazmorra.setNivelMonstruo("0");
+            mazmorra.setResultadoFinal("-");
+            mazmorra.setNivelAventureroFinal("0");
+
+            mazmorra.setId1("-");
+            mazmorra.setIp1("-");
+            mazmorra.setNivel1("0");
+            mazmorra.setId2("-");
+            mazmorra.setIp2("-");
+            mazmorra.setNivel2("0");
+            mazmorra.setReto("false");
+            mazmorra.setResultado("-");
+            mazmorra.setNivelFinal1("0");
+            mazmorra.setNivelFinal2("0");
+
+            mazmorra.setAgenteFinalizadoNivel("0");
+            mazmorra.setMonstruosDerrotados("0");
+            mazmorra.setDeathTime("0");
+
+            mazmorra.setAgentsDirectory(this.directorio_de_agentes);
+            mazmorra.setDeadAgents(this.directorio_de_agentes);
+
+            pon_en_lita_enviar(mazmorra);
 
             //Espera mensaje del Dios dando un monstruo (2.2)
-
+            //wait();
 
             //Una vez recibe el mensaje  saca los datos necesarios y calcula el resultado del combate
+            String nombre_Monstro = mazmorra.getNombreMonstruo();
+            int nivel_Monstro = Integer.parseInt(mazmorra.getNivelMonstruo());
+            String tipo_Mazmorrra = mazmorra.getMazmorra();
 
+            System.out.println("Te has encontrado en la mazmorra "+tipo_Mazmorrra+", al monstruo "+nombre_Monstro+" de nivel "+nivel_Monstro);
+            int nivel_aventurero = Integer.parseInt(mazmorra.getNivelAventurero());
+            int exp_ganada;
 
-            System.out.println("Te has encontrado en la mazmorra [Mazmorra], al monstruo [Monstruo] de nivel [Nivel]");
-
-
-            System.out.println("Resultado: [Victoria/Derrota] \n Experiencia ganada: [Exp] \n Nivel actual: [Nivel]");
+            if(nivel_aventurero >= nivel_Monstro){
+                System.out.println("Desea huir: 1. Si 2. No (Ponga 1 o 2)");
+                int r = s.nextInt();
+                if(r == 1){
+                    System.out.println("Has huido con exito");
+                    return true;
+                }else{
+                    exp_ganada = 1;
+                    nivel_aventurero += exp_ganada;
+                    mazmorra.setResultadoFinal("Victoria");
+                    mazmorra.setNivelAventureroFinal(""+nivel_aventurero);
+                    System.out.println("Resultado: "+mazmorra.getResultadoFinal()+" \n Experiencia ganada: "+exp_ganada+" \n Nivel actual:"+ mazmorra.getNivelAventureroFinal());
+                }
+            }else{
+                int suma_lvl = nivel_Monstro + nivel_aventurero;
+                int probabilidad;
+                System.out.println("Desea huir: 1. Si 2. No (Ponga 1 o 2)");
+                int r = s.nextInt();
+                if(r == 1){
+                    probabilidad = (int) (Math.floor(Math.random()*(suma_lvl-0+1)+0));
+                    if(probabilidad < nivel_aventurero){
+                        System.out.println("Has huido con exito");
+                        return true;
+                    }else{
+                        lucha_mazmorra(mazmorra);
+                    }
+                }else{
+                    lucha_mazmorra(mazmorra);
+                }
+            }
 
             if(true){ //Si nivel del aventurero es >= 99
                 // nivel = 99
                 return false; // Ya que ha terminado la partida.
-            }else if(true){ // Si ha sido derrotado
+            }else if(mazmorra.getResultadoFinal() == "Derrota"){ // Si ha sido derrotado
                 return false; // Ya que ha terminado la partida.
             } else {return true;}
 
@@ -658,6 +738,25 @@ protected void menuInicial(){
         }
     }
 
+    public void lucha_mazmorra(Mensaje mazmorra){
+        int probabilidad, exp_ganada;
+        int nivel_Monstro = Integer.parseInt(mazmorra.getNivelMonstruo());
+        int nivel_aventurero = Integer.parseInt(mazmorra.getNivelAventurero());
+        int suma_lvl = nivel_Monstro + nivel_aventurero;
+        probabilidad = (int) (Math.floor(Math.random()*(suma_lvl-0+1)+0));
+        if(probabilidad < nivel_aventurero){
+            exp_ganada = nivel_Monstro - nivel_aventurero;
+            nivel_aventurero += exp_ganada;
+            mazmorra.setResultadoFinal("Victoria");
+            mazmorra.setNivelAventureroFinal(""+nivel_aventurero);
+            System.out.println("Resultado: "+mazmorra.getResultadoFinal()+" \n Experiencia ganada: "+exp_ganada+" \n Nivel actual:"+ mazmorra.getNivelAventureroFinal());
+
+        }else{
+            mazmorra.setResultadoFinal("Derrota");
+            System.out.println("Resultado: "+mazmorra.getResultadoFinal());
+        }
+
+    }
 
     /**
      * Función pvp()
