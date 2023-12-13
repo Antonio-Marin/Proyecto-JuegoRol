@@ -58,7 +58,7 @@ public class RecibeUdp extends Thread {
             while(true) {
                 // El servidor espera a que el cliente se conecte y devuelve un socket nuevo
                 // Obtiene el flujo de entrada y lee el objeto del stream
-                DatagramPacket datos_recibido_UDP = new DatagramPacket(new byte[1024], 1024);
+                //DatagramPacket datos_recibido_UDP = new DatagramPacket(new byte[1024], 1024);
                 DatagramPacket paquete_recibido_UDP = new DatagramPacket(bufer, bufer.length);
 
                 System.out.println("\n ==> ********************************** Desde  RecibeUdp ESPERANDO paquete UDP en el agente con id  : " + agente.ID_propio +
@@ -132,6 +132,7 @@ public class RecibeUdp extends Thread {
                     nombresEtiquetas.add("info");
                     nombresEtiquetas.add("tipo_protocolo");
                     nombresEtiquetas.add("paso_protocolo");
+                    //TODO: añadir las que hacen falta
                     for (String nombreEtiqueta : nombresEtiquetas) {
                         NodeList listaNodos = document.getElementsByTagName(nombreEtiqueta);
 
@@ -182,12 +183,13 @@ public class RecibeUdp extends Thread {
                                 " - en contenedor tenemos : " + String.valueOf(agente.num_elem_lita_recibidos()) +
                                 " - total recibidos : " + agente.num_elem_lita_recibidos());
 
+                        //TODO: terminar de hacerlo
                         if (tipo_protocolo == "2"){
-                            if (paso_protocolo == "2.1"){
+                            if (paso_protocolo == "1"){
                                 //Llamar a la funcion en relación con el paso protocolo 2.1
-                            } else if (paso_protocolo == "2.2") {
+                            } else if (paso_protocolo == "2") {
                                 //Llamar a la funcion en relación con el paso protocolo 2.2
-                            }else if (paso_protocolo=="2.3"){
+                            }else if (paso_protocolo=="3"){
                                 //Llamar a la funcion en relación con el paso protocolo 2.3
                             }else{
                                 System.out.println("=============================");
@@ -196,13 +198,13 @@ public class RecibeUdp extends Thread {
                             }
 
                         }else if (tipo_protocolo == "3"){
-                            if (paso_protocolo == "3.1"){
+                            if (paso_protocolo == "1"){
                                 //Llamar a la funcion en relación con el paso protocolo 3.1
-                            } else if (paso_protocolo == "3.2") {
+                            } else if (paso_protocolo == "2") {
                                 //Llamar a la funcion en relación con el paso protocolo 3.2
-                            }else if (paso_protocolo=="3.3"){
+                            }else if (paso_protocolo=="3"){
                                 //Llamar a la funcion en relación con el paso protocolo 3.3
-                            }else if (paso_protocolo=="3.4"){
+                            }else if (paso_protocolo=="4"){
                                 //Llamar a la funcion en relación con el paso protocolo 3.4
                             }else{
                                 System.out.println("=============================");
