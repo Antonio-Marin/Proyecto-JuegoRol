@@ -872,7 +872,13 @@ protected void menuInicial(){
                     " - en el puerto :" + Puerto_Propio_str);
 
         //Esperar confirmación (3.2)-----------------------------------------------------------------------------------
-            //wait();
+            if (funcionAventurero.mensajesPVP.isEmpty()){
+                try {
+                    funcionAventurero.mensajesPVP.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
 
         // Si esa confirmación es true le manda el nivel (3.3) y el otro aventurero procesa el resultado

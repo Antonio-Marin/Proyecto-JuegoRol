@@ -103,6 +103,7 @@ public class FuncionDeAventurero implements Runnable {
         }else{
             mensajeRecibido = agente.saca_de_lita_recibidos_pvp();
             mensajesPVP.add(mensajeRecibido);
+            mensajesPVP.notifyAll();
         }
         mensajeRecibido.crearXML();
         TratarXML test = new TratarXML();
