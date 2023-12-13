@@ -104,6 +104,7 @@ public class RecibeUdp extends Thread {
                     String cuerpo_mens = "";
                     String tipo_protocolo = "";
                     String paso_protocolo = "";
+                    String reto = "";
 
                     File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/Proyecto/" + fileName);
                     /*
@@ -132,6 +133,7 @@ public class RecibeUdp extends Thread {
                     nombresEtiquetas.add("info");
                     nombresEtiquetas.add("tipo_protocolo");
                     nombresEtiquetas.add("paso_protocolo");
+                    nombresEtiquetas.add("reto");
                     //TODO: añadir las que hacen falta
                     for (String nombreEtiqueta : nombresEtiquetas) {
                         NodeList listaNodos = document.getElementsByTagName(nombreEtiqueta);
@@ -153,6 +155,9 @@ public class RecibeUdp extends Thread {
                                         break;
                                     case "paso_protocolo":
                                         paso_protocolo = elemento.getTextContent();
+                                        break;
+                                    case "reto":
+                                        reto = elemento.getTextContent();
                                         break;
                                 }
                             }
@@ -178,11 +183,8 @@ public class RecibeUdp extends Thread {
                         );
 
                         // Llevamos el mensaje al contenedor de recibidos
-                        if (mensaje_recibido_UDP.reto.equals("reto")||mensaje_recibido_UDP.reto.equals("true")){
-                            agente.pon_en_lita_recibidos_pvp(mensaje_recibido_UDP);
-                        }else{
+
                             agente.pon_en_lita_recibidos(mensaje_recibido_UDP);
-                        }
 
                         System.out.println("\n ==> Desde RecibeUdp, hemos recibido un mensaje almacenado en " + fileName +
                                 " - en contenedor tenemos : " + String.valueOf(agente.num_elem_lita_recibidos()) +
@@ -204,9 +206,12 @@ public class RecibeUdp extends Thread {
 
                         }else if (tipo_protocolo == "3"){
                             if (paso_protocolo == "1"){
-                                //Llamar a la funcion en relación con el paso protocolo 3.1
+                                mensaje_recibido_UDP.setReto(reto);
+                                agente.pvpAdversario(mensaje_recibido_UDP);
+                                //ToDo pensar si espera el 2 o sigue con su vida
                             } else if (paso_protocolo == "2") {
-                                //Llamar a la funcion en relación con el paso protocolo 3.2
+                                //mensaje_recibido_UDP.setLOQUESENECESITE();
+                                agente.pvpResultado(mensaje_recibido_UDP);
                             }else if (paso_protocolo=="3"){
                                 //Llamar a la funcion en relación con el paso protocolo 3.3
                             }else if (paso_protocolo=="4"){

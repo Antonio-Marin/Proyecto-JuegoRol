@@ -9,6 +9,7 @@ public class AjrLocalizado {
     protected int puerto;
     protected long fecha_encontrado;
 
+
     AjrLocalizado(String ID, String IP, int puerto, long fecha_encontrado){
         this.ID = ID;
         this.IP = IP;

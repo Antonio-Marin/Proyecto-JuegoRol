@@ -63,7 +63,7 @@ public class Ajr {
     protected int salidaVoluntaria;
 
     protected double Frecuencia_rastreo_puertos; // Para manejar la velocidad en la que el agente busca otros agentes
-    protected LinkedList<Aventurero> aventurerosVivos = new LinkedList<>();
+
     // //////////////////////////////////////
     // //////////////////////////////////////
     // Datos de la función del agente
@@ -142,6 +142,7 @@ public class Ajr {
             notificaNacimiento();
             randomizedDungeons(); //Crea las mazmorras con los monstruos aleatorios
             menuInicial();
+            finalizaAgente();
         }
         else if (this.tipo_agente == tipos_de_agentes.DIOS)
         {
@@ -371,10 +372,6 @@ public class Ajr {
                 " - Su generación es :" + Num_generacion_str +
                 " - t de generación :" + Tiempo_de_nacimiento_str);
 
-        //Añadimos un nuevo aventurero vivo a la lista
-        aventurero = new Aventurero(this.ID_propio,this.Ip_Propia,this.Puerto_Propio_UDP,null,1,0);
-
-        aventurerosVivos.add(aventurero);
     }
 
     /**
@@ -460,13 +457,6 @@ public class Ajr {
             System.out.println("\n ==> NOTIFICACION LOCAL de FIN DE AGENTE: " + ID_propio);
         }
 
-        //Buscamos el aventurero muerto para quitarlo del LinkedList
-        for (Aventurero aventurero : aventurerosVivos){
-            if ((aventurero.getID_propio()).equals(ID_propio)){
-                aventurerosVivos.remove(aventurero);
-                break;
-            }
-        }
 
         // ///////////////////////////////////////////////////////
         // Nos vamos
@@ -584,7 +574,9 @@ protected void menuInicial(){
             case 1:
                 var = mazmorra();
             case 2:
-                var = pvp();
+                pvp();
+                //wait();
+                //pvpResultado();
 
 
             case 3:
@@ -663,126 +655,128 @@ protected void menuInicial(){
      * Función pvp()
      * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
      */
-    public boolean pvp(){
+     public void pvp() {
         Scanner s = new Scanner(System.in);
-        int opcion,yo=0;
-        Aventurero adversario;
+        int opcion, yo = 0;
+        AjrLocalizado adversario;
 
         System.out.println("Con que el aventurero desea luchar con otro de su condición... \n Buscando un aventurero");
         // Buscar un aventurero disponible.
 
         //Mira si solo esta el
-        if (aventurerosVivos.size()==1) {
+        if (directorio_de_agentes.size() == 1) {
             System.out.println("No hay aventureros disponibles.");
-            return true;
         }
+        else {
 
-        //Imprime lista de todos los aventureros vivos
-        //menos el mismo
-        System.out.println("Aventureros disponibles:");
-        for (int i = 0; i < aventurerosVivos.size(); i++) {
-            if(!aventurerosVivos.get(i).getID_propio().equals(aventurero.getID_propio())) {
-                System.out.println((i+1) + " -> " + aventurerosVivos.get(i).getID_propio());
-            }else{
-                yo=i+1;
+            //Imprime lista de todos los aventureros vivos
+            //menos el mismo
+            System.out.println("Aventureros disponibles:");
+            for (int i = 0; i < directorio_de_agentes.size(); i++) {
+                if (!directorio_de_agentes.get(i).ID.equals(ID_propio)) {
+                    System.out.println((i + 1) + " -> " + directorio_de_agentes.get(i).ID);
+                } else {
+                    yo = i + 1;
+                }
+            }
+
+            do {
+                System.out.print("Numero del contrincante: ");
+                opcion = s.nextInt();
+                s.nextLine();
+
+                if (opcion == yo) { //Si me elijo a mi mismo a pesar de no mostrarme
+                    System.out.println("Deja de apuntarte con tu arma y elige");
+                }
+                if (opcion > directorio_de_agentes.size()) { //si elijo un numero que no esta disponible
+                    System.out.println("Ese aventurero no esta aqui ¿esperas a alguien mas?");
+                    //ToDo puede dar error?
+                }
+            } while (opcion == yo || opcion > directorio_de_agentes.size());
+
+            if (opcion != 0) {
+                adversario = directorio_de_agentes.get(opcion - 1);
+
+
+                String ID_mensaje = dame_codigo_id_local_men();
+                String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
+
+                //String aventureroID=this.getID_propio();
+                //String aventureroIP=aventurero.getIP_propio();
+                //String aventureroPuerto=String.valueOf(aventurero.getPuerto_Propio_UDP());
+                String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
+                String momento_actual = String.valueOf(System.currentTimeMillis());
+                String adversarioID = adversario.ID;
+                String adversarioIP = adversario.IP;
+                String adversarioPuerto = String.valueOf(adversario.puerto);
+
+                Mensaje mensajePVP = new Mensaje(msgId, "3", "1", ID_propio, Ip_Propia,
+                        Puerto_Propio_str, momento_actual, adversarioID, adversarioIP, adversarioPuerto, momento_actual);
+
+                String cuerpo_mens_pvp = "Esto es el MENSAJE PVP  - que el agente con ID_propio : " + ID_propio +
+                        " - con ip : " + Ip_Propia +
+                        " - con Puerto_Propio : " + Puerto_Propio_str +
+                        " - con ID_mensaje : " + ID_mensaje +
+                        " - envia al adversario con Id : " + adversarioID +
+                        " - con Ip : " + adversarioIP +
+                        " - con Puerto_Propio : " + adversarioPuerto +
+                        " - en T : " + momento_actual +
+                        " - con Nivel : " + nivelAventurero +
+                        " - con Monstruos Eliminados : " + aventurero.getMonstruosDerrotados();
+
+                //Unica información relevante del mensaje 3.1
+                mensajePVP.setInfo(cuerpo_mens_pvp);
+                mensajePVP.setReto("true");
+
+                //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
+
+                mensajePVP.setMotivoMuerte("0");
+                mensajePVP.setAgenteFinalizadoNivel("0");
+                mensajePVP.setMonstruosDerrotados("0");
+                mensajePVP.setDeathTime("0");
+
+                mensajePVP.setMazmorra("-");
+                mensajePVP.setNivelAventurero("0");
+                mensajePVP.setNombreMonstruo("-");
+                mensajePVP.setNivelMonstruo("0");
+                mensajePVP.setResultadoFinal("-");
+                mensajePVP.setNivelAventureroFinal("0");
+
+                mensajePVP.setId1(ID_propio);
+                mensajePVP.setIp1(Ip_Propia);
+                mensajePVP.setNivel1("0");
+                mensajePVP.setId2(adversarioID);
+                mensajePVP.setIp2(adversarioIP);
+                mensajePVP.setNivel2("0");
+                mensajePVP.setResultado("-");
+                mensajePVP.setNivelFinal1("0");
+                mensajePVP.setNivelFinal2("0");
+
+                mensajePVP.setAgentsDirectory(this.directorio_de_agentes);
+                mensajePVP.setDeadAgents(this.directorio_de_agentes);
+
+
+                // Insertamos el mensaje
+                pon_en_lita_enviar(mensajePVP);
+
+
+                System.out.println("\n ==> Se ha lanzado un reto PvP en la IP = " + Ip_Propia +
+                        " - con ID_propio :" + ID_propio +
+                        " - con Nivel :" + nivelAventurero +
+                        " - en el puerto :" + Puerto_Propio_str);
+
+                //Esperar confirmación (3.2)-----------------------------------------------------------------------------------
+                //wait();
             }
         }
-
-        do {
-            System.out.print("Numero del contrincante: ");
-            opcion = s.nextInt();
-            s.nextLine();
-
-            if (opcion==yo){ //Si me elijo a mi mismo a pesar de no mostrarme
-                System.out.println("Deja de apuntarte con tu arma y elige");
-            }
-            if(opcion>aventurerosVivos.size()){ //si elijo un numero que no esta disponible
-                System.out.println("Ese aventurero no esta aqui ¿esperas a alguien mas?");
-            }
-        }while (opcion == yo || opcion>aventurerosVivos.size());
-
-        if(opcion!=0){
-            adversario=aventurerosVivos.get(opcion-1);
-
-
-            String ID_mensaje = dame_codigo_id_local_men();
-            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
-
-            //String aventureroID=this.getID_propio();
-            //String aventureroIP=aventurero.getIP_propio();
-            //String aventureroPuerto=String.valueOf(aventurero.getPuerto_Propio_UDP());
-            String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
-            String momento_actual = String.valueOf(System.currentTimeMillis());
-            String adversarioID = adversario.getID_propio();
-            String adversarioIP = adversario.getIP_propio();
-            String adversarioPuerto = String.valueOf(adversario.getPuerto_Propio_UDP());
-
-            Mensaje mensajePVP = new Mensaje(msgId, "3", "1",ID_propio,Ip_Propia,
-                    Puerto_Propio_str, momento_actual, adversarioID, adversarioIP, adversarioPuerto, momento_actual);
-
-            String cuerpo_mens_pvp = "Esto es el MENSAJE PVP  - que el agente con ID_propio : " + ID_propio +
-                    " - con ip : " + Ip_Propia +
-                    " - con Puerto_Propio : " + Puerto_Propio_str +
-                    " - con ID_mensaje : " + ID_mensaje +
-                    " - envia al adversario con Id : " + adversarioID +
-                    " - con Ip : " + adversarioIP +
-                    " - con Puerto_Propio : " + adversarioPuerto +
-                    " - en T : " + momento_actual +
-                    " - con Nivel : " + nivelAventurero +
-                    " - con Monstruos Eliminados : " + aventurero.getMonstruosDerrotados();
-
-        //Mandar mensaje (3.1)
-            mensajePVP.setInfo(cuerpo_mens_pvp);
-            mensajePVP.setReto("true");
-
-            //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
-
-            mensajePVP.setMotivoMuerte("0");
-            mensajePVP.setAgenteFinalizadoNivel("0");
-            mensajePVP.setMonstruosDerrotados("0");
-            mensajePVP.setDeathTime("0");
-
-            mensajePVP.setMazmorra("-");
-            mensajePVP.setNivelAventurero("0");
-            mensajePVP.setNombreMonstruo("-");
-            mensajePVP.setNivelMonstruo("0");
-            mensajePVP.setResultadoFinal("-");
-            mensajePVP.setNivelAventureroFinal("0");
-
-            mensajePVP.setId1(aventurero.getID_propio());
-            mensajePVP.setIp1(aventurero.getIP_propio());
-            mensajePVP.setNivel1(String.valueOf(aventurero.getNivel()));
-            mensajePVP.setId2(adversarioID);
-            mensajePVP.setIp2(adversarioIP);
-            mensajePVP.setNivel2(String.valueOf(adversario.getNivel()));
-            mensajePVP.setResultado("-");
-            mensajePVP.setNivelFinal1("0");
-            mensajePVP.setNivelFinal2("0");
-
-            mensajePVP.setAgentsDirectory(this.directorio_de_agentes);
-            mensajePVP.setDeadAgents(this.directorio_de_agentes);
-
-
-            // Insertamos el mensaje
-            pon_en_lita_enviar(mensajePVP);
-
-
-            System.out.println("\n ==> Se ha lanzado un reto PvP en la IP = "+Ip_Propia+
-                    " - con ID_propio :" + ID_propio +
-                    " - con Nivel :"+nivelAventurero+
-                    " - en el puerto :" + Puerto_Propio_str);
-
-        //Esperar confirmación (3.2)-----------------------------------------------------------------------------------
-            //wait();
-
 
         // Si esa confirmación es true le manda el nivel (3.3) y el otro aventurero procesa el resultado
 
 
         //Recibes el resultado (3.4) y te actualizas
-        Mensaje mensajeResultado = funcionAventurero.mensajesPVP.pop();
-        aventurero.nivel=Integer.parseInt(mensajeResultado.nivelFinal2);
-        adversario.nivel=Integer.parseInt(mensajeResultado.nivelFinal1);
+        //Mensaje mensajeResultado = funcionAventurero.mensajesPVP.pop();
+        //aventurero.nivel=Integer.parseInt(mensajeResultado.nivelFinal2);
+        /*adversario.nivel=Integer.parseInt(mensajeResultado.nivelFinal1);
 
         }
         if(nivelAventurero>=100 || nivelAventurero<=0){ //Si nivel del aventurero es >= 99
@@ -791,22 +785,24 @@ protected void menuInicial(){
         }else{
             return true;
         }
+
+         */
     }
 
     public void pvpAdversario(Mensaje msj){
         Scanner s = new Scanner(System.in);
-        int opcion,nivel1=0,nivel2=0;
+        int opcion, nivel1=0, nivel2=0;
         String win=null;
 
-        if (msj.reto.equals("true")){
-            System.out.print("El Aventurero "+msj.id1+" con nivel: "+msj.nivel1+" te ha desafiado.\n 1. Aceptas \n 2. Rechazas");
+        if (msj.getReto().equals("true")){
+            System.out.print("El Aventurero "+msj.originId+" te ha desafiado.\n 1. Aceptas \n 2. Rechazas");
 
             do{
                 opcion = s.nextInt(); s.nextLine();
                 switch (opcion){
                     case 1:
                         System.out.println("Has aceptado el desafio, preparate para el combate");
-                        int resultado = Integer.parseInt(msj.nivel1) - Integer.parseInt(msj.nivel2);
+                        /*int resultado = Integer.parseInt(msj.nivel1) - Integer.parseInt(msj.nivel2);
                         if (resultado>0){
                             System.out.println("Has perdido el combate, te has quedado sin "+resultado+" niveles");
                             nivel1=Integer.parseInt(msj.nivel1)+resultado;
@@ -821,18 +817,21 @@ protected void menuInicial(){
                             System.out.println("Un buen choque de espadas, pero no ha servido de nada");
                         }
 
+                         */
+
                         String ID_mensaje = dame_codigo_id_local_men();
                         String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
 
-                        String aventureroID=msj.id2;
-                        String aventureroIP=msj.ip2;
+                        String aventureroID=msj.destinationId;
+                        String aventureroIP=msj.destinationIp;
                         String aventureroPuerto=msj.destinationPortUDP;
                         String momento_actual = String.valueOf(System.currentTimeMillis());
-                        String adversarioID = msj.id1;
-                        String adversarioIP = msj.ip1;
+                        String adversarioID = msj.originId;
+                        String adversarioIP = msj.originIp;
                         String adversarioPuerto = msj.originPortUDP;
 
-                        Mensaje mensajePVP = new Mensaje(msgId, "3", "3.2",aventureroID,aventureroIP, aventureroPuerto, momento_actual,adversarioID,adversarioIP,adversarioPuerto, momento_actual);
+                        Mensaje mensajePVP = new Mensaje(msgId, "3", "2",aventureroID,aventureroIP,
+                                aventureroPuerto, momento_actual,adversarioID,adversarioIP,adversarioPuerto, momento_actual);
 
                         String cuerpo_mens_pvp = "Esto es el MENSAJE CONFIRMACION  - que el agente con ID_propio : " + aventureroID +
                                 " - con ip : " + aventureroIP +
@@ -840,11 +839,17 @@ protected void menuInicial(){
                                 " - con ID_mensaje : " + ID_mensaje +
                                 " - envia al adversario con Ip : " + adversarioIP +
                                 " - con Puerto_Propio : " + adversarioPuerto +
-                                " - en T : " + momento_actual +
-                                " - con Nivel : " + msj.nivel2 ;
+                                " - en T : " + momento_actual;
 
                         //Mandar mensaje (3.1)
                         mensajePVP.setInfo(cuerpo_mens_pvp);
+                        mensajePVP.setReto("true");
+                        mensajePVP.setId1(msj.originId);
+                        mensajePVP.setIp1(msj.originIp);
+                        mensajePVP.setNivel1("0");
+                        mensajePVP.setId2(msj.destinationId);
+                        mensajePVP.setIp2(msj.destinationIp);
+                        mensajePVP.setNivel2(Integer.toString(nivelAventurero));
 
                         //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
 
@@ -860,19 +865,12 @@ protected void menuInicial(){
                         mensajePVP.setResultadoFinal("-");
                         mensajePVP.setNivelAventureroFinal("0");
 
-                        mensajePVP.setId1(msj.id2);
-                        mensajePVP.setIp1(msj.ip2);
-                        mensajePVP.setNivel1(msj.nivel2);
-                        mensajePVP.setId2(msj.id1);
-                        mensajePVP.setIp2(msj.ip1);
-                        mensajePVP.setNivel2(msj.nivel1);
-                        mensajePVP.setReto("true");
-                        mensajePVP.setResultado("Ha ganado el aventurero "+win+" recibiendo "+Math.abs(resultado)+" niveles");
-                        mensajePVP.setNivelFinal1(String.valueOf(nivel2));
-                        mensajePVP.setNivelFinal2(String.valueOf(nivel1));
 
-                        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
-                        directorio_de_agentes.add(ej);
+
+                        mensajePVP.setResultado("-");
+                        mensajePVP.setNivelFinal1("0");
+                        mensajePVP.setNivelFinal2("0");
+
                         mensajePVP.setAgentsDirectory(this.directorio_de_agentes);
                         mensajePVP.setDeadAgents(this.directorio_de_agentes);
 
@@ -880,18 +878,91 @@ protected void menuInicial(){
                         // Insertamos el mensaje
                         pon_en_lita_enviar(mensajePVP);
 
-                        String Num_generacion_str = String.valueOf(this.Num_generacion);
-                        String Tiempo_de_nacimiento_str = String.valueOf(this.Tiempo_de_nacimiento);
-                        System.out.println("\n ==> Se ha llevado a cabo un combate PvP ");
+                        System.out.println("\n ==> Se ha aceptado un combate PvP ");
                         break;
                     case 2:
                         System.out.println("Has rechazado el desafio, sigue con tu aventura");
+
+                        String ID_mensaje_rech = dame_codigo_id_local_men();
+                        String msgId_rech = String.valueOf(ID_mensaje_rech.charAt(ID_mensaje_rech.length()-1));
+
+                        String aventureroID_rech=msj.destinationId;
+                        String aventureroIP_rech=msj.destinationIp;
+                        String aventureroPuerto_rech=msj.destinationPortUDP;
+                        String momento_actual_rech = String.valueOf(System.currentTimeMillis());
+                        String adversarioID_rech = msj.originId;
+                        String adversarioIP_rech = msj.originIp;
+                        String adversarioPuerto_rech = msj.originPortUDP;
+
+                        Mensaje mensajePVP_rech = new Mensaje(msgId_rech, "3", "2",aventureroID_rech,aventureroIP_rech,
+                                aventureroPuerto_rech, momento_actual_rech,adversarioID_rech,adversarioIP_rech,adversarioPuerto_rech, momento_actual_rech);
+
+                        String cuerpo_mens_pvp_rech = "Esto es el MENSAJE CONFIRMACION  - que el agente con ID_propio : " + aventureroID_rech +
+                                " - con ip : " + aventureroIP_rech +
+                                " - con Puerto_Propio : " + aventureroPuerto_rech +
+                                " - con ID_mensaje : " + ID_mensaje_rech +
+                                " - envia al adversario con Ip : " + adversarioIP_rech +
+                                " - con Puerto_Propio : " + adversarioPuerto_rech +
+                                " - en T : " + momento_actual_rech;
+
+                        //Mandar mensaje (3.1)
+                        mensajePVP_rech.setInfo(cuerpo_mens_pvp_rech);
+                        mensajePVP_rech.setReto("false");
+                        mensajePVP_rech.setId1(msj.originId);
+                        mensajePVP_rech.setIp1(msj.originIp);
+                        mensajePVP_rech.setNivel1("0");
+                        mensajePVP_rech.setId2(msj.destinationId);
+                        mensajePVP_rech.setIp2(msj.destinationIp);
+                        mensajePVP_rech.setNivel2("0");
+
+                        //Rellenamos el resto del XML como "vacío" para que no de probelmas al validar
+
+                        mensajePVP_rech.setMotivoMuerte("0");
+                        mensajePVP_rech.setAgenteFinalizadoNivel("0");
+                        mensajePVP_rech.setMonstruosDerrotados("0");
+                        mensajePVP_rech.setDeathTime("0");
+
+                        mensajePVP_rech.setMazmorra("-");
+                        mensajePVP_rech.setNivelAventurero("0");
+                        mensajePVP_rech.setNombreMonstruo("-");
+                        mensajePVP_rech.setNivelMonstruo("0");
+                        mensajePVP_rech.setResultadoFinal("-");
+                        mensajePVP_rech.setNivelAventureroFinal("0");
+
+
+
+                        mensajePVP_rech.setResultado("-");
+                        mensajePVP_rech.setNivelFinal1("0");
+                        mensajePVP_rech.setNivelFinal2("0");
+
+                        mensajePVP_rech.setAgentsDirectory(this.directorio_de_agentes);
+                        mensajePVP_rech.setDeadAgents(this.directorio_de_agentes);
+
+
+                        // Insertamos el mensaje
+                        pon_en_lita_enviar(mensajePVP_rech);
+
                         break;
                 }
+
+                //ToDo Puede dar error?
             }while(!(opcion == 1 || opcion == 2));
         }
     }
 
+    /**
+     * Funcion pvpResultado();
+     */
+
+    public void pvpResultado(Mensaje msg_recibido){
+        //ToDo hacer clase que resuelve el conflicto y notifica
+
+        if(msg_recibido.reto.equals("true")){
+
+        } else{
+            System.out.println("Seguimos con nuestra vida");
+        }
+    }
 
     /**
      * Funciones para sincronizar información
