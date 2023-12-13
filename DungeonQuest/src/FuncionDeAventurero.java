@@ -1,5 +1,6 @@
 package DungeonQuest.src;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 public class FuncionDeAventurero implements Runnable {
@@ -11,6 +12,8 @@ public class FuncionDeAventurero implements Runnable {
 
     protected int num_men_enviados_fa; // Para identificar los mensajes enviados por este agente y poder identificarlos de forma unívoca
     protected int num_men_recibidos_fa; // Para identificar los mensajes recibidos por este agente y poder identificarlos de forma unívoca
+    protected Mensaje mensajeRecibido;
+    protected LinkedList<Mensaje> mensajesPVP=new LinkedList<>();
 
 
     protected Ajr agente; // Para poder acceder a los datos generales de este agente
@@ -42,7 +45,10 @@ public class FuncionDeAventurero implements Runnable {
             // Obtenemos los mensajes recibidos
                 // Miramos si hay algun mensaje recibido y si lo hay lo recogemos
             if(agente.num_elem_lita_recibidos() > 0) {
-            recogeMensajeRecibido();
+                recogeMensajeRecibido(1);
+            }
+            if(agente.num_elem_lita_recibidos_pvp() > 0) {
+                recogeMensajeRecibido(2);
             }
 
             // //////////////////////////////////////
@@ -90,9 +96,14 @@ public class FuncionDeAventurero implements Runnable {
         } // Fin de while(true){
     } // Fin de - public void run() {
 
-    void recogeMensajeRecibido() {
+    void recogeMensajeRecibido(int n) {
         // Obtenemos el mensaje
-        Mensaje mensajeRecibido = agente.saca_de_lita_recibidos();
+        if(n==1) {
+            mensajeRecibido = agente.saca_de_lita_recibidos();
+        }else{
+            mensajeRecibido = agente.saca_de_lita_recibidos_pvp();
+            mensajesPVP.add(mensajeRecibido);
+        }
         mensajeRecibido.crearXML();
         TratarXML test = new TratarXML();
         String archivo_xml = "xml_"+ mensajeRecibido.msgId +".xml";
