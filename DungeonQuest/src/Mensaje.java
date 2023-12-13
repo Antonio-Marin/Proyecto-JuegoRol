@@ -100,6 +100,8 @@ public class Mensaje {
         this.destinationIp = destinationIp;
         this.destinationPortUDP = destinationPortUDP;
         this.destinationTime = destinationTime;
+
+
     }
 
     //GETTERS

@@ -178,7 +178,12 @@ public class RecibeUdp extends Thread {
                         );
 
                         // Llevamos el mensaje al contenedor de recibidos
-                        agente.pon_en_lita_recibidos(mensaje_recibido_UDP);
+                        if (mensaje_recibido_UDP.reto.equals("reto")||mensaje_recibido_UDP.reto.equals("true")){
+                            agente.pon_en_lita_recibidos_pvp(mensaje_recibido_UDP);
+                        }else{
+                            agente.pon_en_lita_recibidos(mensaje_recibido_UDP);
+                        }
+
                         System.out.println("\n ==> Desde RecibeUdp, hemos recibido un mensaje almacenado en " + fileName +
                                 " - en contenedor tenemos : " + String.valueOf(agente.num_elem_lita_recibidos()) +
                                 " - total recibidos : " + agente.num_elem_lita_recibidos());
