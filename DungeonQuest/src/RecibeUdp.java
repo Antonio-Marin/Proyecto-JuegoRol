@@ -104,6 +104,12 @@ public class RecibeUdp extends Thread {
                     String cuerpo_mens = "";
                     String tipo_protocolo = "";
                     String paso_protocolo = "";
+                    String mazmorra = "";
+                    String nivel_aventurero = "";
+                    String nombre_monstruo = "";
+                    String nivel_monstruo = "";
+                    String resultado_final = "";
+                    String nivel_aventurero_final = "";
 
                     File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/Proyecto/" + fileName);
                     /*
@@ -154,6 +160,24 @@ public class RecibeUdp extends Thread {
                                     case "paso_protocolo":
                                         paso_protocolo = elemento.getTextContent();
                                         break;
+                                    case "mazmorra":
+                                        mazmorra = elemento.getTextContent();
+                                        break;
+                                    case "nivel_aventurero":
+                                        nivel_aventurero = elemento.getTextContent();
+                                        break;
+                                    case "nombre_monstruo":
+                                        nombre_monstruo = elemento.getTextContent();
+                                        break;
+                                    case "nivel_monstruo":
+                                        nivel_monstruo = elemento.getTextContent();
+                                        break;
+                                    case "resultado_final":
+                                        resultado_final = elemento.getTextContent();
+                                        break;
+                                    case "nivel_aventurero_final":
+                                        nivel_aventurero_final = elemento.getTextContent();
+                                        break;
                                 }
                             }
                         }
@@ -191,9 +215,17 @@ public class RecibeUdp extends Thread {
                         //TODO: terminar de hacerlo
                         if (tipo_protocolo == "2"){
                             if (paso_protocolo == "1"){
-                                //Llamar a la funcion en relación con el paso protocolo 2.1
+                                //El Dios al recibir este mensaje, envía un mensaje mandándole un monstruo
+                                mensaje_recibido_UDP.setMazmorra(mazmorra);
+                                mensaje_recibido_UDP.setNivelAventurero(nivel_aventurero);
+                                agente.mazmorraDios(mensaje_recibido_UDP);
                             } else if (paso_protocolo == "2") {
-                                //Llamar a la funcion en relación con el paso protocolo 2.2
+                                //El avnturero recibe el nombre y el nivel del monstruo al que debe derrotar
+                                mensaje_recibido_UDP.setMazmorra(mazmorra);
+                                mensaje_recibido_UDP.setNivelAventurero(mazmorra);
+                                mensaje_recibido_UDP.setNombreMonstruo(mazmorra);
+                                mensaje_recibido_UDP.setNivelMonstruo(mazmorra);
+                                agente.mazmorraDios(mensaje_recibido_UDP);
                             }else if (paso_protocolo=="3"){
                                 //Llamar a la funcion en relación con el paso protocolo 2.3
                             }else{

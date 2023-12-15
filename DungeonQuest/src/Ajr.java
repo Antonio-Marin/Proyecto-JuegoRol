@@ -91,6 +91,7 @@ public class Ajr {
     private LinkedList<Monstruo> mazmorra_principiantes = new LinkedList<>();
     private LinkedList<Monstruo> mazmorra_intermedia = new LinkedList<>();
     private LinkedList<Monstruo> mazmorra_avanzado = new LinkedList<>();
+    boolean mazmorra_boolean;
 
     //TODO: Mirar ACC y añadir más código
 
@@ -140,11 +141,11 @@ public class Ajr {
             // Para el agente CAMBIACROMOS arrancamos su funcion del agente y notificamos al monitor su nacimiento
             this.funcionAventurero = new FuncionDeAventurero(this);
             notificaNacimiento();
-            randomizedDungeons(); //Crea las mazmorras con los monstruos aleatorios
             menuInicial();
         }
         else if (this.tipo_agente == tipos_de_agentes.DIOS)
         {
+            randomizedDungeons(); //Crea las mazmorras con los monstruos aleatorios
             // Para el agente MONITOR tan solo arrancamos su funcion del agente monitor
             this.funcionDios = new FuncionDios(this);
             // EL monitor no se notifica su propio nacimiento
@@ -225,6 +226,7 @@ public class Ajr {
         this.nivelAventurero = 0;
         this.monstruosDerrotados = 0;
         this.salidaVoluntaria = 0;
+        this.mazmorra_boolean = true;
 
         this.Frecuencia_rastreo_puertos = 0.00001f;
         //this.salidaVoluntaria = false;
@@ -624,62 +626,97 @@ protected void menuInicial(){
      * Función mazmorra()
      * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
      */
-    public boolean mazmorra(){
+    public boolean mazmorra() {
+        String mazmorra_elegida = "";
+        boolean tr = true;
         Scanner s = new Scanner(System.in);
         System.out.println("Hola valiente aventurero \n Has elegido entrar en una mazmorra \n Decide en cual: ");
-        String resp = s.next();
+        System.out.println("1. (facil) \n 2. (medio) \n 3. (dificil)");
+        int resp = s.nextInt();
+        while (tr) {
+            switch (resp) {
+                case (1):
+                    mazmorra_elegida = "mazmorra_principiantes";
+                    tr = false;
+                    break;
+                case (2):
+                    mazmorra_elegida = "mazmorra_intermedia";
+                    tr = false;
+                    break;
+                case (3):
+                    mazmorra_elegida = "mazmorra_avanzado";
+                    tr = false;
+                    break;
+                default:
+                    System.out.println("Opcion de mazmorra no valida, elige otra");
+            }
+        }
+        // Crea mensaje petición monstruo al Dios (2.1)
+        String ID_mensaje = dame_codigo_id_local_men();
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
+        String momento_actual_str = String.valueOf(System.currentTimeMillis());
+        String Puerto_Propio_UDP_str = String.valueOf(Puerto_Propio_UDP);
+        String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
+        Mensaje mazmorra = new Mensaje(
+                msgId, "2", "1",
+                ID_propio, Ip_Propia, Puerto_Propio_UDP_str, momento_actual_str,
+                "ID_Dios", Ip_Dios, Puerto_Dios_UDP_str, momento_actual_str);
 
-        if(true) {// if resp es una mazmorra válida
-            // Crea mensaje petición monstruo al Dios (2.1)
-            String ID_mensaje = dame_codigo_id_local_men();
-            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
-            String momento_actual_str = String.valueOf(System.currentTimeMillis());
-            String Puerto_Propio_UDP_str = String.valueOf(Puerto_Propio_UDP);
-            String Puerto_Dios_UDP_str = String.valueOf(Puerto_Dios_UDP);
-            Mensaje mazmorra = new Mensaje(
-                    msgId, "2", "1",
-                    ID_propio, Ip_Propia, Puerto_Propio_UDP_str, momento_actual_str,
-                    "ID_Dios", Ip_Dios, Puerto_Dios_UDP_str, momento_actual_str);
+        String cuerpo_mens_mazmorra = "Esto es el mensaje mazmorra  - que el agente con ID_propio : " + ID_propio +
+                " - con ip : " + Ip_Propia +
+                " - con Puerto_Propio : " + Puerto_Propio_UDP_str +
+                " - con ID_mensaje : " + ID_mensaje +
+                " - envia al monitor con Ip_Monitor : " + Ip_Dios +
+                " - con Puerto_Monitor : " + Puerto_Dios_UDP_str +
+                " - en T : " + momento_actual_str +
+                " - que ha seleccionado la mazmorra: " + mazmorra_elegida +
+                " - con nivel de aventurero" + aventurero.nivel;
 
-            String cuerpo_mens_mazmorra = "Esto es el MENSAJE FIN DE AGENTE  - que el agente con ID_propio : " + ID_propio +
-                    " - con ip : " + Ip_Propia +
-                    " - con Puerto_Propio : " + Puerto_Propio_UDP_str +
-                    " - con ID_mensaje : " + ID_mensaje +
-                    " - envia al monitor con Ip_Monitor : " + Ip_Dios +
-                    " - con Puerto_Monitor : " + Puerto_Dios_UDP_str +
-                    " - en T : " + momento_actual_str +
-                    " - con dificultad mazmorra: " + resp+
-                    " - con nivel de aventurero" + aventurero.nivel;
+        mazmorra.setInfo(cuerpo_mens_mazmorra);
+        mazmorra.setMazmorra(mazmorra_elegida);
+        mazmorra.setNivelAventurero(Integer.toString(nivelAventurero));
 
-            mazmorra.setInfo(cuerpo_mens_mazmorra);
-            mazmorra.setMazmorra(resp);
-            mazmorra.setNivelAventurero(""+nivelAventurero);
+        //Pa que no de fallo manin
+        mazmorra.setNombreMonstruo("-");
+        mazmorra.setNivelMonstruo("0");
+        mazmorra.setResultadoFinal("-");
+        mazmorra.setNivelAventureroFinal("0");
 
-            //Pa que no de fallo manin
-            mazmorra.setNombreMonstruo("-");
-            mazmorra.setNivelMonstruo("0");
-            mazmorra.setResultadoFinal("-");
-            mazmorra.setNivelAventureroFinal("0");
+        mazmorra.setId1("-");
+        mazmorra.setIp1("-");
+        mazmorra.setNivel1("0");
+        mazmorra.setId2("-");
+        mazmorra.setIp2("-");
+        mazmorra.setNivel2("0");
+        mazmorra.setReto("false");
+        mazmorra.setResultado("-");
+        mazmorra.setNivelFinal1("0");
+        mazmorra.setNivelFinal2("0");
 
-            mazmorra.setId1("-");
-            mazmorra.setIp1("-");
-            mazmorra.setNivel1("0");
-            mazmorra.setId2("-");
-            mazmorra.setIp2("-");
-            mazmorra.setNivel2("0");
-            mazmorra.setReto("false");
-            mazmorra.setResultado("-");
-            mazmorra.setNivelFinal1("0");
-            mazmorra.setNivelFinal2("0");
+        mazmorra.setAgenteFinalizadoNivel("0");
+        mazmorra.setMonstruosDerrotados("0");
+        mazmorra.setDeathTime("0");
 
-            mazmorra.setAgenteFinalizadoNivel("0");
-            mazmorra.setMonstruosDerrotados("0");
-            mazmorra.setDeathTime("0");
+        mazmorra.setAgentsDirectory(this.directorio_de_agentes);
+        mazmorra.setDeadAgents(this.directorio_de_agentes);
 
-            mazmorra.setAgentsDirectory(this.directorio_de_agentes);
-            mazmorra.setDeadAgents(this.directorio_de_agentes);
+        pon_en_lita_enviar(mazmorra);
 
-            pon_en_lita_enviar(mazmorra);
+        //Bucle infinito para que se quede esperando
+        while (mazmorra_boolean) {
+
+        }
+
+        if (nivelAventurero>=100 || nivelAventurero<=0) { //Si nivel del aventurero es >= 99
+            // nivel = 99
+            return false; // Ya que ha terminado la partida.
+        } else {
+            return true;
+        }
+    }
+
+    /* Lo comento para que no de error, era la continuación de la primera funcion
+    public void funcionx(){
 
             //Espera mensaje del Dios dando un monstruo (2.2)
             //wait();
@@ -724,20 +761,177 @@ protected void menuInicial(){
                 }
             }
 
-            if(true){ //Si nivel del aventurero es >= 99
-                // nivel = 99
-                return false; // Ya que ha terminado la partida.
-            }else if(mazmorra.getResultadoFinal() == "Derrota"){ // Si ha sido derrotado
-                return false; // Ya que ha terminado la partida.
-            } else {return true;}
+
 
             //Crea mensaje info para el Dios (2.3)
-        }else {
-            System.out.println("Nombre de mazmorra no valido, volvemos al menu inicial");
-            return true;
-        }
     }
 
+     */
+
+    /**
+     * Clase mazmorraDios();
+     * Clase para que el Dios envía un monstruo de una mazmorra al aventurero
+     */
+
+    public void mazmorraDios(Mensaje msg){
+        Random random = new Random();
+        String mazmorra_elegida = msg.getMazmorra();
+        Monstruo mons_elegido;
+        if(mazmorra_elegida.equals("mazmorra_principiantes")){
+            int size = this.mazmorra_principiantes.size();
+            int r = random.nextInt(size);
+            mons_elegido = this.mazmorra_principiantes.get(r);
+        } else if (mazmorra_elegida.equals("mazmorra_intermedia")) {
+            int size = this.mazmorra_intermedia.size();
+            int r = random.nextInt(size);
+            mons_elegido = this.mazmorra_intermedia.get(r);
+        } else if (mazmorra_elegida.equals("mazmorra_avanzado")) {
+            int size = this.mazmorra_avanzado.size();
+            int r = random.nextInt(size);
+            mons_elegido = this.mazmorra_avanzado.get(r);
+        }else{mons_elegido = null;}
+
+        String ID_mensaje = dame_codigo_id_local_men();
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
+        String momento_actual_str = String.valueOf(System.currentTimeMillis());
+
+        String cuerpo_mens_mazmorra_Dios = "Esto es el mensaje mazmorra  - que el Dios: " + ID_propio +
+                " - con ip : " + Ip_Propia +
+                " - con Puerto_Propio : " + msg.destinationPortUDP +
+                " - con ID_mensaje : " + ID_mensaje +
+                " - envia al aventurero con Id : " + msg.originId +
+                " - y con Ip : " + msg.originIp +
+                " - con Puerto : " + msg.originPortUDP +
+                " - en T : " + momento_actual_str +
+                " - que ha seleccionado la mazmorra: " + mazmorra_elegida +
+                " - con nivel de aventurero" + msg.nivelAventurero;
+
+        Mensaje diosMazmorra = new Mensaje(
+                msgId, "2", "2",
+                msg.destinationId, msg.destinationIp, msg.destinationPortUDP, momento_actual_str,
+                msg.originId, msg.originIp, msg.originPortUDP, momento_actual_str);
+        diosMazmorra.setInfo(cuerpo_mens_mazmorra_Dios);
+
+        // Añadimos lo necesario
+
+        diosMazmorra.setMazmorra(mazmorra_elegida);
+        diosMazmorra.setNivelAventurero(msg.nivelAventurero);
+        diosMazmorra.setNombreMonstruo(mons_elegido.nombre);
+        diosMazmorra.setNivelMonstruo(Integer.toString(mons_elegido.nivel));
+
+        //Resto para que no de error
+        diosMazmorra.setMotivoMuerte("0");
+        diosMazmorra.setAgenteFinalizadoNivel("0");
+        diosMazmorra.setMonstruosDerrotados("0");
+        diosMazmorra.setDeathTime("0");
+
+        diosMazmorra.setResultadoFinal("-");
+        diosMazmorra.setNivelAventureroFinal("0");
+
+        diosMazmorra.setId1("-");
+        diosMazmorra.setIp1("-");
+        diosMazmorra.setNivel1("0");
+        diosMazmorra.setId2("-");
+        diosMazmorra.setIp2("-");
+        diosMazmorra.setNivel2("0");
+        diosMazmorra.setReto("-");
+        diosMazmorra.setResultado("-");
+        diosMazmorra.setNivelFinal1("0");
+        diosMazmorra.setNivelFinal2("0");
+
+        diosMazmorra.setAgentsDirectory(this.directorio_de_agentes);
+        diosMazmorra.setDeadAgents(this.directorio_de_agentes);
+
+
+        // Insertamos el mensaje
+        pon_en_lita_enviar(diosMazmorra);
+
+
+        System.out.println("\n ==> Se ha enviado un monstruo a = "+msg.originId+
+                " - con Ip:" + msg.originIp +
+                " - con Nivel :"+msg.nivelAventurero+
+                " - en el puerto :" + msg.originPortUDP);
+
+    }
+
+    /**
+     * función mazmorraResultado() Calcula el resultado del combate y acaba el bloque mazmorra
+     */
+    public void mazmorraResultado(Mensaje msg){
+        String nombre_monstruo = msg.getNombreMonstruo();
+        String nivel_monstruo = msg.getNivelMonstruo();
+        System.out.println("Aparece ante ti el monstruo " + nombre_monstruo + " de nivel " + nivel_monstruo);
+
+        //ToDo Se calcula que ocurre (Manuel y Antonio)
+
+
+        //ToDo final
+
+        //Creamos mensaje para enviar al dios
+        String ID_mensaje = dame_codigo_id_local_men();
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
+        String momento_actual_str = String.valueOf(System.currentTimeMillis());
+
+        String cuerpo_mens_mazmorra_resultado = "Esto es el mensaje resultado del combate  - que el aventurero: " + ID_propio +
+                " - con ip : " + Ip_Propia +
+                " - con Puerto_Propio : " + msg.destinationPortUDP +
+                " - con ID_mensaje : " + ID_mensaje +
+                " - envia al Dios con Id : " + msg.originId +
+                " - y con Ip : " + Ip_Dios +
+                " - con Puerto : " + msg.originPortUDP +
+                " - en T : " + momento_actual_str;
+
+        Mensaje resultadoMazmorra = new Mensaje(
+                msgId, "2", "3",
+                msg.destinationId, msg.destinationIp, msg.destinationPortUDP, momento_actual_str,
+                msg.originId, msg.originIp, msg.originPortUDP, momento_actual_str);
+        resultadoMazmorra.setInfo(cuerpo_mens_mazmorra_resultado);
+
+        // Añadimos lo necesario
+
+        resultadoMazmorra.setMazmorra(msg.getMazmorra());
+        resultadoMazmorra.setNivelAventurero(msg.getNivelAventurero());
+        resultadoMazmorra.setNombreMonstruo(nombre_monstruo);
+        resultadoMazmorra.setNivelMonstruo(nivel_monstruo);
+        //resultadoMazmorra.setResultadoFinal(resul);Dependiendo de lo que calculeis (Propongo V: Victoria y D: Derrota)+
+        resultadoMazmorra.setNivelAventureroFinal(Integer.toString(this.nivelAventurero)); //Cuando lo hayais actualizado
+
+        //Resto para que no de error
+        resultadoMazmorra.setMotivoMuerte("0");
+        resultadoMazmorra.setAgenteFinalizadoNivel("0");
+        resultadoMazmorra.setMonstruosDerrotados("0");
+        resultadoMazmorra.setDeathTime("0");
+
+
+        resultadoMazmorra.setId1("-");
+        resultadoMazmorra.setIp1("-");
+        resultadoMazmorra.setNivel1("0");
+        resultadoMazmorra.setId2("-");
+        resultadoMazmorra.setIp2("-");
+        resultadoMazmorra.setNivel2("0");
+        resultadoMazmorra.setReto("-");
+        resultadoMazmorra.setResultado("-");
+        resultadoMazmorra.setNivelFinal1("0");
+        resultadoMazmorra.setNivelFinal2("0");
+
+        resultadoMazmorra.setAgentsDirectory(this.directorio_de_agentes);
+        resultadoMazmorra.setDeadAgents(this.directorio_de_agentes);
+
+
+        // Insertamos el mensaje
+        pon_en_lita_enviar(resultadoMazmorra);
+
+
+        System.out.println("\n ==> Se ha enviado el resultado del combate al Dios = "+msg.originId+
+                " - con Ip:" + msg.originIp +
+                " - en el puerto :" + msg.originPortUDP);
+
+        //Liberamos el condicional que ponía en bucle infinito la funcion mazmorra()
+        this.mazmorra_boolean = false;
+
+    }
+
+    /* Lo comento para que no de error
     public void lucha_mazmorra(Mensaje mazmorra){
         int probabilidad, exp_ganada;
         int nivel_Monstro = Integer.parseInt(mazmorra.getNivelMonstruo());
@@ -757,6 +951,8 @@ protected void menuInicial(){
         }
 
     }
+
+     */
 
     /**
      * Función pvp()
