@@ -222,12 +222,19 @@ public class RecibeUdp extends Thread {
                             } else if (paso_protocolo == "2") {
                                 //El avnturero recibe el nombre y el nivel del monstruo al que debe derrotar
                                 mensaje_recibido_UDP.setMazmorra(mazmorra);
-                                mensaje_recibido_UDP.setNivelAventurero(mazmorra);
-                                mensaje_recibido_UDP.setNombreMonstruo(mazmorra);
-                                mensaje_recibido_UDP.setNivelMonstruo(mazmorra);
-                                agente.mazmorraDios(mensaje_recibido_UDP);
+                                mensaje_recibido_UDP.setNivelAventurero(nivel_aventurero);
+                                mensaje_recibido_UDP.setNombreMonstruo(nombre_monstruo);
+                                mensaje_recibido_UDP.setNivelMonstruo(nivel_monstruo);
+                                agente.mazmorraResultado(mensaje_recibido_UDP);
                             }else if (paso_protocolo=="3"){
+                                //TODO: No llama a ninguna función?
                                 //Llamar a la funcion en relación con el paso protocolo 2.3
+                                mensaje_recibido_UDP.setMazmorra(mazmorra);
+                                mensaje_recibido_UDP.setNivelAventurero(nivel_aventurero);
+                                mensaje_recibido_UDP.setNombreMonstruo(nombre_monstruo);
+                                mensaje_recibido_UDP.setNivelMonstruo(nivel_monstruo);
+                                mensaje_recibido_UDP.setResultadoFinal(resultado_final);
+                                mensaje_recibido_UDP.setNivelAventureroFinal(nivel_aventurero_final);
                             }else{
                                 System.out.println("=============================");
                                 System.out.println("Paso de protocolo INCORRECTO.");

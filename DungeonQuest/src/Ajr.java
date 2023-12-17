@@ -21,10 +21,11 @@ public class Ajr {
     protected int Puerto_Propio_UDP;  // Es el puerto de servidor UDP del agente (es el siguiente a "Puerto_Propio" osea - Puerto_Propio_UDP = Puerto_Propio+1)
     protected long Tiempo_de_nacimiento;  // La hora del sistema de esta maquina en la que se genera el agente
     protected tipos_de_agentes tipo_agente;  // Para indicar si es aventurero o Dios
-    protected enum tipos_de_agentes
-    {
+
+    protected enum tipos_de_agentes {
         AVENTURERO, DIOS
     }
+
     Aventurero aventurero;
 
     // //////////////////////////////////////
@@ -38,22 +39,23 @@ public class Ajr {
     protected int Rango_Puertos; // Se suma a "Puerto_Inicio" para definir el ultimo puerto del rango donde este agente podrá buscar otros agentes, o buscar donde anidar
     protected String localizacion_codigo;
     protected long tiempo_espera_fin_env; // Es el tiempo maximo que esperaremos para enviar los mensajen pendientes en la cola de envios, antes de finalizar el agente
-                                        // si transcurrido esta cantidad de milisegundos sigue habiendo mensajes por enviar en la cola de envios, el agente se cierra y estos
-                                        // quedaran sin enviar
+    // si transcurrido esta cantidad de milisegundos sigue habiendo mensajes por enviar en la cola de envios, el agente se cierra y estos
+    // quedaran sin enviar
     protected FuncionDios funcionDios;  // Sera un hilo de ejecución
 
     // //////////////////////////////////////
     // Datos para ingeniería social
-    protected ComportamientoBase comportamientoBase ;  // Sera un hilo de ejecución
-    protected enum Estado_del_AJR
-    {
+    protected ComportamientoBase comportamientoBase;  // Sera un hilo de ejecución
+
+    protected enum Estado_del_AJR {
         VIVO, MUERTO
     }
+
     protected Estado_del_AJR Estado_Actual;
     protected long Tiempo_de_vida; // Definimos aqui en milisegundos el tiempo que el proceso del agente estara activo antes de terminarse
 
     protected int Num_generacion; // Un agente que se arranca en una maquina genera procesos hijos y estos generan procesos nietos, este numero
-                                    // indica a que generación correspondeeste agente como descendiente del agente inicial
+    // indica a que generación correspondeeste agente como descendiente del agente inicial
     protected int Num_max_de_generaciones; // Los agentes de este nivel de generaciones, no generaran agente hijos
     protected int Num_hijos_generados; // Define el numero de descendientes que este agente ha generado (en primera generación)
     protected int Num_max_hijos_generados; // Define el numero maximo de descendientes de primera generación. que este agente ùede generar
@@ -78,13 +80,13 @@ public class Ajr {
     protected DatagramSocket servidor_UDP;  // Puerto para el servicio por UDP
 
     private LinkedList<AjrLocalizado> directorio_de_agentes = new LinkedList<>(); // Contenedor para almacenar cada uno de los mensajes para enviar por un agente
-    private  int num_tot_ajr_loc;  // Numero total de agentes localizados
+    private int num_tot_ajr_loc;  // Numero total de agentes localizados
     private LinkedList<Mensaje> contenedor_de_mensajes_a_enviar = new LinkedList<>(); // Contenedor para almacenar cada uno de los mensajes para enviar por un agente
-    private  int num_tot_men_env;  // Numero total de mensajes enviados por el agente
+    private int num_tot_men_env;  // Numero total de mensajes enviados por el agente
     private LinkedList<Mensaje> contenedor_de_mensajes_recibidos = new LinkedList<>(); // Contenedor para almacenar cada uno de los mensajes recibidos por un agente
     private LinkedList<Mensaje> contenedor_de_mensajes_recibidos_pvp = new LinkedList<>(); // Contenedor para almacenar cada uno de los mensajes recibidos por un agente
-    private  int num_tot_men_rec;  // Numero total de mensajes recibidos por el agente
-    private  int num_id_local_men;  // Este numero, junto con el identificador del agente, generan un codigo unico de mensaje
+    private int num_tot_men_rec;  // Numero total de mensajes recibidos por el agente
+    private int num_id_local_men;  // Este numero, junto con el identificador del agente, generan un codigo unico de mensaje
 
     //private boolean salidaVoluntaria;
 
@@ -95,27 +97,25 @@ public class Ajr {
 
     //TODO: Mirar ACC y añadir más código
 
-    public Ajr (String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor){
+    public Ajr(String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor) {
         long pid = obtenerPID();
         System.out.println("\n ========================================================================================" +
                 "\n> =========================== INICIO AGENTE ==============================================" +
                 "\n> ========================================================================================" +
-                " \n ID_propio : "+ ID_propio+
-                " Num generacion : "+ este_num_generacion_str+
-                " Tipo agente : "+ este_tipo_agente+
-                " Ip Dios : "+ este_Ip_Dios +
-                " Puerto Monitor : "+ este_Puerto_Monitor+
-                "\n> ========================= PID proceso : "+pid+" ======================================" +
-                "\n> ============ Para matar el proceso : taskkill /PID "+pid+" /F  ========================" +
+                " \n ID_propio : " + ID_propio +
+                " Num generacion : " + este_num_generacion_str +
+                " Tipo agente : " + este_tipo_agente +
+                " Ip Dios : " + este_Ip_Dios +
+                " Puerto Monitor : " + este_Puerto_Monitor +
+                "\n> ========================= PID proceso : " + pid + " ======================================" +
+                "\n> ============ Para matar el proceso : taskkill /PID " + pid + " /F  ========================" +
                 "\n> ========================================================================================");
 
         generaConfiguracionInicial(ID_propio, este_num_generacion_str, este_tipo_agente, este_Ip_Dios, este_Puerto_Monitor);
-        if(this.tipo_agente == tipos_de_agentes.AVENTURERO)
-        {
+        if (this.tipo_agente == tipos_de_agentes.AVENTURERO) {
             // Para el agente CAMBIACROMOS tenemos que buscar los puertos donde albergar el agente
             buscaNido();
-        }
-        else if (this.tipo_agente == tipos_de_agentes.DIOS) {
+        } else if (this.tipo_agente == tipos_de_agentes.DIOS) {
             // Para el agente DIOS los puertos vienen fijados al generar el agente
             this.Puerto_Propio_UDP = this.Puerto_Dios;
 
@@ -127,31 +127,24 @@ public class Ajr {
                 System.out.println("\n ==> ERROR. Desde Ajr al abrir los puertos de comunicaciones con Puerto_Propio_UDP : " + Puerto_Propio_UDP +
                         " - en el MONITOR");
             }
-        }
-        else
-        {
+        } else {
             System.out.println("Desde public Ajr. ERROR al procesar el tipo de agente al buscar nido");
         }
         this.recibeUdp = new RecibeUdp(this);
         this.enviar = new Enviar(this);
         this.comportamientoBase = new ComportamientoBase(this);
 
-        if(this.tipo_agente == tipos_de_agentes.AVENTURERO)
-        {
+        if (this.tipo_agente == tipos_de_agentes.AVENTURERO) {
             // Para el agente CAMBIACROMOS arrancamos su funcion del agente y notificamos al monitor su nacimiento
             this.funcionAventurero = new FuncionDeAventurero(this);
             notificaNacimiento();
             menuInicial();
-        }
-        else if (this.tipo_agente == tipos_de_agentes.DIOS)
-        {
+        } else if (this.tipo_agente == tipos_de_agentes.DIOS) {
             randomizedDungeons(); //Crea las mazmorras con los monstruos aleatorios
             // Para el agente MONITOR tan solo arrancamos su funcion del agente monitor
             this.funcionDios = new FuncionDios(this);
             // EL monitor no se notifica su propio nacimiento
-        }
-        else
-        {
+        } else {
             System.out.println("Desde public Acc. ERROR al procesar el tipo de agente al ir a notificar el nacimiento");
         }
 
@@ -252,7 +245,7 @@ public class Ajr {
         // Para evitar que el proceso se eternice
         int num_intentos = 0; // Para llevar una cuenta del numero de puertos en los que hemos intentado anidar
         int max_num_intentos = 5000; // Para llevar una cuenta del numero de puertos en los que hemos intentado anidar
-        long T_ini_busqueda =  System.currentTimeMillis();  // La hora del sistema de esta maquina en la que se inicia la busqueda de nido
+        long T_ini_busqueda = System.currentTimeMillis();  // La hora del sistema de esta maquina en la que se inicia la busqueda de nido
         long T_max_busqueda = 1000 * 10;  // El periodo maximo de tiempo que permitimos que el agente este buscando su nido (en milisegundos)
         long T_limite_busqueda = T_ini_busqueda + T_max_busqueda;  // El momento en el que el agente debe parar de buscar su nido (en milisegundos)
 
@@ -268,13 +261,13 @@ public class Ajr {
 
                 long T_actual = System.currentTimeMillis();
                 long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
-                System.out.println("\n ==> Desde Acc => buscaNido ANIDADO CORRECTAMENTE con num_intentos : "+num_intentos+
-                        " - con max_num_intentos : "+ max_num_intentos +
-                        " - con T_ini_busqueda : "+ T_ini_busqueda +
-                        " - con T_actual : "+ T_actual +
-                        " - con T_limite_busqueda : "+ T_limite_busqueda +
-                        " - tiempo invertido (milisegundos) : "+ T_buscando+
-                        "\n - anidado en Puerto_Propio : "+ this.Puerto_Propio_UDP +
+                System.out.println("\n ==> Desde Acc => buscaNido ANIDADO CORRECTAMENTE con num_intentos : " + num_intentos +
+                        " - con max_num_intentos : " + max_num_intentos +
+                        " - con T_ini_busqueda : " + T_ini_busqueda +
+                        " - con T_actual : " + T_actual +
+                        " - con T_limite_busqueda : " + T_limite_busqueda +
+                        " - tiempo invertido (milisegundos) : " + T_buscando +
+                        "\n - anidado en Puerto_Propio : " + this.Puerto_Propio_UDP +
                         " - Puerto_Propio_UDP : " + this.Puerto_Propio_UDP);
 
             } catch (Exception e) {
@@ -287,16 +280,15 @@ public class Ajr {
 
                 // COntrolamos si debemos detener la busqueda de nido
                 long T_actual = System.currentTimeMillis();
-                if((num_intentos > max_num_intentos) || (T_actual > T_limite_busqueda))
-                {
+                if ((num_intentos > max_num_intentos) || (T_actual > T_limite_busqueda)) {
                     sigue_buscando = false;
                     long T_buscando = System.currentTimeMillis() - T_ini_busqueda;
-                    System.out.println("\n ==> Desde Acc => buscaNido.Detenemos la busqueda por exceso de intentos o tiempo con num_intentos : "+num_intentos+
-                            " - con max_num_intentos : "+ max_num_intentos +
-                            " - con T_ini_busqueda : "+ T_ini_busqueda +
-                            " - con T_actual : "+ T_actual +
-                            " - con T_limite_busqueda : "+ T_limite_busqueda +
-                            " - tiempo invertido (milisegundos) : "+ T_buscando);
+                    System.out.println("\n ==> Desde Acc => buscaNido.Detenemos la busqueda por exceso de intentos o tiempo con num_intentos : " + num_intentos +
+                            " - con max_num_intentos : " + max_num_intentos +
+                            " - con T_ini_busqueda : " + T_ini_busqueda +
+                            " - con T_actual : " + T_actual +
+                            " - con T_limite_busqueda : " + T_limite_busqueda +
+                            " - tiempo invertido (milisegundos) : " + T_buscando);
                 }
             } // Fin de - try catch
         }  // FIn de - while (sigue_buscando)
@@ -314,7 +306,7 @@ public class Ajr {
         // Construimos el mensaje
 
         String ID_mensaje = dame_codigo_id_local_men();
-        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
+        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
         String momento_actual = String.valueOf(System.currentTimeMillis());
         String Puerto_Propio_str = String.valueOf(Puerto_Propio_UDP);
         String Puerto_Dios_str = String.valueOf(Puerto_Dios_UDP);
@@ -322,8 +314,8 @@ public class Ajr {
                 " - con ip : " + Ip_Propia +
                 " - con Puerto_Propio : " + Puerto_Propio_str +
                 " - con ID_mensaje : " + ID_mensaje +
-                " - envia al monitor con Ip_Monitor : "+Ip_Dios+
-                " - con Puerto_Dios : "+Puerto_Dios_str+
+                " - envia al monitor con Ip_Monitor : " + Ip_Dios +
+                " - con Puerto_Dios : " + Puerto_Dios_str +
                 " :  - en T : " + momento_actual;
 
         Mensaje mensaje_he_nacido = new Mensaje(
@@ -356,7 +348,7 @@ public class Ajr {
         mensaje_he_nacido.setNivelFinal1("0");
         mensaje_he_nacido.setNivelFinal2("0");
 
-        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
+        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000, 15550005);
         directorio_de_agentes.add(ej);
         mensaje_he_nacido.setAgentsDirectory(this.directorio_de_agentes);
         mensaje_he_nacido.setDeadAgents(this.directorio_de_agentes);
@@ -367,14 +359,14 @@ public class Ajr {
 
         String Num_generacion_str = String.valueOf(this.Num_generacion);
         String Tiempo_de_nacimiento_str = String.valueOf(this.Tiempo_de_nacimiento);
-        System.out.println("\n ==> Ha nacido un agente en la IP = "+Ip_Propia+
+        System.out.println("\n ==> Ha nacido un agente en la IP = " + Ip_Propia +
                 " - con ID_propio :" + this.ID_propio +
                 " - en el puerto :" + this.Puerto_Propio_UDP +
                 " - Su generación es :" + Num_generacion_str +
                 " - t de generación :" + Tiempo_de_nacimiento_str);
 
         //Añadimos un nuevo aventurero vivo a la lista
-        aventurero = new Aventurero(this.ID_propio,this.Ip_Propia,this.Puerto_Propio_UDP,null,1,0);
+        aventurero = new Aventurero(this.ID_propio, this.Ip_Propia, this.Puerto_Propio_UDP, null, 1, 0);
 
         aventurerosVivos.add(aventurero);
     }
@@ -385,7 +377,6 @@ public class Ajr {
      */
 
     //ToDo hacer como en nacimiento
-
     protected void finalizaAgente() {
         Estado_Actual = Estado_del_AJR.MUERTO;
 
@@ -393,7 +384,7 @@ public class Ajr {
         // Notificamos al monitor que este agente ha finalizadO
         if (tipo_agente == tipos_de_agentes.AVENTURERO) {
             String ID_mensaje = dame_codigo_id_local_men();
-            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
+            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
             long momento_actual = System.currentTimeMillis();
             String momento_actual_str = String.valueOf(System.currentTimeMillis());
             String tiempo_vivido = String.valueOf(System.currentTimeMillis() - Tiempo_de_nacimiento);
@@ -419,12 +410,13 @@ public class Ajr {
             // 0 --> Derrotado
             // 1 --> Nivel Máximo
             // 2 --> Salida Voluntaria
-            if (this.salidaVoluntaria != 0){
+            if (this.salidaVoluntaria != 0) {
                 mensaje_fin_agente.setMotivoMuerte("2");
-            } else if(this.nivelAventurero == 99){
+            } else if (this.nivelAventurero == 99) {
                 mensaje_fin_agente.setMotivoMuerte("1");
+            } else {
+                mensaje_fin_agente.setMotivoMuerte("0");
             }
-            else{mensaje_fin_agente.setMotivoMuerte("0");}
 
 
             mensaje_fin_agente.setAgenteFinalizadoNivel(Integer.toString(this.nivelAventurero));
@@ -463,8 +455,8 @@ public class Ajr {
         }
 
         //Buscamos el aventurero muerto para quitarlo del LinkedList
-        for (Aventurero aventurero : aventurerosVivos){
-            if ((aventurero.getID_propio()).equals(ID_propio)){
+        for (Aventurero aventurero : aventurerosVivos) {
+            if ((aventurero.getID_propio()).equals(ID_propio)) {
                 aventurerosVivos.remove(aventurero);
                 break;
             }
@@ -506,6 +498,7 @@ public class Ajr {
     /**
      * Función cerrarSockets()
      * Cierra los sockets antes de terminar
+     *
      * @return
      */
 
@@ -522,6 +515,7 @@ public class Ajr {
     /**
      * Función obtenerPid()
      * Obtenemos el PID
+     *
      * @return
      */
 
@@ -542,12 +536,13 @@ public class Ajr {
         // Si no se pudo obtener el PID, devolver un valor predeterminado
         return -1;
     }
+
     /**
      * Función randomizedDungeons()
      * Antes de pasar al menu y despues de haber notificado
      * el nacimiento se crearan las mazmorras aleatoriamente
      */
-    protected void randomizedDungeons(){
+    protected void randomizedDungeons() {
         this.mazmorra_principiantes.clear();
         this.mazmorra_intermedia.clear();
         this.mazmorra_avanzado.clear();
@@ -556,8 +551,8 @@ public class Ajr {
         List<String> nombres_principiante = Arrays.asList("Slime", "Hilichurl", "Megaflora", "Hilichurl ballestero", "Samachurl", "Duende", "Bokoblin", "Esqueleto");
         List<String> nombres_intermedio = Arrays.asList("Skulltula", "Lawachurl", "Ogro", "Recaudador Fatui", "Fantasma", "Zombie", "Caballero errante", "Jauría de lobos");
         List<String> nombres_avanzado = Arrays.asList("Dragón", "Regisvid", "Oceánida", "Protrodragarto", "Oni Espadachín", "Serpiente de las Ruinas", "Kraken", "Cíclope");
-        for(int i =0 ; i<10; i++){
-            Monstruo monstruo_principiante = new Monstruo(nombres_principiante.get(rand.nextInt(8)), rand.nextInt(1,6));
+        for (int i = 0; i < 10; i++) {
+            Monstruo monstruo_principiante = new Monstruo(nombres_principiante.get(rand.nextInt(8)), rand.nextInt(1, 6));
             Monstruo monstruo_intermedio = new Monstruo(nombres_intermedio.get(rand.nextInt(8)), rand.nextInt(6, 16));
             Monstruo monstruo_avanzado = new Monstruo(nombres_avanzado.get(rand.nextInt(8)), rand.nextInt(16, 30));
             this.mazmorra_principiantes.add(monstruo_principiante);
@@ -566,39 +561,41 @@ public class Ajr {
         }
 
     }
+
     /**
      * Función menuInicial()
      * Será el menú inicial del Aventurero.
      */
-protected void menuInicial(){
-    //TODO: hacer más bonito el menú inicial
-    Scanner s = new Scanner(System.in);
-    boolean var = true;
-    while(var) {
-        while ((funcionAventurero.mensajesPVP.isEmpty())){
-            Mensaje m = funcionAventurero.mensajesPVP.pop();
-            pvpAdversario(m);
-        }
-        int op;
-        System.out.println("Introduce una opción: \n 1. Ir a una mazmorra.\n 2. PVP\n 3. Salir");
-        op = s.nextInt();
-        switch (op){
-            case 1:
-                var = mazmorra();
-            case 2:
-                var = pvp();
+    protected void menuInicial() {
+        //TODO: hacer más bonito el menú inicial
+        Scanner s = new Scanner(System.in);
+        boolean var = true;
+        while (var) {
+            while ((funcionAventurero.mensajesPVP.isEmpty())) {
+                Mensaje m = funcionAventurero.mensajesPVP.pop();
+                pvpAdversario(m);
+            }
+            int op;
+            System.out.println("Introduce una opción: \n 1. Ir a una mazmorra.\n 2. PVP\n 3. Salir");
+            op = s.nextInt();
+            switch (op) {
+                case 1:
+                    var = mazmorra();
+                case 2:
+                    var = pvp();
 
 
-            case 3:
-                var = false;
-                this.salidaVoluntaria = 1;
-                break;
-            default:
-                System.out.println("Opcion incorrecta");
-                break;
+                case 3:
+                    var = false;
+                    this.salidaVoluntaria = 1;
+                    break;
+                default:
+                    System.out.println("Opcion incorrecta");
+                    break;
+            }
         }
+        finalizaAgente();
     }
-}
 
 /**        PRUEBA PARA MOSTRAR LOS ENEMIGOS DE LAS MAZMORRAS (FUNCIONA)
  *
@@ -707,7 +704,7 @@ protected void menuInicial(){
 
         }
 
-        if (nivelAventurero>=100 || nivelAventurero<=0) { //Si nivel del aventurero es >= 99
+        if (nivelAventurero >= 100 || nivelAventurero <= 0 || Estado_Actual == Estado_del_AJR.MUERTO) { //Si nivel del aventurero es >= 99
             // nivel = 99
             return false; // Ya que ha terminado la partida.
         } else {
@@ -715,69 +712,16 @@ protected void menuInicial(){
         }
     }
 
-    /* Lo comento para que no de error, era la continuación de la primera funcion
-    public void funcionx(){
-
-            //Espera mensaje del Dios dando un monstruo (2.2)
-            //wait();
-
-            //Una vez recibe el mensaje  saca los datos necesarios y calcula el resultado del combate
-            String nombre_Monstro = mazmorra.getNombreMonstruo();
-            int nivel_Monstro = Integer.parseInt(mazmorra.getNivelMonstruo());
-            String tipo_Mazmorrra = mazmorra.getMazmorra();
-
-            System.out.println("Te has encontrado en la mazmorra "+tipo_Mazmorrra+", al monstruo "+nombre_Monstro+" de nivel "+nivel_Monstro);
-            int nivel_aventurero = Integer.parseInt(mazmorra.getNivelAventurero());
-            int exp_ganada;
-
-            if(nivel_aventurero >= nivel_Monstro){
-                System.out.println("Desea huir: 1. Si 2. No (Ponga 1 o 2)");
-                int r = s.nextInt();
-                if(r == 1){
-                    System.out.println("Has huido con exito");
-                    return true;
-                }else{
-                    exp_ganada = 1;
-                    nivel_aventurero += exp_ganada;
-                    mazmorra.setResultadoFinal("Victoria");
-                    mazmorra.setNivelAventureroFinal(""+nivel_aventurero);
-                    System.out.println("Resultado: "+mazmorra.getResultadoFinal()+" \n Experiencia ganada: "+exp_ganada+" \n Nivel actual:"+ mazmorra.getNivelAventureroFinal());
-                }
-            }else{
-                int suma_lvl = nivel_Monstro + nivel_aventurero;
-                int probabilidad;
-                System.out.println("Desea huir: 1. Si 2. No (Ponga 1 o 2)");
-                int r = s.nextInt();
-                if(r == 1){
-                    probabilidad = (int) (Math.floor(Math.random()*(suma_lvl-0+1)+0));
-                    if(probabilidad < nivel_aventurero){
-                        System.out.println("Has huido con exito");
-                        return true;
-                    }else{
-                        lucha_mazmorra(mazmorra);
-                    }
-                }else{
-                    lucha_mazmorra(mazmorra);
-                }
-            }
-
-
-
-            //Crea mensaje info para el Dios (2.3)
-    }
-
-     */
-
     /**
      * Clase mazmorraDios();
      * Clase para que el Dios envía un monstruo de una mazmorra al aventurero
      */
 
-    public void mazmorraDios(Mensaje msg){
+    public void mazmorraDios(Mensaje msg) {
         Random random = new Random();
         String mazmorra_elegida = msg.getMazmorra();
         Monstruo mons_elegido;
-        if(mazmorra_elegida.equals("mazmorra_principiantes")){
+        if (mazmorra_elegida.equals("mazmorra_principiantes")) {
             int size = this.mazmorra_principiantes.size();
             int r = random.nextInt(size);
             mons_elegido = this.mazmorra_principiantes.get(r);
@@ -789,7 +733,9 @@ protected void menuInicial(){
             int size = this.mazmorra_avanzado.size();
             int r = random.nextInt(size);
             mons_elegido = this.mazmorra_avanzado.get(r);
-        }else{mons_elegido = null;}
+        } else {
+            mons_elegido = null;
+        }
 
         String ID_mensaje = dame_codigo_id_local_men();
         String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
@@ -847,9 +793,9 @@ protected void menuInicial(){
         pon_en_lita_enviar(diosMazmorra);
 
 
-        System.out.println("\n ==> Se ha enviado un monstruo a = "+msg.originId+
+        System.out.println("\n ==> Se ha enviado un monstruo a = " + msg.originId +
                 " - con Ip:" + msg.originIp +
-                " - con Nivel :"+msg.nivelAventurero+
+                " - con Nivel :" + msg.nivelAventurero +
                 " - en el puerto :" + msg.originPortUDP);
 
     }
@@ -857,13 +803,85 @@ protected void menuInicial(){
     /**
      * función mazmorraResultado() Calcula el resultado del combate y acaba el bloque mazmorra
      */
-    public void mazmorraResultado(Mensaje msg){
+    public void mazmorraResultado(Mensaje msg) {
         String nombre_monstruo = msg.getNombreMonstruo();
-        String nivel_monstruo = msg.getNivelMonstruo();
+        int nivel_monstruo = Integer.parseInt(msg.getNivelMonstruo());
         System.out.println("Aparece ante ti el monstruo " + nombre_monstruo + " de nivel " + nivel_monstruo);
 
         //ToDo Se calcula que ocurre (Manuel y Antonio)
+        Random random = new Random();
+        int nivel_aventurero = Integer.parseInt(msg.getNivelAventurero());
+        int exp_ganada;
+        String resultado_final = "-";
+        Scanner s = new Scanner(System.in);
+        boolean con = true;
 
+        while (con) {
+            System.out.println("Desea huir: 1. Si 2. No (Ponga 1 o 2)");
+            int r = s.nextInt();
+            if (nivel_aventurero >= nivel_monstruo) {
+                switch (r) {
+                    case 1:
+                        System.out.println("Has huido con exito");
+                        con = false;
+                        break;
+                    case 2:
+                        exp_ganada = 1;
+                        nivel_aventurero += exp_ganada;
+                        resultado_final = "Victoria";
+                        System.out.println("Resultado: " + resultado_final + " \n Experiencia ganada: " + exp_ganada + " \n Nivel actual:" + nivel_aventurero);
+                        con = false;
+                        break;
+
+                    default:
+                        System.out.println("Mal intoducido, intoduzca de nuevo");
+                }
+
+            } else {
+                int suma_lvl = nivel_monstruo + nivel_aventurero;
+                int probabilidad;
+                switch (r) {
+                    case 1:
+                        probabilidad = random.nextInt(suma_lvl);
+                        con = false;
+                        if (probabilidad < nivel_aventurero) {
+                            System.out.println("Has huido con exito");
+                        } else {
+                            probabilidad = random.nextInt(suma_lvl);
+
+                            if (probabilidad < nivel_aventurero) {
+                                exp_ganada = nivel_monstruo - nivel_aventurero;
+                                nivel_aventurero += exp_ganada;
+                                resultado_final = "Victoria";
+                                System.out.println("Resultado: " + resultado_final + " \n Experiencia ganada: " + exp_ganada + " \n Nivel actual:" + nivel_aventurero);
+
+                            } else {
+                                resultado_final = "Derrota";
+                                System.out.println("Resultado: " + resultado_final);
+                            }
+                        }
+                        break;
+                    case 2:
+                        probabilidad = random.nextInt(suma_lvl);
+                        con = false;
+
+
+                        if (probabilidad < nivel_aventurero) {
+                            exp_ganada = nivel_monstruo - nivel_aventurero;
+                            nivel_aventurero += exp_ganada;
+                            resultado_final = "Victoria";
+                            System.out.println("Resultado: " + resultado_final + " \n Experiencia ganada: " + exp_ganada + " \n Nivel actual:" + nivel_aventurero);
+
+                        } else {
+                            resultado_final = "Derrota";
+                            System.out.println("Resultado: " + resultado_final);
+                        }
+                        break;
+                    default:
+                        System.out.println("Mal intoducido, intoduzca de nuevo");
+                }
+            }
+        }
 
         //ToDo final
 
@@ -892,9 +910,14 @@ protected void menuInicial(){
         resultadoMazmorra.setMazmorra(msg.getMazmorra());
         resultadoMazmorra.setNivelAventurero(msg.getNivelAventurero());
         resultadoMazmorra.setNombreMonstruo(nombre_monstruo);
-        resultadoMazmorra.setNivelMonstruo(nivel_monstruo);
-        //resultadoMazmorra.setResultadoFinal(resul);Dependiendo de lo que calculeis (Propongo V: Victoria y D: Derrota)+
-        resultadoMazmorra.setNivelAventureroFinal(Integer.toString(this.nivelAventurero)); //Cuando lo hayais actualizado
+        resultadoMazmorra.setNivelMonstruo(Integer.toString(nivel_monstruo));
+        resultadoMazmorra.setResultadoFinal(resultado_final);//Nos hemos quedado con Victoria y Derrota
+        resultadoMazmorra.setNivelAventureroFinal(Integer.toString(nivel_aventurero));
+
+        this.nivelAventurero = nivel_aventurero;
+        if(resultado_final == "Derrota"){
+            this.Estado_Actual = Estado_del_AJR.MUERTO;
+        }
 
         //Resto para que no de error
         resultadoMazmorra.setMotivoMuerte("0");
@@ -922,7 +945,7 @@ protected void menuInicial(){
         pon_en_lita_enviar(resultadoMazmorra);
 
 
-        System.out.println("\n ==> Se ha enviado el resultado del combate al Dios = "+msg.originId+
+        System.out.println("\n ==> Se ha enviado el resultado del combate al Dios = " + msg.originId +
                 " - con Ip:" + msg.originIp +
                 " - en el puerto :" + msg.originPortUDP);
 
@@ -931,43 +954,21 @@ protected void menuInicial(){
 
     }
 
-    /* Lo comento para que no de error
-    public void lucha_mazmorra(Mensaje mazmorra){
-        int probabilidad, exp_ganada;
-        int nivel_Monstro = Integer.parseInt(mazmorra.getNivelMonstruo());
-        int nivel_aventurero = Integer.parseInt(mazmorra.getNivelAventurero());
-        int suma_lvl = nivel_Monstro + nivel_aventurero;
-        probabilidad = (int) (Math.floor(Math.random()*(suma_lvl-0+1)+0));
-        if(probabilidad < nivel_aventurero){
-            exp_ganada = nivel_Monstro - nivel_aventurero;
-            nivel_aventurero += exp_ganada;
-            mazmorra.setResultadoFinal("Victoria");
-            mazmorra.setNivelAventureroFinal(""+nivel_aventurero);
-            System.out.println("Resultado: "+mazmorra.getResultadoFinal()+" \n Experiencia ganada: "+exp_ganada+" \n Nivel actual:"+ mazmorra.getNivelAventureroFinal());
-
-        }else{
-            mazmorra.setResultadoFinal("Derrota");
-            System.out.println("Resultado: "+mazmorra.getResultadoFinal());
-        }
-
-    }
-
-     */
 
     /**
      * Función pvp()
      * Te da distintas opciones de mazmorra a la que ir y allí encontrarás un monstruo. Si lo derrotas conseguirás experiencia y subirás de nivel.
      */
-    public boolean pvp(){
+    public boolean pvp() {
         Scanner s = new Scanner(System.in);
-        int opcion,yo=0;
+        int opcion, yo = 0;
         Aventurero adversario;
 
         System.out.println("Con que el aventurero desea luchar con otro de su condición... \n Buscando un aventurero");
         // Buscar un aventurero disponible.
 
         //Mira si solo esta el
-        if (aventurerosVivos.size()==1) {
+        if (aventurerosVivos.size() == 1) {
             System.out.println("No hay aventureros disponibles.");
             return true;
         }
@@ -976,10 +977,10 @@ protected void menuInicial(){
         //menos el mismo
         System.out.println("Aventureros disponibles:");
         for (int i = 0; i < aventurerosVivos.size(); i++) {
-            if(!aventurerosVivos.get(i).getID_propio().equals(aventurero.getID_propio())) {
-                System.out.println((i+1) + " -> " + aventurerosVivos.get(i).getID_propio());
-            }else{
-                yo=i+1;
+            if (!aventurerosVivos.get(i).getID_propio().equals(aventurero.getID_propio())) {
+                System.out.println((i + 1) + " -> " + aventurerosVivos.get(i).getID_propio());
+            } else {
+                yo = i + 1;
             }
         }
 
@@ -988,20 +989,20 @@ protected void menuInicial(){
             opcion = s.nextInt();
             s.nextLine();
 
-            if (opcion==yo){ //Si me elijo a mi mismo a pesar de no mostrarme
+            if (opcion == yo) { //Si me elijo a mi mismo a pesar de no mostrarme
                 System.out.println("Deja de apuntarte con tu arma y elige");
             }
-            if(opcion>aventurerosVivos.size()){ //si elijo un numero que no esta disponible
+            if (opcion > aventurerosVivos.size()) { //si elijo un numero que no esta disponible
                 System.out.println("Ese aventurero no esta aqui ¿esperas a alguien mas?");
             }
-        }while (opcion == yo || opcion>aventurerosVivos.size());
+        } while (opcion == yo || opcion > aventurerosVivos.size());
 
-        if(opcion!=0){
-            adversario=aventurerosVivos.get(opcion-1);
+        if (opcion != 0) {
+            adversario = aventurerosVivos.get(opcion - 1);
 
 
             String ID_mensaje = dame_codigo_id_local_men();
-            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
+            String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
 
             //String aventureroID=this.getID_propio();
             //String aventureroIP=aventurero.getIP_propio();
@@ -1012,7 +1013,7 @@ protected void menuInicial(){
             String adversarioIP = adversario.getIP_propio();
             String adversarioPuerto = String.valueOf(adversario.getPuerto_Propio_UDP());
 
-            Mensaje mensajePVP = new Mensaje(msgId, "3", "1",ID_propio,Ip_Propia,
+            Mensaje mensajePVP = new Mensaje(msgId, "3", "1", ID_propio, Ip_Propia,
                     Puerto_Propio_str, momento_actual, adversarioID, adversarioIP, adversarioPuerto, momento_actual);
 
             String cuerpo_mens_pvp = "Esto es el MENSAJE PVP  - que el agente con ID_propio : " + ID_propio +
@@ -1026,7 +1027,7 @@ protected void menuInicial(){
                     " - con Nivel : " + nivelAventurero +
                     " - con Monstruos Eliminados : " + aventurero.getMonstruosDerrotados();
 
-        //Mandar mensaje (3.1)
+            //Mandar mensaje (3.1)
             mensajePVP.setInfo(cuerpo_mens_pvp);
             mensajePVP.setReto("true");
 
@@ -1062,72 +1063,73 @@ protected void menuInicial(){
             pon_en_lita_enviar(mensajePVP);
 
 
-            System.out.println("\n ==> Se ha lanzado un reto PvP en la IP = "+Ip_Propia+
+            System.out.println("\n ==> Se ha lanzado un reto PvP en la IP = " + Ip_Propia +
                     " - con ID_propio :" + ID_propio +
-                    " - con Nivel :"+nivelAventurero+
+                    " - con Nivel :" + nivelAventurero +
                     " - en el puerto :" + Puerto_Propio_str);
 
-        //Esperar confirmación (3.2)-----------------------------------------------------------------------------------
+            //Esperar confirmación (3.2)-----------------------------------------------------------------------------------
             //wait();
 
 
-        // Si esa confirmación es true le manda el nivel (3.3) y el otro aventurero procesa el resultado
+            // Si esa confirmación es true le manda el nivel (3.3) y el otro aventurero procesa el resultado
 
 
-        //Recibes el resultado (3.4) y te actualizas
-        Mensaje mensajeResultado = funcionAventurero.mensajesPVP.pop();
-        aventurero.nivel=Integer.parseInt(mensajeResultado.nivelFinal2);
-        adversario.nivel=Integer.parseInt(mensajeResultado.nivelFinal1);
+            //Recibes el resultado (3.4) y te actualizas
+            Mensaje mensajeResultado = funcionAventurero.mensajesPVP.pop();
+            aventurero.nivel = Integer.parseInt(mensajeResultado.nivelFinal2);
+            adversario.nivel = Integer.parseInt(mensajeResultado.nivelFinal1);
 
         }
-        if(nivelAventurero>=100 || nivelAventurero<=0){ //Si nivel del aventurero es >= 99
+        if (nivelAventurero >= 100 || nivelAventurero <= 0) { //Si nivel del aventurero es >= 99
             // nivel superior a 99 o muerto con nivel cero
             return false; // Ya que ha terminado la partida
-        }else{
+        } else {
             return true;
         }
     }
 
-    public void pvpAdversario(Mensaje msj){
+    public void pvpAdversario(Mensaje msj) {
         Scanner s = new Scanner(System.in);
-        int opcion,nivel1=0,nivel2=0;
-        String win=null;
+        int opcion, nivel1 = 0, nivel2 = 0;
+        String win = null;
 
-        if (msj.reto.equals("true")){
-            System.out.print("El Aventurero "+msj.id1+" con nivel: "+msj.nivel1+" te ha desafiado.\n 1. Aceptas \n 2. Rechazas");
+        if (msj.reto.equals("true")) {
+            System.out.print("El Aventurero " + msj.id1 + " con nivel: " + msj.nivel1 + " te ha desafiado.\n 1. Aceptas \n 2. Rechazas");
 
-            do{
-                opcion = s.nextInt(); s.nextLine();
-                switch (opcion){
+            do {
+                opcion = s.nextInt();
+                s.nextLine();
+                switch (opcion) {
                     case 1:
                         System.out.println("Has aceptado el desafio, preparate para el combate");
                         int resultado = Integer.parseInt(msj.nivel1) - Integer.parseInt(msj.nivel2);
-                        if (resultado>0){
-                            System.out.println("Has perdido el combate, te has quedado sin "+resultado+" niveles");
-                            nivel1=Integer.parseInt(msj.nivel1)+resultado;
-                            nivel2=Integer.parseInt(msj.nivel1)-resultado;
-                            win=msj.id1;
-                        } else if (resultado<0) {
-                            System.out.println("¡¡Has ganado!! todo un campeon, disfruta de tus "+(resultado*(-1))+" niveles extra");
-                            nivel1=Integer.parseInt(msj.nivel1)+resultado;
-                            nivel2=Integer.parseInt(msj.nivel1)-resultado;
-                            win=msj.id2;
-                        }else{
+                        if (resultado > 0) {
+                            System.out.println("Has perdido el combate, te has quedado sin " + resultado + " niveles");
+                            nivel1 = Integer.parseInt(msj.nivel1) + resultado;
+                            nivel2 = Integer.parseInt(msj.nivel1) - resultado;
+                            win = msj.id1;
+                        } else if (resultado < 0) {
+                            System.out.println("¡¡Has ganado!! todo un campeon, disfruta de tus " + (resultado * (-1)) + " niveles extra");
+                            nivel1 = Integer.parseInt(msj.nivel1) + resultado;
+                            nivel2 = Integer.parseInt(msj.nivel1) - resultado;
+                            win = msj.id2;
+                        } else {
                             System.out.println("Un buen choque de espadas, pero no ha servido de nada");
                         }
 
                         String ID_mensaje = dame_codigo_id_local_men();
-                        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length()-1));
+                        String msgId = String.valueOf(ID_mensaje.charAt(ID_mensaje.length() - 1));
 
-                        String aventureroID=msj.id2;
-                        String aventureroIP=msj.ip2;
-                        String aventureroPuerto=msj.destinationPortUDP;
+                        String aventureroID = msj.id2;
+                        String aventureroIP = msj.ip2;
+                        String aventureroPuerto = msj.destinationPortUDP;
                         String momento_actual = String.valueOf(System.currentTimeMillis());
                         String adversarioID = msj.id1;
                         String adversarioIP = msj.ip1;
                         String adversarioPuerto = msj.originPortUDP;
 
-                        Mensaje mensajePVP = new Mensaje(msgId, "3", "3.2",aventureroID,aventureroIP, aventureroPuerto, momento_actual,adversarioID,adversarioIP,adversarioPuerto, momento_actual);
+                        Mensaje mensajePVP = new Mensaje(msgId, "3", "3.2", aventureroID, aventureroIP, aventureroPuerto, momento_actual, adversarioID, adversarioIP, adversarioPuerto, momento_actual);
 
                         String cuerpo_mens_pvp = "Esto es el MENSAJE CONFIRMACION  - que el agente con ID_propio : " + aventureroID +
                                 " - con ip : " + aventureroIP +
@@ -1136,7 +1138,7 @@ protected void menuInicial(){
                                 " - envia al adversario con Ip : " + adversarioIP +
                                 " - con Puerto_Propio : " + adversarioPuerto +
                                 " - en T : " + momento_actual +
-                                " - con Nivel : " + msj.nivel2 ;
+                                " - con Nivel : " + msj.nivel2;
 
                         //Mandar mensaje (3.1)
                         mensajePVP.setInfo(cuerpo_mens_pvp);
@@ -1162,11 +1164,11 @@ protected void menuInicial(){
                         mensajePVP.setIp2(msj.ip1);
                         mensajePVP.setNivel2(msj.nivel1);
                         mensajePVP.setReto("true");
-                        mensajePVP.setResultado("Ha ganado el aventurero "+win+" recibiendo "+Math.abs(resultado)+" niveles");
+                        mensajePVP.setResultado("Ha ganado el aventurero " + win + " recibiendo " + Math.abs(resultado) + " niveles");
                         mensajePVP.setNivelFinal1(String.valueOf(nivel2));
                         mensajePVP.setNivelFinal2(String.valueOf(nivel1));
 
-                        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000,15550005 );
+                        AjrLocalizado ej = new AjrLocalizado("id", "ip", 10000000, 15550005);
                         directorio_de_agentes.add(ej);
                         mensajePVP.setAgentsDirectory(this.directorio_de_agentes);
                         mensajePVP.setDeadAgents(this.directorio_de_agentes);
@@ -1183,7 +1185,7 @@ protected void menuInicial(){
                         System.out.println("Has rechazado el desafio, sigue con tu aventura");
                         break;
                 }
-            }while(!(opcion == 1 || opcion == 2));
+            } while (!(opcion == 1 || opcion == 2));
         }
     }
 
@@ -1192,28 +1194,81 @@ protected void menuInicial(){
      * Funciones para sincronizar información
      */
 
-    protected void pon_en_lita_enviar(Mensaje este_mensaje) {contenedor_de_mensajes_a_enviar.add(este_mensaje); num_tot_men_env++; }
-    protected void pon_en_lita_recibidos(Mensaje este_mensaje) {contenedor_de_mensajes_recibidos.add(este_mensaje);num_tot_men_rec++; }
-    protected void pon_en_lita_recibidos_pvp(Mensaje este_mensaje) {contenedor_de_mensajes_recibidos_pvp.add(este_mensaje);num_tot_men_rec++; }
-    protected void pon_en_directorio_de_agentes(AjrLocalizado este_accLocalizado) {directorio_de_agentes.add(este_accLocalizado); num_tot_ajr_loc++; }
+    protected void pon_en_lita_enviar(Mensaje este_mensaje) {
+        contenedor_de_mensajes_a_enviar.add(este_mensaje);
+        num_tot_men_env++;
+    }
 
-    protected int num_elem_lita_enviar() {int num_elem1 = contenedor_de_mensajes_a_enviar.size(); return num_elem1;}
-    protected int num_elem_lita_recibidos() {int num_elem2 = contenedor_de_mensajes_recibidos.size(); return num_elem2;}
-    protected int num_elem_lita_recibidos_pvp() {int num_elem2 = contenedor_de_mensajes_recibidos_pvp.size(); return num_elem2;}
-    protected int num_elem_directorio_de_agentes() {int num_elem3 = directorio_de_agentes.size(); return num_elem3;}
+    protected void pon_en_lita_recibidos(Mensaje este_mensaje) {
+        contenedor_de_mensajes_recibidos.add(este_mensaje);
+        num_tot_men_rec++;
+    }
 
-    protected int dime_num_tot_men_env() {return num_tot_men_env;}
-    protected int dime_num_tot_men_rec() {return num_tot_men_rec;}
-    protected int dime_num_tot_acc_loc() {return num_tot_ajr_loc;}
+    protected void pon_en_lita_recibidos_pvp(Mensaje este_mensaje) {
+        contenedor_de_mensajes_recibidos_pvp.add(este_mensaje);
+        num_tot_men_rec++;
+    }
 
-    protected String dame_codigo_id_local_men(){
+    protected void pon_en_directorio_de_agentes(AjrLocalizado este_accLocalizado) {
+        directorio_de_agentes.add(este_accLocalizado);
+        num_tot_ajr_loc++;
+    }
+
+    protected int num_elem_lita_enviar() {
+        int num_elem1 = contenedor_de_mensajes_a_enviar.size();
+        return num_elem1;
+    }
+
+    protected int num_elem_lita_recibidos() {
+        int num_elem2 = contenedor_de_mensajes_recibidos.size();
+        return num_elem2;
+    }
+
+    protected int num_elem_lita_recibidos_pvp() {
+        int num_elem2 = contenedor_de_mensajes_recibidos_pvp.size();
+        return num_elem2;
+    }
+
+    protected int num_elem_directorio_de_agentes() {
+        int num_elem3 = directorio_de_agentes.size();
+        return num_elem3;
+    }
+
+    protected int dime_num_tot_men_env() {
+        return num_tot_men_env;
+    }
+
+    protected int dime_num_tot_men_rec() {
+        return num_tot_men_rec;
+    }
+
+    protected int dime_num_tot_acc_loc() {
+        return num_tot_ajr_loc;
+    }
+
+    protected String dame_codigo_id_local_men() {
         String codigo_id_local_men = ID_propio + "_men_" + num_id_local_men;
         num_id_local_men++;
         return codigo_id_local_men;
     }
 
-    protected Mensaje saca_de_lita_enviar() {Mensaje este_mensaje = contenedor_de_mensajes_a_enviar.pop(); return este_mensaje; }
-    protected Mensaje saca_de_lita_recibidos() {Mensaje este_mensaje = contenedor_de_mensajes_recibidos.pop(); return este_mensaje; }
-    protected Mensaje saca_de_lita_recibidos_pvp() {Mensaje este_mensaje = contenedor_de_mensajes_recibidos_pvp.pop(); return este_mensaje; }
-    protected AjrLocalizado saca_de_directorio_de_agentes() {AjrLocalizado este_accLocalizado = directorio_de_agentes.pop(); return este_accLocalizado; }
+    protected Mensaje saca_de_lita_enviar() {
+        Mensaje este_mensaje = contenedor_de_mensajes_a_enviar.pop();
+        return este_mensaje;
+    }
+
+    protected Mensaje saca_de_lita_recibidos() {
+        Mensaje este_mensaje = contenedor_de_mensajes_recibidos.pop();
+        return este_mensaje;
+    }
+
+    protected Mensaje saca_de_lita_recibidos_pvp() {
+        Mensaje este_mensaje = contenedor_de_mensajes_recibidos_pvp.pop();
+        return este_mensaje;
+    }
+
+    protected AjrLocalizado saca_de_directorio_de_agentes() {
+        AjrLocalizado este_accLocalizado = directorio_de_agentes.pop();
+        return este_accLocalizado;
+    }
 }
