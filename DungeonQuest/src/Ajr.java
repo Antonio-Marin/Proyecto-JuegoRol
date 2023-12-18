@@ -95,8 +95,6 @@ public class Ajr {
     private LinkedList<Monstruo> mazmorra_avanzado = new LinkedList<>();
     boolean mazmorra_boolean;
 
-    //TODO: Mirar ACC y añadir más código
-
     public Ajr(String ID_propio, String este_num_generacion_str, String este_tipo_agente, String este_Ip_Dios, String este_Puerto_Monitor) {
         long pid = obtenerPID();
         System.out.println("\n ========================================================================================" +
@@ -400,7 +398,6 @@ public class Ajr {
                     " - con T de vida : " + Tiempo_de_vida +
                     " - con T vivido : " + tiempo_vivido;
 
-            //TODO: mensaje muerte revisar
             Mensaje mensaje_fin_agente = new Mensaje(
                     msgId, "4", "0",
                     ID_propio, Ip_Propia, Puerto_Propio_str, momento_actual_str,
@@ -569,7 +566,7 @@ public class Ajr {
      * Será el menú inicial del Aventurero.
      */
     protected void menuInicial() {
-        //TODO: hacer más bonito el menú inicial
+        //TODO: hacer más bonito el menú inicial y implementar sleep
         Scanner s = new Scanner(System.in);
         boolean var = true;
         while (var) {
@@ -758,10 +755,16 @@ public class Ajr {
                 " - que ha seleccionado la mazmorra: " + mazmorra_elegida +
                 " - con nivel de aventurero" + msg.nivelAventurero;
 
+        String ip_or = "";
+
+        if (msg.originIp != null && !msg.originIp.isEmpty() && msg.originIp.charAt(0) == '/') {
+            ip_or = msg.originIp.substring(1);
+        }
+
         Mensaje diosMazmorra = new Mensaje(
                 msgId, "2", "2",
                 msg.destinationId, msg.destinationIp, msg.destinationPortUDP, momento_actual_str,
-                msg.originId, msg.originIp, msg.originPortUDP, momento_actual_str);
+                msg.originId, ip_or, msg.originPortUDP, momento_actual_str);
         diosMazmorra.setInfo(cuerpo_mens_mazmorra_Dios);
 
         // Añadimos lo necesario
@@ -791,10 +794,11 @@ public class Ajr {
         diosMazmorra.setNivelFinal1("0");
         diosMazmorra.setNivelFinal2("0");
 
-        AjrLocalizado av = new AjrLocalizado(msg.originId, msg.originIp, Puerto_Propio_UDP, System.currentTimeMillis());
+        AjrLocalizado av = new AjrLocalizado(msg.originId, ip_or, Integer.parseInt(msg.originPortUDP), System.currentTimeMillis());
         AjrLocalizado d = new AjrLocalizado(ID_propio, Ip_Dios, Puerto_Dios, System.currentTimeMillis());
         directorio_de_agentes.add(av);
         directorio_de_agentes.add(d);
+        //TODO: funcion chatGPT
         diosMazmorra.setAgentsDirectory(this.directorio_de_agentes);
         diosMazmorra.setDeadAgents(this.directorio_de_agentes);
 
@@ -818,7 +822,7 @@ public class Ajr {
         int nivel_monstruo = Integer.parseInt(msg.getNivelMonstruo());
         System.out.println("Aparece ante ti el monstruo " + nombre_monstruo + " de nivel " + nivel_monstruo);
 
-        //ToDo Se calcula que ocurre (Manuel y Antonio)
+
         Random random = new Random();
         int nivel_aventurero = Integer.parseInt(msg.getNivelAventurero());
         int exp_ganada;
@@ -892,8 +896,6 @@ public class Ajr {
                 }
             }
         }
-
-        //ToDo final
 
         //Creamos mensaje para enviar al dios
         String ID_mensaje = dame_codigo_id_local_men();
