@@ -177,7 +177,7 @@ public class Ajr {
         if (este_tipo_agente.equals("DIOS")) {
             this.Ip_Dios = this.Ip_Propia; // Si el agente es el monitor su ip y la del monitor son la misma evidentemente
         } else if (este_tipo_agente.equals("AVENTURERO")) {
-            this.Ip_Propia = este_Ip_Monitor;
+            this.Ip_Dios = este_Ip_Monitor;
         } else {
             System.out.println("Desde public Ajr. ERROR Definiendo DATOS DEL ENTORNO : " + este_tipo_agente + " - no es un tipo de agente conocido");
         }
@@ -331,7 +331,7 @@ public class Ajr {
         mensaje_he_nacido.setDeathTime("0");
 
         mensaje_he_nacido.setMazmorra("-");
-        mensaje_he_nacido.setNivelAventurero("0");
+        mensaje_he_nacido.setNivelAventurero("1");
         mensaje_he_nacido.setNombreMonstruo("-");
         mensaje_he_nacido.setNivelMonstruo("0");
         mensaje_he_nacido.setResultadoFinal("-");
@@ -474,11 +474,13 @@ public class Ajr {
                 espera_fin_envios = false;
             }
         }
-        try {
+       /* try {
             Thread.sleep(3000);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+
+        */
         // Dejamos la casa como estaba
         cerrarSockets();
 
@@ -571,10 +573,11 @@ public class Ajr {
         Scanner s = new Scanner(System.in);
         boolean var = true;
         while (var) {
-            while ((funcionAventurero.mensajesPVP.isEmpty())) {
+           /* while ((funcionAventurero.mensajesPVP.isEmpty())) {
                 Mensaje m = funcionAventurero.mensajesPVP.pop();
                 pvpAdversario(m);
             }
+            */
             int op;
             System.out.println("Introduce una opción: \n 1. Ir a una mazmorra.\n 2. PVP\n 3. Salir");
             op = s.nextInt();
@@ -672,6 +675,8 @@ public class Ajr {
         mazmorra.setInfo(cuerpo_mens_mazmorra);
         mazmorra.setMazmorra(mazmorra_elegida);
         mazmorra.setNivelAventurero(Integer.toString(nivelAventurero));
+
+        mazmorra.setMotivoMuerte("0");
 
         //Pa que no de fallo manin
         mazmorra.setNombreMonstruo("-");
@@ -849,12 +854,12 @@ public class Ajr {
                     case 1:
                         probabilidad = random.nextInt(suma_lvl);
                         con = false;
-                        if (probabilidad < nivel_aventurero) {
+                        if (probabilidad <= nivel_aventurero) {
                             System.out.println("Has huido con exito");
                         } else {
                             probabilidad = random.nextInt(suma_lvl);
 
-                            if (probabilidad < nivel_aventurero) {
+                            if (probabilidad <= nivel_aventurero) {
                                 exp_ganada = nivel_monstruo - nivel_aventurero;
                                 nivel_aventurero += exp_ganada;
                                 resultado_final = "Victoria";
@@ -871,7 +876,7 @@ public class Ajr {
                         con = false;
 
 
-                        if (probabilidad < nivel_aventurero) {
+                        if (probabilidad <= nivel_aventurero) {
                             exp_ganada = nivel_monstruo - nivel_aventurero;
                             nivel_aventurero += exp_ganada;
                             resultado_final = "Victoria";
