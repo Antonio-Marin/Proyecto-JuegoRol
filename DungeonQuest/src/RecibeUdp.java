@@ -146,7 +146,7 @@ public class RecibeUdp extends Thread {
                     nombresEtiquetas.add("resultado_final");
                     nombresEtiquetas.add("nivel_aventurero_final");
                     nombresEtiquetas.add("reto");
-                    //TODO: añadir las que hacen falta
+                    //Se pueden añadir más
                     for (String nombreEtiqueta : nombresEtiquetas) {
                         NodeList listaNodos = document.getElementsByTagName(nombreEtiqueta);
 
@@ -224,7 +224,7 @@ public class RecibeUdp extends Thread {
                                 " - en contenedor tenemos : " + String.valueOf(agente.num_elem_lita_recibidos()) +
                                 " - total recibidos : " + agente.num_elem_lita_recibidos());
 
-                        //TODO: terminar de hacerlo
+                        //TODO: revisar y añadir equals tambien en 3
                         if (tipo_protocolo.equals("2")){
                             if (paso_protocolo.equals("1")){
                                 //El Dios al recibir este mensaje, envía un mensaje mandándole un monstruo
