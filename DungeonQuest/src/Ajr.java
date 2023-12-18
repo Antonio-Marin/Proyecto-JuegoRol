@@ -718,6 +718,7 @@ public class Ajr {
      */
 
     public void mazmorraDios(Mensaje msg) {
+        System.out.println("MAZMORRA DIOS");
         Random random = new Random();
         String mazmorra_elegida = msg.getMazmorra();
         Monstruo mons_elegido;
@@ -780,11 +781,15 @@ public class Ajr {
         diosMazmorra.setId2("-");
         diosMazmorra.setIp2("-");
         diosMazmorra.setNivel2("0");
-        diosMazmorra.setReto("-");
+        diosMazmorra.setReto("false");
         diosMazmorra.setResultado("-");
         diosMazmorra.setNivelFinal1("0");
         diosMazmorra.setNivelFinal2("0");
 
+        AjrLocalizado av = new AjrLocalizado(msg.originId, msg.originIp, Puerto_Propio_UDP, System.currentTimeMillis());
+        AjrLocalizado d = new AjrLocalizado(ID_propio, Ip_Dios, Puerto_Dios, System.currentTimeMillis());
+        directorio_de_agentes.add(av);
+        directorio_de_agentes.add(d);
         diosMazmorra.setAgentsDirectory(this.directorio_de_agentes);
         diosMazmorra.setDeadAgents(this.directorio_de_agentes);
 

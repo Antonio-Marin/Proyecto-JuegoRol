@@ -107,7 +107,7 @@ public class FuncionDeAventurero implements Runnable {
         mensajeRecibido.crearXML();
         TratarXML test = new TratarXML();
         String archivo_xml = "xml_"+ mensajeRecibido.msgId +".xml";
-        String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
+        String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION_ROL.xsd";
         if(test.validarXMLConEsquema(archivo_xml, archivo_xsd)) {
             num_men_recibidos_fa = num_men_recibidos_fa + 1;
 

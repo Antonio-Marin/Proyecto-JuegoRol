@@ -86,7 +86,7 @@ public class RecibeUdp extends Thread {
 
                 TratarXML test = new TratarXML();
                 String archivo_xml = fileName;
-                String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION.xsd";
+                String archivo_xsd = "ESQUEMA_XML_PROTOCOLO_COMUNICACION_ROL.xsd";
                 if (test.validarXMLConEsquema(archivo_xml, archivo_xsd)) {
                     System.out.println("El archivo se ha sometido a verificacion y es correcto");
 
@@ -110,8 +110,9 @@ public class RecibeUdp extends Thread {
                     String nivel_monstruo = "";
                     String resultado_final = "";
                     String nivel_aventurero_final = "";
+                    String reto = "";
 
-                    File xmlFile = new File("C:/Users/marti/IdeaProjects/SMA_23-24/Proyecto/" + fileName);
+                    File xmlFile = new File("C:/Users/marti/IdeaProjects/Proyecto/" + fileName);
                     /*
                     Ruta para:
                     Pablo = C:/Users/pablo/IdeaProjects/Proyecto-JuegoRol/
@@ -138,6 +139,13 @@ public class RecibeUdp extends Thread {
                     nombresEtiquetas.add("info");
                     nombresEtiquetas.add("tipo_protocolo");
                     nombresEtiquetas.add("paso_protocolo");
+                    nombresEtiquetas.add("mazmorra");
+                    nombresEtiquetas.add("nivel_aventurero");
+                    nombresEtiquetas.add("nombre_monstruo");
+                    nombresEtiquetas.add("nivel_mosntruo");
+                    nombresEtiquetas.add("resultado_final");
+                    nombresEtiquetas.add("nivel_aventurero_final");
+                    nombresEtiquetas.add("reto");
                     //TODO: añadir las que hacen falta
                     for (String nombreEtiqueta : nombresEtiquetas) {
                         NodeList listaNodos = document.getElementsByTagName(nombreEtiqueta);
@@ -178,6 +186,9 @@ public class RecibeUdp extends Thread {
                                     case "nivel_aventurero_final":
                                         nivel_aventurero_final = elemento.getTextContent();
                                         break;
+                                    case "reto":
+                                        nivel_aventurero_final = elemento.getTextContent();
+                                        break;
                                 }
                             }
                         }
@@ -189,6 +200,7 @@ public class RecibeUdp extends Thread {
                                 id_or, IP_or, Integer.toString(puerto_or), momento_actual,
                                 id_dest, IP_dest, Integer.toString(puerto_dest), momento_actual);
                         mensaje_recibido_UDP.setInfo(cuerpo_mens);
+                        mensaje_recibido_UDP.setReto(reto);
 
 
                         String num_men_por_recibidos_str = String.valueOf(agente.num_elem_lita_recibidos());
@@ -213,11 +225,12 @@ public class RecibeUdp extends Thread {
                                 " - total recibidos : " + agente.num_elem_lita_recibidos());
 
                         //TODO: terminar de hacerlo
-                        if (tipo_protocolo == "2"){
-                            if (paso_protocolo == "1"){
+                        if (tipo_protocolo.equals("2")){
+                            if (paso_protocolo.equals("1")){
                                 //El Dios al recibir este mensaje, envía un mensaje mandándole un monstruo
                                 mensaje_recibido_UDP.setMazmorra(mazmorra);
                                 mensaje_recibido_UDP.setNivelAventurero(nivel_aventurero);
+                                System.out.println("DIOS TRATA MENSAJE RECIBIDO");
                                 agente.mazmorraDios(mensaje_recibido_UDP);
                             } else if (paso_protocolo == "2") {
                                 //El avnturero recibe el nombre y el nivel del monstruo al que debe derrotar
