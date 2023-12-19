@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4134a981-ba58-40bc-918f-b87c330e5a2e" name="Changes" comment="Cambios y añadidos TODOs" />
+    <list default="true" id="4134a981-ba58-40bc-918f-b87c330e5a2e" name="Changes" comment="Cambio TODOs" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,14 +48,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Comunicacion__mazmorra",
-    "last_opened_file_path": "C:/Users/marti/IdeaProjects/SMA_23-24/base"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Comunicacion__mazmorra&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/marti/IdeaProjects/SMA_23-24/base&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\marti\IdeaProjects\Proyecto" />
@@ -65,7 +65,7 @@
     <configuration name="arranca_agente" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="DungeonQuest.src.arranca_agente" />
       <module name="Proyecto-JuegoRol" />
-      <option name="PROGRAM_PARAMETERS" value="&quot;Antonio_Dios&quot; 0 &quot;DIOS&quot; &quot;192.168.55.107&quot; &quot;7&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="&quot;Antonio_Dios&quot; 0 &quot;AVENTURERO&quot; &quot;192.168.55.107&quot; &quot;7&quot;" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="DungeonQuest.src.*" />
@@ -350,13 +350,42 @@
       <option name="project" value="LOCAL" />
       <updated>1702466756716</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Cambios para funcionamiento Dios">
+      <option name="closed" value="true" />
+      <created>1702901463569</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1702901463569</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Cambios out">
+      <option name="closed" value="true" />
+      <created>1702905823936</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1702905823936</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Cambios TODOs y añadido tratamiento IP al mandar mensaje 2.3">
+      <option name="closed" value="true" />
+      <created>1702905888862</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1702905888862</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Cambio TODOs">
+      <option name="closed" value="true" />
+      <created>1702905904251</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1702905904251</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Eliminada parte donde miraba el ComunicationProtocol y dejado por determinado que siempre use UDP" />
-    <MESSAGE value="Cambios en el mensaje_recibido_UDP y variable bodyInfo → info" />
-    <MESSAGE value="Cambios de TCP a UDP. correción de errores en mensajes y añadidos TODOs" />
     <MESSAGE value="Menu básico" />
     <MESSAGE value="Cambio TCP → UDP" />
     <MESSAGE value="Cambio de id_propio → ID_propio" />
@@ -374,11 +403,14 @@
     <MESSAGE value="Añadida función toSTring" />
     <MESSAGE value="Limpiar mazmorra y prueba para mostrar los monstruos de cada mazmorra" />
     <MESSAGE value="Unversioned files" />
-    <MESSAGE value="Cambios out" />
     <MESSAGE value="Cambios rama Monstruo en rama Ajr" />
     <MESSAGE value="Quitado COMUNICID" />
     <MESSAGE value="Añadida comprobación de etiquetas tipo_protocolo y paso_protocolo" />
     <MESSAGE value="Cambios y añadidos TODOs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cambios y añadidos TODOs" />
+    <MESSAGE value="Cambios para funcionamiento Dios" />
+    <MESSAGE value="Cambios out" />
+    <MESSAGE value="Cambios TODOs y añadido tratamiento IP al mandar mensaje 2.3" />
+    <MESSAGE value="Cambio TODOs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cambio TODOs" />
   </component>
 </project>
