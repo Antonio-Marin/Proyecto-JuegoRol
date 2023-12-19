@@ -471,13 +471,13 @@ public class Ajr {
                 espera_fin_envios = false;
             }
         }
-       /* try {
+       try {
             Thread.sleep(3000);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
 
-        */
+
         // Dejamos la casa como estaba
         cerrarSockets();
 
